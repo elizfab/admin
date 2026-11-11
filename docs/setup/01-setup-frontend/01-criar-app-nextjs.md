@@ -28,7 +28,7 @@ Could not create a project called "_admin" because of npm naming restrictions:
 ```
 
 **Solução (validada):** criar o projeto em uma subpasta temporária chamada
-`personal-platform-admin`, que vira o nome do pacote, e depois mover o
+`frontend`, que vira o nome do pacote, e depois mover o
 conteúdo para a raiz de `_admin`.
 
 ## Pré-requisitos
@@ -47,34 +47,34 @@ cd ~/repos/projetos-pessoais/portfolio/org-elizfab/_admin
 ### 2. Executar o instalador
 
 ```bash
-npx create-next-app@latest personal-platform-admin
+npx create-next-app@latest frontend
 ```
 
 Responda às perguntas assim:
 
-| Pergunta | Resposta | 💡 Motivo |
-|---|---|---|
-| Would you like to use the recommended Next.js defaults? | **No, customize settings** | O padrão inclui Tailwind, que o projeto não usa |
-| Would you like to use TypeScript? | **Yes** | Tipagem estática (ADR-003) |
-| Which linter would you like to use? | **ESLint** | Padrão do ecossistema Next.js |
-| Would you like to use React Compiler? | **No** | Avaliar depois; menos variáveis no início |
-| Would you like to use Tailwind CSS? | **No** | O projeto usa SCSS Modules (ADR-004) |
-| Would you like your code inside a `src/` directory? | **Yes** | Separa código de arquivos de configuração |
-| Would you like to use App Router? | **Yes** | Arquitetura definida (ADR-002) |
-| Would you like to use Cache Components? | **No** | Recurso avançado de cache; avaliar depois |
-| Would you like to customize the import alias? | **No** | Mantém o padrão `@/*` |
-| Would you like to include AGENTS.md…? | **Yes** | Orienta assistentes de IA a usar a documentação da versão instalada |
+| Pergunta                                                | Resposta                   | 💡 Motivo                                                           |
+| ------------------------------------------------------- | -------------------------- | ------------------------------------------------------------------- |
+| Would you like to use the recommended Next.js defaults? | **No, customize settings** | O padrão inclui Tailwind, que o projeto não usa                     |
+| Would you like to use TypeScript?                       | **Yes**                    | Tipagem estática (ADR-003)                                          |
+| Which linter would you like to use?                     | **ESLint**                 | Padrão do ecossistema Next.js                                       |
+| Would you like to use React Compiler?                   | **No**                     | Avaliar depois; menos variáveis no início                           |
+| Would you like to use Tailwind CSS?                     | **No**                     | O projeto usa SCSS Modules (ADR-004)                                |
+| Would you like your code inside a `src/` directory?     | **Yes**                    | Separa código de arquivos de configuração                           |
+| Would you like to use App Router?                       | **Yes**                    | Arquitetura definida (ADR-002)                                      |
+| Would you like to use Cache Components?                 | **No**                     | Recurso avançado de cache; avaliar depois                           |
+| Would you like to customize the import alias?           | **No**                     | Mantém o padrão `@/*`                                               |
+| Would you like to include AGENTS.md…?                   | **Yes**                    | Orienta assistentes de IA a usar a documentação da versão instalada |
 
-Se aparecer uma pergunta sobre enviar *feedback* anônimo ao Next.js, a
+Se aparecer uma pergunta sobre enviar _feedback_ anônimo ao Next.js, a
 resposta é opcional.
 
 > Alternativa sem perguntas (mesmo resultado):
 >
 > ```bash
-> npx create-next-app@latest personal-platform-admin --ts --eslint --no-tailwind --src-dir --app --no-react-compiler --no-cache-components --agents-md --import-alias "@/*" --use-npm
+> npx create-next-app@latest frontend --ts --eslint --no-tailwind --src-dir --app --no-react-compiler --no-cache-components --agents-md --import-alias "@/*" --use-npm
 > ```
 
-Aguarde até aparecer `Success! Created personal-platform-admin`.
+Aguarde até aparecer `Success! Created frontend`.
 
 O instalador deve informar que **pulou** a criação do Git, porque `_admin`
 já é um repositório.
@@ -82,7 +82,7 @@ já é um repositório.
 ### 3. Conferir o que foi gerado
 
 ```bash
-ls -A personal-platform-admin
+ls -A frontend
 ```
 
 Esperado (a ordem pode variar):
@@ -100,9 +100,9 @@ inicializado. Volte à Fase 00, passo 02, antes de continuar.
 Estes comandos funcionam tanto no bash quanto no zsh:
 
 ```bash
-mv personal-platform-admin/.gitignore .
-mv personal-platform-admin/* .
-rm -rf personal-platform-admin
+mv frontend/.gitignore .
+mv frontend/* .
+rm -rf frontend
 ```
 
 💡 O primeiro `mv` move o único arquivo oculto que importa (`.gitignore`). O
@@ -129,39 +129,39 @@ Para encerrar o servidor: `Ctrl + C`.
 
 ## Arquivos criados ou alterados
 
-| Arquivo | Ação | Descrição |
-|---|---|---|
+| Arquivo                              | Ação   | Descrição                                             |
+| ------------------------------------ | ------ | ----------------------------------------------------- |
 | `package.json` / `package-lock.json` | Criado | Dependências e scripts; o lock fixa as versões exatas |
-| `tsconfig.json` | Criado | Configuração do TypeScript (já com `strict: true`) |
-| `eslint.config.mjs` | Criado | Regras do ESLint (formato *flat config*) |
-| `next.config.ts` | Criado | Configuração do Next.js |
-| `next-env.d.ts` | Criado | Tipos do Next.js (gerado; ignorado pelo Git) |
-| `AGENTS.md` | Criado | Instruções para assistentes de IA |
-| `.gitignore` | Criado | Arquivos que o Git deve ignorar |
-| `src/app/` | Criado | Layout, página inicial e estilos padrão |
-| `public/` | Criado | Arquivos estáticos (imagens, ícones) |
+| `tsconfig.json`                      | Criado | Configuração do TypeScript (já com `strict: true`)    |
+| `eslint.config.mjs`                  | Criado | Regras do ESLint (formato _flat config_)              |
+| `next.config.ts`                     | Criado | Configuração do Next.js                               |
+| `next-env.d.ts`                      | Criado | Tipos do Next.js (gerado; ignorado pelo Git)          |
+| `AGENTS.md`                          | Criado | Instruções para assistentes de IA                     |
+| `.gitignore`                         | Criado | Arquivos que o Git deve ignorar                       |
+| `src/app/`                           | Criado | Layout, página inicial e estilos padrão               |
+| `public/`                            | Criado | Arquivos estáticos (imagens, ícones)                  |
 
 ## ✅ Como testar
 
-| # | Teste | Resultado esperado |
-|---|---|---|
-| 1 | `ls -A` em `_admin` | `docs/` e os arquivos do Next.js lado a lado; sem a pasta `personal-platform-admin` |
-| 2 | `grep '"name"' package.json` | `"name": "personal-platform-admin"` |
-| 3 | `npm run dev` + abrir `localhost:3000` | Página padrão do Next.js |
-| 4 | `npm run build` | Termina com a tabela de rotas e sem erros |
+| #   | Teste                                  | Resultado esperado                                                   |
+| --- | -------------------------------------- | -------------------------------------------------------------------- |
+| 1   | `ls -A` em `_admin`                    | `docs/` e os arquivos do Next.js lado a lado; sem a pasta `frontend` |
+| 2   | `grep '"name"' package.json`           | `"name": "frontend"`                                                 |
+| 3   | `npm run dev` + abrir `localhost:3000` | Página padrão do Next.js                                             |
+| 4   | `npm run build`                        | Termina com a tabela de rotas e sem erros                            |
 
 **Critério de aceite:** os testes 3 e 4 passam.
 
 ## ⚠️ Problemas comuns
 
-| Sintoma | Causa provável | Solução |
-|---|---|---|
-| `name cannot start with an underscore` | Rodou `create-next-app .` em `_admin` | Usar a subpasta temporária (item 2) |
-| `mv: cannot move … Directory not empty` | Já existia na raiz um arquivo ou pasta com o mesmo nome | Conferir com `ls -A`; a raiz deveria ter só `docs/` e `.git/` |
-| `Port 3000 is in use` | Outro servidor está rodando | Encerrar o outro processo ou usar a porta indicada pelo Next.js |
-| `npm warn deprecated eslint@9…` | Aviso de versão da ferramenta | Não bloqueia; manter a versão instalada pelo Next.js |
-| `8 moderate severity vulnerabilities` | Avisos do `npm audit` em dependências indiretas | **Não** rodar `npm audit fix --force` (pode quebrar versões). Reavaliar ao atualizar o Next.js |
-| Erro estranho após mover os arquivos | Cache inconsistente | `rm -rf .next node_modules && npm install` |
+| Sintoma                                 | Causa provável                                          | Solução                                                                                        |
+| --------------------------------------- | ------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| `name cannot start with an underscore`  | Rodou `create-next-app .` em `_admin`                   | Usar a subpasta temporária (item 2)                                                            |
+| `mv: cannot move … Directory not empty` | Já existia na raiz um arquivo ou pasta com o mesmo nome | Conferir com `ls -A`; a raiz deveria ter só `docs/` e `.git/`                                  |
+| `Port 3000 is in use`                   | Outro servidor está rodando                             | Encerrar o outro processo ou usar a porta indicada pelo Next.js                                |
+| `npm warn deprecated eslint@9…`         | Aviso de versão da ferramenta                           | Não bloqueia; manter a versão instalada pelo Next.js                                           |
+| `8 moderate severity vulnerabilities`   | Avisos do `npm audit` em dependências indiretas         | **Não** rodar `npm audit fix --force` (pode quebrar versões). Reavaliar ao atualizar o Next.js |
+| Erro estranho após mover os arquivos    | Cache inconsistente                                     | `rm -rf .next node_modules && npm install`                                                     |
 
 ## Commit sugerido
 
