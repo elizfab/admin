@@ -29,14 +29,14 @@ projeto funciona localmente, sem depender do deploy.
 
 | # | Passo | O que entrega | Status |
 |---|---|---|---|
-| 01 | [PostgreSQL local com Docker Compose](01-postgres-local-docker.md) | Banco rodando em `localhost:5432` | ⬜ |
-| 02 | [Projeto no Supabase](02-projeto-supabase.md) | Projeto criado, Data API desativada, strings de conexão guardadas | ⬜ |
-| 03 | [Modelagem de dados e ERD](03-modelagem-e-erd.md) | Entidades, regras e diagrama ER | ⬜ |
-| 04 | [Instalar o Prisma 7](04-instalar-prisma.md) | Pacotes na versão 7 (fixada) | ⬜ |
-| 05 | [Configurar o Prisma](05-configurar-prisma.md) | `prisma7.config.ts`, `schema.prisma`, variáveis e scripts | ⬜ |
-| 06 | [Primeira migration](06-primeira-migration.md) | Tabela `user` criada; Prisma Client gerado | ⬜ |
-| 07 | [Cliente Prisma reutilizável](07-cliente-prisma.md) | `src/lib/db/prisma.ts` | ⬜ |
-| 08 | [Health check com banco](08-health-check.md) | `/api/v1/health` responde 200 ou 503 | ⬜ |
+| 01 | [PostgreSQL local com Docker Compose](01-postgres-local-docker.md) | Banco rodando em `localhost:5432` | ✅ |
+| 02 | [Projeto no Supabase](02-projeto-supabase.md) | Projeto criado, Data API desativada, strings de conexão guardadas | ✅ |
+| 03 | [Modelagem de dados e ERD](03-modelagem-e-erd.md) | Entidades, regras e diagrama ER | ✅ |
+| 04 | [Instalar o Prisma 7](04-instalar-prisma.md) | Pacotes na versão 7 (fixada) | ✅ |
+| 05 | [Configurar o Prisma](05-configurar-prisma.md) | `prisma7.config.ts`, `schema.prisma`, variáveis e scripts | ✅ |
+| 06 | [Primeira migration](06-primeira-migration.md) | Tabela `user` criada; Prisma Client gerado | ✅ |
+| 07 | [Cliente Prisma reutilizável](07-cliente-prisma.md) | `src/lib/db/prisma.ts` | ✅ |
+| 08 | [Health check com banco](08-health-check.md) | `/api/v1/health` responde 200 ou 503 | ✅ |
 
 > **Mudança em relação ao plano original:** o seed da conta administradora
 > passou para a Fase 03, porque a senha precisa ser criptografada com o
@@ -44,17 +44,17 @@ projeto funciona localmente, sem depender do deploy.
 
 ## Checklist da fase
 
-- [ ] PostgreSQL local rodando via Docker Compose
-- [ ] Projeto Supabase criado, **com a Data API desativada**
-- [ ] Strings de conexão do Supabase guardadas em local seguro (fora do Git)
-- [ ] ERD da primeira versão desenhado
-- [ ] Prisma 7 instalado (sem a versão 8 RC)
-- [ ] `prisma7.config.ts` e `schema.prisma` configurados
-- [ ] `.env.local` com `DATABASE_URL` e `DIRECT_URL`; `.env.example` atualizado
-- [ ] Migration `init` criada e aplicada
-- [ ] Client gerado em `src/generated/prisma` (ignorado pelo Git)
-- [ ] `src/lib/db/prisma.ts` criado
-- [ ] `/api/v1/health` respondendo `200` com o banco no ar e `503` sem ele
+- [x] PostgreSQL local rodando via Docker Compose
+- [x] Projeto Supabase criado, **com a Data API desativada**
+- [x] Strings de conexão do Supabase guardadas em local seguro (fora do Git)
+- [x] ERD da primeira versão desenhado
+- [x] Prisma 7 instalado (sem a versão 8 RC)
+- [x] `prisma7.config.ts` e `schema.prisma` configurados
+- [x] `.env.local` com `DATABASE_URL` e `DIRECT_URL`; `.env.example` atualizado
+- [x] Migration `init` criada e aplicada
+- [x] Client gerado em `src/generated/prisma` (ignorado pelo Git)
+- [x] `src/lib/db/prisma.ts` criado
+- [x] `/api/v1/health` respondendo `200` com o banco no ar e `503` sem ele
 
 ## ✅ Critério de conclusão da fase
 
