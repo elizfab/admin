@@ -1,4 +1,5 @@
-import { createProjectSchema, updateProjectSchema } from "@/modules/projects";
+import { createProjectSchema, updateProjectSchema } from "@/modules/schemas/project.schema";
+
 
 describe("createProjectSchema", () => {
     it("aceita um projeto válido e aplica o status padrão", () => {
