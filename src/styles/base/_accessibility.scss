@@ -1,0 +1,20 @@
+@use "../abstracts" as *;
+
+:focus-visible {
+  @include focus-ring;
+}
+
+// Respeita usuários que pedem menos animação no sistema operacional.
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+// Esconde visualmente, mas mantém para leitores de tela.
+.visually-hidden {
+  @include visually-hidden;
+}
