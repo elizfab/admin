@@ -1,0 +1,23 @@
+# PostgreSQL local para desenvolvimento e testes.
+# Subir: docker compose up -d   |   Parar: docker compose down
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: admin-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres # somente local; nunca use em produção
+      POSTGRES_DB: admin_dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - admin-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d admin_dev"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  admin-postgres-data:
