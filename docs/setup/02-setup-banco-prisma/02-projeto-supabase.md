@@ -42,7 +42,7 @@ esse caso é **desativar a Data API**.
 
 1. Acesse <https://supabase.com/dashboard> e clique em **New project**.
 2. Preencha:
-   - **Name:** `personal-platform`
+   - **Name:** `painel-admin`
    - **Database password:** clique em **Generate a password** e **salve no gerenciador de senhas** antes de continuar
    - **Region:** a mais próxima de você e da Vercel (ex.: South America — São Paulo, se disponível)
 3. Se aparecer, nas opções de segurança da criação, a opção de **habilitar a
@@ -65,22 +65,22 @@ significado especial em URLs e precisariam ser codificados (`@` vira `%40`).
 2. Copie as strings abaixo e guarde-as no gerenciador de senhas, junto com a
    senha do banco:
 
-| Uso | Tipo no painel | Porta | Formato (ilustrativo) |
-|---|---|---|---|
-| Aplicação na Vercel (`DATABASE_URL`) | **Transaction pooler** | 6543 | `postgresql://postgres.[REF]:[SENHA]@[HOST-DO-POOLER]:6543/postgres?pgbouncer=true` |
-| Migrations (`DIRECT_URL`) | **Direct connection** | 5432 | `postgresql://postgres:[SENHA]@db.[REF].supabase.co:5432/postgres` |
-| Alternativa a migrations sem IPv6 | **Session pooler** | 5432 | `postgresql://postgres.[REF]:[SENHA]@[HOST-DO-POOLER]:5432/postgres` |
+| Uso                                  | Tipo no painel         | Porta | Formato (ilustrativo)                                                               |
+| ------------------------------------ | ---------------------- | ----- | ----------------------------------------------------------------------------------- |
+| Aplicação na Vercel (`DATABASE_URL`) | **Transaction pooler** | 6543  | `postgresql://postgres.[REF]:[SENHA]@[HOST-DO-POOLER]:6543/postgres?pgbouncer=true` |
+| Migrations (`DIRECT_URL`)            | **Direct connection**  | 5432  | `postgresql://postgres:[SENHA]@db.[REF].supabase.co:5432/postgres`                  |
+| Alternativa a migrations sem IPv6    | **Session pooler**     | 5432  | `postgresql://postgres.[REF]:[SENHA]@[HOST-DO-POOLER]:5432/postgres`                |
 
 ⚠️ **Copie do painel; não monte à mão.** O host do pooler não pode ser
 deduzido pela região. Note também que o **usuário muda**: `postgres` na
 conexão direta e `postgres.[REF]` no pooler.
 
-| Detalhe | 💡 Por quê |
-|---|---|
+| Detalhe                             | 💡 Por quê                                                                                                                                              |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Transaction pooler para a aplicação | Na Vercel, cada requisição pode abrir uma conexão nova. O pooler é uma **fila de caixas compartilhados**: muitas requisições usam poucas conexões reais |
-| `?pgbouncer=true` | Recomendação do Supabase para Prisma no modo *transaction*. Validado: não atrapalha o driver `pg` |
-| Conexão direta para migrations | Migration é uma sessão única e longa; o pooler em modo *transaction* não é adequado |
-| Conexão direta usa **IPv6** | Se a sua rede não tiver IPv6, use o **Session pooler** como `DIRECT_URL` |
+| `?pgbouncer=true`                   | Recomendação do Supabase para Prisma no modo _transaction_. Validado: não atrapalha o driver `pg`                                                       |
+| Conexão direta para migrations      | Migration é uma sessão única e longa; o pooler em modo _transaction_ não é adequado                                                                     |
+| Conexão direta usa **IPv6**         | Se a sua rede não tiver IPv6, use o **Session pooler** como `DIRECT_URL`                                                                                |
 
 ### 4. (Opcional) Testar a conexão agora
 
@@ -109,21 +109,21 @@ Nenhum. As credenciais ficam **somente** no gerenciador de senhas.
 
 ## ✅ Como testar
 
-| # | Teste | Resultado esperado |
-|---|---|---|
-| 1 | Painel → Data API | “Enable Data API” **desligado** |
-| 2 | Gerenciador de senhas | Senha do banco + strings *Transaction pooler*, *Direct* e *Session pooler* salvas |
-| 3 | `git status` | Nenhum arquivo novo (nada do Supabase foi para o projeto) |
+| #   | Teste                 | Resultado esperado                                                                |
+| --- | --------------------- | --------------------------------------------------------------------------------- |
+| 1   | Painel → Data API     | “Enable Data API” **desligado**                                                   |
+| 2   | Gerenciador de senhas | Senha do banco + strings _Transaction pooler_, _Direct_ e _Session pooler_ salvas |
+| 3   | `git status`          | Nenhum arquivo novo (nada do Supabase foi para o projeto)                         |
 
 **Critério de aceite:** os três testes passam.
 
 ## ⚠️ Problemas comuns
 
-| Sintoma | Causa provável | Solução |
-|---|---|---|
-| `password authentication failed` | Senha com caractere especial sem codificar, ou usuário errado | Codificar a senha (`@` → `%40`); conferir `postgres` × `postgres.[REF]` |
-| `Network is unreachable` / timeout na conexão direta | Rede sem IPv6 | Usar o Session pooler |
-| Projeto “Paused” | Inatividade no plano Free | Restaurar pelo painel |
+| Sintoma                                              | Causa provável                                                | Solução                                                                 |
+| ---------------------------------------------------- | ------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| `password authentication failed`                     | Senha com caractere especial sem codificar, ou usuário errado | Codificar a senha (`@` → `%40`); conferir `postgres` × `postgres.[REF]` |
+| `Network is unreachable` / timeout na conexão direta | Rede sem IPv6                                                 | Usar o Session pooler                                                   |
+| Projeto “Paused”                                     | Inatividade no plano Free                                     | Restaurar pelo painel                                                   |
 
 ## Referências
 

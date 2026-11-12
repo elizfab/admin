@@ -17,12 +17,12 @@
 
 ## Histórico de revisões
 
-| Versão | Data | Alterações |
-|---|---|---|
-| 1.0 | 11/11/2026 | Proposta técnica inicial. |
-| 1.1 | 11/11/2026 | Tabelas reconstruídas em Markdown; seção 4.2 atualizada para o instalador do Next.js 16 (incluindo a restrição do nome `_admin`); requisito único de Node.js (≥ 20.19, por causa do Prisma 7); mixin de breakpoints convertido para mobile-first; exemplo da Sidebar com `next/link` e tokens; instalação do Radix pelo pacote unificado `radix-ui`; alerta sobre a situação do Auth.js e sobre `proxy.ts` no Next.js 16; comandos explícitos de `prisma generate` e `prisma db seed` (Prisma 7); `testPathIgnorePatterns` no Jest; estrutura de `docs/setup/` alinhada ao mapa de implementação; correção de digitação na Parte X. |
-| 1.2 | 11/11/2026 | **ADR-006 aceita: Better Auth substitui Auth.js** (seção 11 reescrita como resumo; detalhes em `docs/decisions/` e na Fase 03); Prisma fixado em `@7` (a tag `latest` do npm aponta para o 8.0 RC); arquivo de configuração `prisma7.config.ts` (nome do Prisma 7.10+); PostgreSQL local com Docker como banco de desenvolvimento; Data API do Supabase desativada (seção 12.6); seed da administradora movido para a Fase 03; script `typecheck` com `next typegen`. |
-| 1.3 | 11/11/2026 | Fase 4 implementada (módulo Projetos): sintaxe do **Zod 4** (seção 15); formato padrão de respostas `{ data }` / `{ error }` (seção 10.3); API pública do módulo dividida em `index.ts` (seguro para o cliente) e `server.ts` (`server-only`) (seção 9.4); um arquivo de serviço por módulo enquanto for pequeno; `404` para recurso de outra usuária. |
+| Versão | Data       | Alterações                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| ------ | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1.0    | 11/11/2026 | Proposta técnica inicial.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| 1.1    | 11/11/2026 | Tabelas reconstruídas em Markdown; seção 4.2 atualizada para o instalador do Next.js 16 (incluindo a restrição do nome `_admin`); requisito único de Node.js (≥ 20.19, por causa do Prisma 7); mixin de breakpoints convertido para mobile-first; exemplo da Sidebar com `next/link` e tokens; instalação do Radix pelo pacote unificado `radix-ui`; alerta sobre a situação do Auth.js e sobre `proxy.ts` no Next.js 16; comandos explícitos de `prisma generate` e `prisma db seed` (Prisma 7); `testPathIgnorePatterns` no Jest; estrutura de `docs/setup/` alinhada ao mapa de implementação; correção de digitação na Parte X. |
+| 1.2    | 11/11/2026 | **ADR-006 aceita: Better Auth substitui Auth.js** (seção 11 reescrita como resumo; detalhes em `docs/decisions/` e na Fase 03); Prisma fixado em `@7` (a tag `latest` do npm aponta para o 8.0 RC); arquivo de configuração `prisma7.config.ts` (nome do Prisma 7.10+); PostgreSQL local com Docker como banco de desenvolvimento; Data API do Supabase desativada (seção 12.6); seed da administradora movido para a Fase 03; script `typecheck` com `next typegen`.                                                                                                                                                               |
+| 1.3    | 11/11/2026 | Fase 4 implementada (módulo Projetos): sintaxe do **Zod 4** (seção 15); formato padrão de respostas `{ data }` / `{ error }` (seção 10.3); API pública do módulo dividida em `index.ts` (seguro para o cliente) e `server.ts` (`server-only`) (seção 9.4); um arquivo de serviço por módulo enquanto for pequeno; `404` para recurso de outra usuária.                                                                                                                                                                                                                                                                              |
 
 > **Como usar este documento:** este é o documento de **arquitetura** (o “porquê” e o “o quê”).
 > O passo a passo de execução (o “como”) fica em `docs/setup/`, seguindo a ordem do
@@ -79,27 +79,27 @@ poderão permanecer independentes e ser acessadas pelo portal central.
 
 ## 2. Decisões tecnológicas
 
-| Camada | Tecnologia | Responsabilidade |
-|---|---|---|
-| Framework | Next.js App Router | Aplicação web, renderização e backend integrado |
-| Linguagem | TypeScript | Tipagem estática e contratos |
-| UI | React | Componentização da interface |
-| Estilos | Sass / SCSS Modules | Estilos isolados por componente |
-| Componentes acessíveis | Radix UI Primitives | Comportamentos acessíveis sem impor identidade visual |
-| Ícones | Lucide React | Ícones SVG |
-| Autenticação | Better Auth (ADR-006) | Login, sessão no banco, rate limiting e integração com o Next.js |
-| Backend | Route Handlers + Server Actions | APIs HTTP e mutações acionadas pela interface |
-| Validação | Zod | Validação de formulários, parâmetros e payloads |
-| Banco | PostgreSQL | Persistência relacional |
-| Banco gerenciado | Supabase Free | PostgreSQL hospedado para desenvolvimento inicial |
-| ORM | Prisma ORM | Modelagem, consultas, migrations e tipos |
-| Testes unitários | Jest | Funções, regras e componentes compatíveis |
-| Testes de componentes | React Testing Library | Comportamento da interface |
-| Testes E2E | Playwright | Fluxos reais no navegador |
-| Hospedagem | Vercel Hobby | Deploy da aplicação pessoal |
-| Repositório | GitHub privado | Versionamento e histórico |
-| Execução local | Node.js + npm | Desenvolvimento |
-| Banco local | Docker Compose | PostgreSQL local para desenvolvimento e testes (padrão do dia a dia) |
+| Camada                 | Tecnologia                      | Responsabilidade                                                     |
+| ---------------------- | ------------------------------- | -------------------------------------------------------------------- |
+| Framework              | Next.js App Router              | Aplicação web, renderização e backend integrado                      |
+| Linguagem              | TypeScript                      | Tipagem estática e contratos                                         |
+| UI                     | React                           | Componentização da interface                                         |
+| Estilos                | Sass / SCSS Modules             | Estilos isolados por componente                                      |
+| Componentes acessíveis | Radix UI Primitives             | Comportamentos acessíveis sem impor identidade visual                |
+| Ícones                 | Lucide React                    | Ícones SVG                                                           |
+| Autenticação           | Better Auth (ADR-006)           | Login, sessão no banco, rate limiting e integração com o Next.js     |
+| Backend                | Route Handlers + Server Actions | APIs HTTP e mutações acionadas pela interface                        |
+| Validação              | Zod                             | Validação de formulários, parâmetros e payloads                      |
+| Banco                  | PostgreSQL                      | Persistência relacional                                              |
+| Banco gerenciado       | Supabase Free                   | PostgreSQL hospedado para desenvolvimento inicial                    |
+| ORM                    | Prisma ORM                      | Modelagem, consultas, migrations e tipos                             |
+| Testes unitários       | Jest                            | Funções, regras e componentes compatíveis                            |
+| Testes de componentes  | React Testing Library           | Comportamento da interface                                           |
+| Testes E2E             | Playwright                      | Fluxos reais no navegador                                            |
+| Hospedagem             | Vercel Hobby                    | Deploy da aplicação pessoal                                          |
+| Repositório            | GitHub privado                  | Versionamento e histórico                                            |
+| Execução local         | Node.js + npm                   | Desenvolvimento                                                      |
+| Banco local            | Docker Compose                  | PostgreSQL local para desenvolvimento e testes (padrão do dia a dia) |
 
 ### 2.1 Decisões fechadas e decisões que exigem validação
 
@@ -147,19 +147,19 @@ poderão permanecer independentes e ser acessadas pelo portal central.
 
 Preencher os links quando as contas e os recursos forem criados.
 
-| Recurso | Link / identificação | Status |
-|---|---|---|
-| GitHub — conta | <https://github.com/elizabetefabri> | Existente |
-| GitHub — organização | `elizfab` | Existente |
-| GitHub — repositório Admin | A definir (organização `elizfab`) | Pendente — será criado por último |
-| Pasta local do projeto | `~/repos/projetos-pessoais/portfolio/org-elizfab/_admin` | Existente |
-| Vercel | <https://vercel.com/dashboard> | Pendente de vinculação |
-| Projeto Vercel | A definir | Pendente |
-| Supabase | <https://supabase.com/dashboard> | Pendente |
-| Projeto Supabase | A definir | Pendente |
-| Domínio personalizado | A definir | Opcional |
-| Portal Docusaurus | <https://elizfab.github.io/portal-dev/> | Existente; atualmente público |
-| Cloudflare | <https://dash.cloudflare.com/> | Opcional, para proteger aplicações independentes |
+| Recurso                    | Link / identificação                                     | Status                                           |
+| -------------------------- | -------------------------------------------------------- | ------------------------------------------------ |
+| GitHub — conta             | <https://github.com/elizabetefabri>                      | Existente                                        |
+| GitHub — organização       | `elizfab`                                                | Existente                                        |
+| GitHub — repositório Admin | A definir (organização `elizfab`)                        | Pendente — será criado por último                |
+| Pasta local do projeto     | `~/repos/projetos-pessoais/portfolio/org-elizfab/_admin` | Existente                                        |
+| Vercel                     | <https://vercel.com/dashboard>                           | Pendente de vinculação                           |
+| Projeto Vercel             | A definir                                                | Pendente                                         |
+| Supabase                   | <https://supabase.com/dashboard>                         | Pendente                                         |
+| Projeto Supabase           | A definir                                                | Pendente                                         |
+| Domínio personalizado      | A definir                                                | Opcional                                         |
+| Portal Docusaurus          | <https://elizfab.github.io/portal-dev/>                  | Existente; atualmente público                    |
+| Cloudflare                 | <https://dash.cloudflare.com/>                           | Opcional, para proteger aplicações independentes |
 
 ### 3.2 O que ainda falta criar
 
@@ -176,7 +176,7 @@ Preencher os links quando as contas e os recursos forem criados.
 
 ### 3.3 Repositório e estratégia Git
 
-Nome sugerido: `personal-platform-admin`.
+Nome sugerido: `painel-admin-admin`.
 
 Branches sugeridas:
 
@@ -240,23 +240,23 @@ Executar no diretório em que o projeto deverá ser criado (ver o
 procedimento completo, com a pasta `_admin`, no guia de setup do frontend):
 
 ```bash
-npx create-next-app@latest personal-platform-admin
+npx create-next-app@latest painel-admin-admin
 ```
 
 Nas perguntas do instalador, selecionar:
 
-| Pergunta do instalador | Escolha |
-|---|---|
+| Pergunta do instalador                                  | Escolha                                               |
+| ------------------------------------------------------- | ----------------------------------------------------- |
 | Would you like to use the recommended Next.js defaults? | **No, customize settings** (o padrão inclui Tailwind) |
-| TypeScript? | Yes |
-| Which linter? | ESLint |
-| React Compiler? | No inicialmente; avaliar depois |
-| Tailwind CSS? | No |
-| Código dentro de `src/`? | Yes |
-| App Router? | Yes |
-| Cache Components? | No inicialmente; avaliar depois |
-| Customize the import alias? | No (mantém `@/*`) |
-| Include AGENTS.md? | Yes |
+| TypeScript?                                             | Yes                                                   |
+| Which linter?                                           | ESLint                                                |
+| React Compiler?                                         | No inicialmente; avaliar depois                       |
+| Tailwind CSS?                                           | No                                                    |
+| Código dentro de `src/`?                                | Yes                                                   |
+| App Router?                                             | Yes                                                   |
+| Cache Components?                                       | No inicialmente; avaliar depois                       |
+| Customize the import alias?                             | No (mantém `@/*`)                                     |
+| Include AGENTS.md?                                      | Yes                                                   |
 
 > **Atenção (validado em 11/11/2026):** o `create-next-app` não aceita criar o
 > projeto diretamente na pasta `_admin`, porque nomes de pacote npm não podem
@@ -267,7 +267,7 @@ Alternativa com opções explícitas, se suportadas pela versão atual do
 CLI:
 
 ```bash
-npx create-next-app@latest personal-platform-admin --ts --eslint --no-tailwind --src-dir --app --no-react-compiler --no-cache-components --agents-md --import-alias "@/*" --use-npm
+npx create-next-app@latest painel-admin-admin --ts --eslint --no-tailwind --src-dir --app --no-react-compiler --no-cache-components --agents-md --import-alias "@/*" --use-npm
 ```
 
 Iniciar o servidor de desenvolvimento a partir da pasta do projeto:
@@ -381,17 +381,17 @@ páginas, mas não aparecem na URL.
 
 ### 5.1 Rotas planejadas
 
-| Arquivo | URL | Acesso |
-|---|---|---|
-| `app/page.tsx` | `/` | Redireciona conforme sessão |
-| `(public)/login/page.tsx` | `/login` | Público |
-| `(private)/dashboard/page.tsx` | `/dashboard` | Autenticado |
-| `(private)/studies/page.tsx` | `/studies` | Autenticado |
-| `(private)/finance/page.tsx` | `/finance` | Autenticado |
-| `(private)/pdi/page.tsx` | `/pdi` | Autenticado |
-| `(private)/projects/page.tsx` | `/projects` | Autenticado |
-| `api/auth/[...nextauth]/route.ts` | `/api/auth/*` | Auth.js |
-| `api/v1/health/route.ts` | `/api/v1/health` | Endpoint de diagnóstico controlado |
+| Arquivo                           | URL              | Acesso                             |
+| --------------------------------- | ---------------- | ---------------------------------- |
+| `app/page.tsx`                    | `/`              | Redireciona conforme sessão        |
+| `(public)/login/page.tsx`         | `/login`         | Público                            |
+| `(private)/dashboard/page.tsx`    | `/dashboard`     | Autenticado                        |
+| `(private)/studies/page.tsx`      | `/studies`       | Autenticado                        |
+| `(private)/finance/page.tsx`      | `/finance`       | Autenticado                        |
+| `(private)/pdi/page.tsx`          | `/pdi`           | Autenticado                        |
+| `(private)/projects/page.tsx`     | `/projects`      | Autenticado                        |
+| `api/auth/[...nextauth]/route.ts` | `/api/auth/*`    | Auth.js                            |
+| `api/v1/health/route.ts`          | `/api/v1/health` | Endpoint de diagnóstico controlado |
 
 ### 5.2 Layouts
 
@@ -507,7 +507,7 @@ variáveis Sass, resolvidas na compilação, não conseguem fazer:
 `src/styles/abstracts/_mixins.scss`:
 
 O mixin segue **mobile-first** (regra da seção 6.7): o estilo base vale
-para o celular e cada breakpoint *adiciona* ajustes para telas maiores.
+para o celular e cada breakpoint _adiciona_ ajustes para telas maiores.
 
 ```scss
 @use "sass:map";
@@ -663,17 +663,17 @@ estados, foco e acessibilidade; os estilos serão definidos pelo projeto.
 
 ### 7.2 Componentes previstos
 
-| Componente | Uso |
-|---|---|
-| Dialog | Modal e formulários |
-| Alert Dialog | Confirmação de ações destrutivas |
-| Dropdown Menu | Menu de ações |
-| Select | Seleção de opções |
-| Tabs | Abas |
-| Tooltip | Ajuda contextual |
-| Popover | Conteúdo flutuante |
-| Checkbox | Seleções |
-| Accordion | Conteúdo expansível |
+| Componente    | Uso                              |
+| ------------- | -------------------------------- |
+| Dialog        | Modal e formulários              |
+| Alert Dialog  | Confirmação de ações destrutivas |
+| Dropdown Menu | Menu de ações                    |
+| Select        | Seleção de opções                |
+| Tabs          | Abas                             |
+| Tooltip       | Ajuda contextual                 |
+| Popover       | Conteúdo flutuante               |
+| Checkbox      | Seleções                         |
+| Accordion     | Conteúdo expansível              |
 
 ### 7.3 Instalação incremental
 
@@ -809,7 +809,7 @@ import { NextResponse } from "next/server";
 export async function GET() {
   return NextResponse.json({
     status: "ok",
-    service: "personal-platform-api",
+    service: "painel-admin-api",
     timestamp: new Date().toISOString(),
   });
 }
@@ -901,14 +901,14 @@ action não deve conter consultas complexas diretamente.
 
 ### 9.3 Diferença prática
 
-| Necessidade | Recurso |
-|---|---|
-| Carregar dados de uma página no servidor | Server Component + serviço |
-| Criar registro por formulário interno | Server Action |
-| API consumida por aplicação externa | Route Handler |
-| Receber webhook | Route Handler |
-| Expor endpoint de consulta | Route Handler |
-| Atualizar dados por interação interna | Server Action, quando adequada |
+| Necessidade                              | Recurso                        |
+| ---------------------------------------- | ------------------------------ |
+| Carregar dados de uma página no servidor | Server Component + serviço     |
+| Criar registro por formulário interno    | Server Action                  |
+| API consumida por aplicação externa      | Route Handler                  |
+| Receber webhook                          | Route Handler                  |
+| Expor endpoint de consulta               | Route Handler                  |
+| Atualizar dados por interação interna    | Server Action, quando adequada |
 
 ### 9.4 Padrão de organização do backend
 
@@ -952,19 +952,19 @@ pertence ao Auth.js e não precisa receber o prefixo de versão.
 
 ### 10.1 Endpoints iniciais
 
-| Método | Endpoint | Objetivo | Proteção |
-|---|---|---|---|
-| GET | `/api/v1/health` | Diagnóstico básico | Pública, sem dados sensíveis |
-| GET | `/api/v1/me` | Dados do usuário autenticado | Sessão obrigatória |
-| GET | `/api/v1/projects` | Listar projetos | Sessão obrigatória |
-| POST | `/api/v1/projects` | Criar projeto | Sessão + autorização |
-| GET | `/api/v1/projects/:id` | Consultar projeto | Sessão + propriedade |
-| PATCH | `/api/v1/projects/:id` | Atualizar projeto | Sessão + propriedade |
-| DELETE | `/api/v1/projects/:id` | Excluir projeto | Sessão + propriedade |
-| GET | `/api/v1/finance/transactions` | Listar lançamentos | Sessão + autorização |
-| POST | `/api/v1/finance/transactions` | Criar lançamento | Sessão + autorização |
-| GET | `/api/v1/pdi/goals` | Listar metas | Sessão + autorização |
-| POST | `/api/v1/pdi/goals` | Criar meta | Sessão + autorização |
+| Método | Endpoint                       | Objetivo                     | Proteção                     |
+| ------ | ------------------------------ | ---------------------------- | ---------------------------- |
+| GET    | `/api/v1/health`               | Diagnóstico básico           | Pública, sem dados sensíveis |
+| GET    | `/api/v1/me`                   | Dados do usuário autenticado | Sessão obrigatória           |
+| GET    | `/api/v1/projects`             | Listar projetos              | Sessão obrigatória           |
+| POST   | `/api/v1/projects`             | Criar projeto                | Sessão + autorização         |
+| GET    | `/api/v1/projects/:id`         | Consultar projeto            | Sessão + propriedade         |
+| PATCH  | `/api/v1/projects/:id`         | Atualizar projeto            | Sessão + propriedade         |
+| DELETE | `/api/v1/projects/:id`         | Excluir projeto              | Sessão + propriedade         |
+| GET    | `/api/v1/finance/transactions` | Listar lançamentos           | Sessão + autorização         |
+| POST   | `/api/v1/finance/transactions` | Criar lançamento             | Sessão + autorização         |
+| GET    | `/api/v1/pdi/goals`            | Listar metas                 | Sessão + autorização         |
+| POST   | `/api/v1/pdi/goals`            | Criar meta                   | Sessão + autorização         |
 
 Os endpoints são um mapa inicial. Não criar todos antes de modelar os
 casos de uso e os dados de cada módulo.
@@ -1034,16 +1034,16 @@ implementar; use o guia da Fase 03.
 
 Mapeamento da proposta original para a implementação adotada:
 
-| Proposta original (Auth.js) | Implementação adotada (Better Auth) |
-|---|---|
-| `src/auth.ts` | `src/lib/auth/auth.ts` |
-| `api/auth/[...nextauth]/route.ts` | `api/auth/[...all]/route.ts` |
-| Sessão JWT (sem revogação) | Sessão no banco (tabela `session`); o logout invalida de fato |
-| `bcryptjs` | `hashPassword` do Better Auth (scrypt) |
-| `AUTH_SECRET` / `AUTH_URL` | `BETTER_AUTH_SECRET` / `BETTER_AUTH_URL` |
-| `lib/auth/require-auth.ts` | `lib/auth/session.ts` (`getSession`, `requireSession`, `requireRole`) |
-| Rate limiting a implementar | `rateLimit` nativo com armazenamento em banco |
-| `middleware.ts` | `src/proxy.ts` (Next.js 16), apenas otimista |
+| Proposta original (Auth.js)       | Implementação adotada (Better Auth)                                   |
+| --------------------------------- | --------------------------------------------------------------------- |
+| `src/auth.ts`                     | `src/lib/auth/auth.ts`                                                |
+| `api/auth/[...nextauth]/route.ts` | `api/auth/[...all]/route.ts`                                          |
+| Sessão JWT (sem revogação)        | Sessão no banco (tabela `session`); o logout invalida de fato         |
+| `bcryptjs`                        | `hashPassword` do Better Auth (scrypt)                                |
+| `AUTH_SECRET` / `AUTH_URL`        | `BETTER_AUTH_SECRET` / `BETTER_AUTH_URL`                              |
+| `lib/auth/require-auth.ts`        | `lib/auth/session.ts` (`getSession`, `requireSession`, `requireRole`) |
+| Rate limiting a implementar       | `rateLimit` nativo com armazenamento em banco                         |
+| `middleware.ts`                   | `src/proxy.ts` (Next.js 16), apenas otimista                          |
 
 ### 11.0.1 Contexto da decisão (registrado na revisão 1.1)
 
@@ -1329,7 +1329,7 @@ Documentação: <https://supabase.com/docs>
 3. Criar uma organização, se necessário.
 4. Selecionar **New project**.
 5. Informar:
-   - Nome: `personal-platform`.
+   - Nome: `painel-admin`.
    - Senha forte para o banco.
    - Região próxima dos usuários e da aplicação, considerando
      disponibilidade.
@@ -1371,12 +1371,12 @@ usuário do pooler são específicos do projeto.
 
 ### 12.3 Portas
 
-| Serviço | Porta | Observação |
-|---|---|---|
-| Next.js local | 3000 | Aplicação web |
-| PostgreSQL local | 5432 | Porta padrão do Postgres |
-| Supabase pooler transaction | 6543 | Conexão compartilhada transaction |
-| Supabase pooler session | 5432 | Conexão compartilhada session |
+| Serviço                     | Porta | Observação                        |
+| --------------------------- | ----- | --------------------------------- |
+| Next.js local               | 3000  | Aplicação web                     |
+| PostgreSQL local            | 5432  | Porta padrão do Postgres          |
+| Supabase pooler transaction | 6543  | Conexão compartilhada transaction |
+| Supabase pooler session     | 5432  | Conexão compartilhada session     |
 
 A porta não deve ser presumida: copiar o endereço e a porta exibidos no
 painel do Supabase.
@@ -1422,8 +1422,8 @@ Supabase, a **Data API deve ser desativada** no projeto. Ver
 
 O dia a dia usa **PostgreSQL local via Docker Compose** (princípio 9). O
 Supabase é usado em Preview e Produção (Fase 06). Para a aplicação na Vercel,
-`DATABASE_URL` usa o *transaction pooler* com `?pgbouncer=true`; para
-migrations, `DIRECT_URL` usa a conexão direta, ou o *session pooler* quando
+`DATABASE_URL` usa o _transaction pooler_ com `?pgbouncer=true`; para
+migrations, `DIRECT_URL` usa a conexão direta, ou o _session pooler_ quando
 não houver IPv6.
 
 ---
@@ -1435,17 +1435,17 @@ seus relacionamentos.
 
 ### 13.1 Primeiras entidades candidatas
 
-| Domínio | Entidade | Finalidade |
-|---|---|---|
-| Identidade | User | Conta de usuário |
-| Identidade | Account | Contas OAuth, se forem adotadas |
-| Identidade | Session | Sessões persistidas, se adotadas |
-| Projetos | Project | Projetos cadastrados |
-| Projetos | ProjectLink | Links relacionados a um projeto, se necessário |
-| PDI | Goal | Metas profissionais |
-| PDI | ActionItem | Ações de uma meta |
-| Financeiro | Transaction | Receitas e despesas |
-| Financeiro | Category | Categorias financeiras |
+| Domínio    | Entidade    | Finalidade                                     |
+| ---------- | ----------- | ---------------------------------------------- |
+| Identidade | User        | Conta de usuário                               |
+| Identidade | Account     | Contas OAuth, se forem adotadas                |
+| Identidade | Session     | Sessões persistidas, se adotadas               |
+| Projetos   | Project     | Projetos cadastrados                           |
+| Projetos   | ProjectLink | Links relacionados a um projeto, se necessário |
+| PDI        | Goal        | Metas profissionais                            |
+| PDI        | ActionItem  | Ações de uma meta                              |
+| Financeiro | Transaction | Receitas e despesas                            |
+| Financeiro | Category    | Categorias financeiras                         |
 
 Essa lista é preliminar. Não criar todas as tabelas antes de confirmar
 os requisitos funcionais de cada módulo.
@@ -1917,17 +1917,17 @@ Adicionar ao `package.json`:
 
 ### 16.5 Tipos de testes
 
-| Tipo | Ferramenta |
-|---|---|
-| Funções e utilitários | Jest |
-| Componentes React síncronos | Jest + Testing Library |
-| Hooks | Jest + Testing Library |
-| Schemas Zod | Jest |
-| Serviços e regras de negócio | Jest |
-| Fluxo completo de login | Playwright |
-| Navegação e acesso aos módulos | Playwright |
-| Testes de integração com banco | Jest + banco de teste isolado |
-| Async Server Components | E2E com Playwright, quando apropriado |
+| Tipo                           | Ferramenta                            |
+| ------------------------------ | ------------------------------------- |
+| Funções e utilitários          | Jest                                  |
+| Componentes React síncronos    | Jest + Testing Library                |
+| Hooks                          | Jest + Testing Library                |
+| Schemas Zod                    | Jest                                  |
+| Serviços e regras de negócio   | Jest                                  |
+| Fluxo completo de login        | Playwright                            |
+| Navegação e acesso aos módulos | Playwright                            |
+| Testes de integração com banco | Jest + banco de teste isolado         |
+| Async Server Components        | E2E com Playwright, quando apropriado |
 
 **Limitação conhecida:** Jest não oferece suporte completo a Async
 Server Components. Não forçar testes unitários nesse cenário; testar o
@@ -2140,7 +2140,7 @@ Admin não será automaticamente compartilhada com outra aplicação.
 ## 20. Estrutura proposta
 
 ```text
-personal-platform-admin/
+painel-admin-admin/
 │
 ├── docs/
 │   ├── architecture/
@@ -2529,20 +2529,20 @@ integração futura.
 
 ## 25. Registro de decisões arquiteturais
 
-| ID | Decisão | Justificativa | Status |
-|---|---|---|---|
-| ADR-001 | Monólito modular | Reduz complexidade inicial e mantém separação de domínios | Adotada |
-| ADR-002 | Next.js App Router | Fullstack React e aprendizado do ecossistema | Adotada |
-| ADR-003 | TypeScript strict | Segurança de tipos e manutenção | Adotada |
-| ADR-004 | SCSS Modules | Estilos isolados e controle visual | Adotada |
-| ADR-005 | Radix UI + Lucide | Acessibilidade e identidade visual própria | Adotada |
+| ID      | Decisão                                       | Justificativa                                                       | Status                         |
+| ------- | --------------------------------------------- | ------------------------------------------------------------------- | ------------------------------ |
+| ADR-001 | Monólito modular                              | Reduz complexidade inicial e mantém separação de domínios           | Adotada                        |
+| ADR-002 | Next.js App Router                            | Fullstack React e aprendizado do ecossistema                        | Adotada                        |
+| ADR-003 | TypeScript strict                             | Segurança de tipos e manutenção                                     | Adotada                        |
+| ADR-004 | SCSS Modules                                  | Estilos isolados e controle visual                                  | Adotada                        |
+| ADR-005 | Radix UI + Lucide                             | Acessibilidade e identidade visual própria                          | Adotada                        |
 | ADR-006 | Better Auth (e-mail e senha, sessão no banco) | Biblioteca ativa; rate limiting, hash e revogação de sessão nativos | **Aceita** (substitui Auth.js) |
-| ADR-007 | PostgreSQL + Prisma | Persistência relacional e tipagem | Adotada |
-| ADR-008 | Supabase Free | PostgreSQL gerenciado para início | Proposta a validar |
-| ADR-009 | Zod | Validação compartilhada | Adotada |
-| ADR-010 | Jest + Playwright | Testes unitários, componentes e E2E | Adotada |
-| ADR-011 | Vercel Hobby | Deploy pessoal inicial | Proposta a validar |
-| ADR-012 | Arquitetura híbrida | Módulos integrados ou independentes conforme necessidade | Adotada |
+| ADR-007 | PostgreSQL + Prisma                           | Persistência relacional e tipagem                                   | Adotada                        |
+| ADR-008 | Supabase Free                                 | PostgreSQL gerenciado para início                                   | Proposta a validar             |
+| ADR-009 | Zod                                           | Validação compartilhada                                             | Adotada                        |
+| ADR-010 | Jest + Playwright                             | Testes unitários, componentes e E2E                                 | Adotada                        |
+| ADR-011 | Vercel Hobby                                  | Deploy pessoal inicial                                              | Proposta a validar             |
+| ADR-012 | Arquitetura híbrida                           | Módulos integrados ou independentes conforme necessidade            | Adotada                        |
 
 ---
 

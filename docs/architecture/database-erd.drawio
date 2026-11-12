@@ -1,0 +1,41 @@
+<mxfile host="app.diagrams.net" agent="Devin" version="24.0.0" type="device">
+  <diagram name="ERD - Primeira versao" id="erd-v1">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- USER -->
+        <mxCell id="user" value="&lt;div style=&quot;text-align:left&quot;&gt;&lt;b&gt;USER&lt;/b&gt;&lt;/div&gt;&lt;hr&gt;&lt;table style=&quot;border-collapse:collapse;width:100%&quot;&gt;&lt;tr&gt;&lt;td style=&quot;padding:2px 6px&quot;&gt;id&lt;/td&gt;&lt;td style=&quot;padding:2px 6px&quot;&gt;PK&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;padding:2px 6px&quot;&gt;name&lt;/td&gt;&lt;td style=&quot;padding:2px 6px&quot;&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;padding:2px 6px&quot;&gt;email&lt;/td&gt;&lt;td style=&quot;padding:2px 6px&quot;&gt;UK&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;padding:2px 6px&quot;&gt;emailVerified&lt;/td&gt;&lt;td style=&quot;padding:2px 6px&quot;&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;padding:2px 6px&quot;&gt;image&lt;/td&gt;&lt;td style=&quot;padding:2px 6px&quot;&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;padding:2px 6px&quot;&gt;role (ADMIN|USER)&lt;/td&gt;&lt;td style=&quot;padding:2px 6px&quot;&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;padding:2px 6px&quot;&gt;isActive&lt;/td&gt;&lt;td style=&quot;padding:2px 6px&quot;&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;padding:2px 6px&quot;&gt;createdAt&lt;/td&gt;&lt;td style=&quot;padding:2px 6px&quot;&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;padding:2px 6px&quot;&gt;updatedAt&lt;/td&gt;&lt;td style=&quot;padding:2px 6px&quot;&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;" style="html=1;whiteSpace=wrap;rounded=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;align=left;spacingLeft=6;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="40" y="160" width="210" height="290" as="geometry" />
+        </mxCell>
+
+        <!-- SESSION -->
+        <mxCell id="session" value="&lt;div style=&quot;text-align:left&quot;&gt;&lt;b&gt;SESSION&lt;/b&gt;&lt;/div&gt;&lt;hr&gt;&lt;table style=&quot;border-collapse:collapse;width:100%&quot;&gt;&lt;tr&gt;&lt;td style=&quot;padding:2px 6px&quot;&gt;id&lt;/td&gt;&lt;td style=&quot;padding:2px 6px&quot;&gt;PK&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;padding:2px 6px&quot;&gt;token&lt;/td&gt;&lt;td style=&quot;padding:2px 6px&quot;&gt;UK&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;padding:2px 6px&quot;&gt;expiresAt&lt;/td&gt;&lt;td style=&quot;padding:2px 6px&quot;&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;padding:2px 6px&quot;&gt;userId&lt;/td&gt;&lt;td style=&quot;padding:2px 6px&quot;&gt;FK&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;" style="html=1;whiteSpace=wrap;rounded=0;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;align=left;spacingLeft=6;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="380" y="40" width="190" height="170" as="geometry" />
+        </mxCell>
+
+        <!-- ACCOUNT -->
+        <mxCell id="account" value="&lt;div style=&quot;text-align:left&quot;&gt;&lt;b&gt;ACCOUNT&lt;/b&gt;&lt;/div&gt;&lt;hr&gt;&lt;table style=&quot;border-collapse:collapse;width:100%&quot;&gt;&lt;tr&gt;&lt;td style=&quot;padding:2px 6px&quot;&gt;id&lt;/td&gt;&lt;td style=&quot;padding:2px 6px&quot;&gt;PK&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;padding:2px 6px&quot;&gt;providerId (credential)&lt;/td&gt;&lt;td style=&quot;padding:2px 6px&quot;&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;padding:2px 6px&quot;&gt;password (hash)&lt;/td&gt;&lt;td style=&quot;padding:2px 6px&quot;&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;padding:2px 6px&quot;&gt;userId&lt;/td&gt;&lt;td style=&quot;padding:2px 6px&quot;&gt;FK&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;" style="html=1;whiteSpace=wrap;rounded=0;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;align=left;spacingLeft=6;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="380" y="280" width="190" height="170" as="geometry" />
+        </mxCell>
+
+        <!-- PROJECT -->
+        <mxCell id="project" value="&lt;div style=&quot;text-align:left&quot;&gt;&lt;b&gt;PROJECT&lt;/b&gt;&lt;span style=&quot;color:#666;font-size:10px&quot;&gt; (Fase 04)&lt;/span&gt;&lt;/div&gt;&lt;hr&gt;&lt;table style=&quot;border-collapse:collapse;width:100%&quot;&gt;&lt;tr&gt;&lt;td style=&quot;padding:2px 6px&quot;&gt;id&lt;/td&gt;&lt;td style=&quot;padding:2px 6px&quot;&gt;PK&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;padding:2px 6px&quot;&gt;name&lt;/td&gt;&lt;td style=&quot;padding:2px 6px&quot;&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;padding:2px 6px&quot;&gt;userId&lt;/td&gt;&lt;td style=&quot;padding:2px 6px&quot;&gt;FK&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;" style="html=1;whiteSpace=wrap;rounded=0;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;align=left;spacingLeft=6;verticalAlign=top;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="700" y="160" width="190" height="140" as="geometry" />
+        </mxCell>
+
+        <!-- RELATIONSHIPS: USER 1:N SESSION / ACCOUNT / PROJECT -->
+        <mxCell id="rel-user-session" value="possui (1:N)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endArrow=ERone;startArrow=ERmandOne;strokeColor=#333;fontSize=10;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="user" target="session">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-user-account" value="possui (1:N)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=1;exitY=0.6;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endArrow=ERone;startArrow=ERmandOne;strokeColor=#333;fontSize=10;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="user" target="account">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-user-project" value="é dona de (1:N)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;dashed=1;exitX=1;exitY=0.85;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endArrow=ERone;startArrow=ERmandOne;strokeColor=#333;fontSize=10;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="user" target="project">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
