@@ -1,52 +1,81 @@
-# Fase 04 — Backend, Contratos e Primeiro Módulo
+# Fase 04 — Backend, Contratos e Primeiro Módulo (Projetos)
 
-> **Status:** 📋 Planejada — o passo a passo será escrito quando a fase começar.\
+> **Objetivo da fase:** o módulo **Projetos** cria, lista, edita e exclui
+> registros persistidos, **apenas da própria usuária**, com entradas
+> inválidas rejeitadas no servidor e testes cobrindo as regras.\
+> **Tempo estimado:** 6 a 8 horas, divididas em sessões\
 > **Depende de:** [Fase 03 — Autenticação](../03-setup-autenticacao/README.md) concluída\
-> **Arquitetura:** ARCHITECTURE.md, seções 9, 10, 15 e 21 (Fases 4 e 5)
-
-## Objetivo da fase
-
-Operações de domínio funcionando com **validação (Zod), autenticação,
-autorização e persistência**, organizadas em camadas, e um primeiro módulo
-completo (sugestão: Projetos).
+> **Arquitetura:** ARCHITECTURE.md, seções 9, 10, 13.4, 15 e 22\
+> **Mapa geral:** [`docs/README.md`](../../README.md)
 
 ## 💡 As camadas, como numa cozinha de restaurante
 
-| Camada | Analogia | No código |
-|---|---|---|
-| Interface | O salão | Páginas e componentes |
-| Ações e endpoints | O garçom que anota o pedido | Server Actions e Route Handlers |
-| Serviços | O chef que aplica a receita | `modules/<x>/services` |
-| Acesso a dados | O estoquista | `modules/<x>/repositories` |
-| Persistência | A despensa | Prisma + PostgreSQL |
+| Camada | Analogia | Neste projeto | Pode… | Não pode… |
+|---|---|---|---|---|
+| Interface | O salão | Páginas e componentes | Mostrar dados, coletar formulários | Acessar o banco |
+| Entrada (ações e endpoints) | O garçom | Server Actions e Route Handlers | Checar sessão, validar com Zod, chamar o serviço | Conter regra de negócio |
+| Serviço | O chef | `modules/projects/services` | Aplicar as regras (dona, nome único) | Saber de HTTP ou de formulário |
+| Repositório | O estoquista | `modules/projects/repositories` | Ler e gravar no banco, **sempre filtrando pela dona** | Decidir regras |
+| Persistência | A despensa | Prisma + PostgreSQL | Garantir integridade (FK, `UNIQUE`) | — |
 
-O garçom não cozinha e o chef não vai à despensa no meio do salão. Cada
-camada fala apenas com a vizinha.
+💡 O garçom não cozinha e o chef não atende mesa. Quando cada camada faz
+só o seu papel, dá para trocar o salão (uma tela nova, ou um app que consome
+a API) sem mexer na receita (o serviço).
 
-## Antes de começar (decisões e informações necessárias)
+```text
+ Navegador ──formulário──▶ Server Action ─┐
+                                          ├─▶ Serviço ──▶ Repositório ──▶ Prisma ──▶ PostgreSQL
+ App externo ──HTTP JSON──▶ Route Handler ┘
+```
 
-- [ ] Módulo inicial (Projetos ou Estudos)
-- [ ] Requisitos funcionais do módulo: o que se cadastra, lista, edita e exclui
-- [ ] Formato padrão de resposta e de erro da API
+As **duas portas de entrada** (Server Action e Route Handler) usam o
+**mesmo** schema Zod e o **mesmo** serviço. A regra existe em um lugar só.
 
-## Passos previstos
+## Ordem dos passos
 
-| # | Passo | Status |
-|---|---|---|
-| 01 | Instalar o Zod e criar os schemas compartilhados | 📋 |
-| 02 | Padrão de respostas e erros (sem detalhes internos) | 📋 |
-| 03 | Repositório e serviço do módulo inicial | 📋 |
-| 04 | Server Actions (criar, editar, excluir) | 📋 |
-| 05 | Route Handlers `/api/v1/...` necessários | 📋 |
-| 06 | Telas do módulo, substituindo o mock | 📋 |
-| 07 | Testes unitários de schemas e serviços | 📋 |
+| # | Passo | O que entrega | Status |
+|---|---|---|---|
+| 01 | [Modelo `Project` no banco](01-modelo-project.md) | Tabela `project` com dona e nome único | ⬜ |
+| 02 | [Zod 4 e schemas de validação](02-zod-schemas.md) | Contratos de entrada + 7 testes | ⬜ |
+| 03 | [Padrão de erros e respostas](03-erros-e-respostas.md) | `AppError`, `{ data }` / `{ error }` + 5 testes | ⬜ |
+| 04 | [Repositório](04-repositorio.md) | Acesso a dados isolado por dona | ⬜ |
+| 05 | [Serviço e API pública do módulo](05-servico.md) | Regras de negócio + 7 testes | ⬜ |
+| 06 | [Route Handlers `/api/v1/projects`](06-route-handlers.md) | API REST com 5 operações | ⬜ |
+| 07 | [Server Actions](07-server-actions.md) | Criar, editar e excluir pela interface | ⬜ |
+| 08 | [Componentes de UI: Button, AlertDialog e PageHeader](08-componentes-ui.md) | Peças reutilizáveis | ⬜ |
+| 09 | [Telas de Projetos](09-telas-projetos.md) | Lista, novo, editar, excluir e página 404 | ⬜ |
+| 10 | [Validação final e testes de isolamento](10-validacao-final.md) | Prova de que uma usuária não vê os dados de outra | ⬜ |
+
+## Checklist da fase
+
+- [ ] Modelo `Project` com `@@unique([ownerId, name])` e migration aplicada
+- [ ] Zod 4 instalado; schemas de criação e atualização testados
+- [ ] Respostas da API no formato `{ data }` / `{ error: { code, message } }`
+- [ ] Erros inesperados nunca expõem detalhes (testado)
+- [ ] Repositório filtrando **toda** consulta por `ownerId`
+- [ ] Serviço com regras: dona, nome único e “não encontrado” para projeto alheio
+- [ ] `GET/POST /api/v1/projects` e `GET/PATCH/DELETE /api/v1/projects/:id`
+- [ ] Server Actions validando sessão, dados e permissão
+- [ ] Telas: lista, criar, editar e excluir (com confirmação)
+- [ ] Teste de isolamento entre duas usuárias: **404** para projeto alheio
+- [ ] 29 testes unitários passando; bateria de segurança com 16 ok
 
 ## ✅ Critério de conclusão da fase
 
-O módulo inicial cria, lista, edita e exclui registros persistidos, apenas
-do próprio usuário, com entradas inválidas rejeitadas no servidor e testes
-cobrindo os casos positivos e negativos.
+```bash
+npm run typecheck && npm run lint && npm test && npm run build
+```
+
+Mais o roteiro de testes do [passo 10](10-validacao-final.md), com tudo conforme o esperado.
+
+## Versões validadas (11/11/2026)
+
+| Ferramenta | Versão |
+|---|---|
+| zod | 4.6.7 |
+| Next.js | 16.4.6 |
+| radix-ui (AlertDialog) | 1.8.1 |
 
 ---
 
-← [Fase anterior](../03-setup-autenticacao/README.md) · [Mapa geral](../../README.md) · [Próxima fase](../05-setup-testes-e2e/README.md) →
+← Fase anterior: [03 — Autenticação](../03-setup-autenticacao/README.md) · [Mapa geral](../../README.md) · Próxima fase: [05 — Testes E2E](../05-setup-testes-e2e/README.md) →

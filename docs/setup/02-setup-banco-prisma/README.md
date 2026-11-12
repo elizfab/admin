@@ -1,56 +1,79 @@
 # Fase 02 — Banco de Dados e Prisma
 
-> **Status:** 📋 Planejada — o passo a passo será escrito quando a fase começar.\
+> **Objetivo da fase:** a aplicação consulta o banco de desenvolvimento **pelo
+> servidor**, com o schema versionado em migrations.\
+> **Tempo estimado:** 3 a 4 horas\
 > **Depende de:** [Fase 01 — Frontend](../01-setup-frontend/README.md) concluída\
-> **Arquitetura:** ARCHITECTURE.md, seções 12, 13 e 14
+> **Arquitetura:** ARCHITECTURE.md, seções 12, 13 e 14\
+> **Mapa geral:** [`docs/README.md`](../../README.md)
 
-## Objetivo da fase
+## Por que esta fase vem antes da autenticação
 
-A aplicação consegue **consultar o banco de desenvolvimento pelo servidor**,
-com schema versionado em migrations e um usuário administrador criado por
-seed controlado.
+💡 O login precisa de uma tabela de usuários para consultar. Primeiro se
+constrói o **arquivo de fichas** (banco), depois a **portaria**
+(autenticação), que confere as fichas.
 
-## 💡 Por que esta fase vem antes da autenticação
+## Dois bancos, dois papéis
 
-O login precisa de uma tabela de usuários para consultar. Primeiro se
-constrói o “arquivo de fichas” (banco), depois a “portaria” (autenticação),
-que confere as fichas.
+| Banco | Onde roda | Para quê | Passo |
+|---|---|---|---|
+| **PostgreSQL local** (Docker) | Sua máquina | Desenvolvimento diário e testes; funciona offline e pode ser apagado à vontade | 01 |
+| **Supabase** (PostgreSQL gerenciado) | Nuvem | Preview e produção (Fase 06); criado agora para validar a conexão com antecedência | 02 |
 
-## Antes de começar (decisões e informações necessárias)
+💡 É como ter uma **cozinha de testes** em casa e o **restaurante** aberto
+ao público. As receitas novas são testadas em casa, e só vão para o
+restaurante as que deram certo. Isso cumpre o princípio 9 da arquitetura: o
+projeto funciona localmente, sem depender do deploy.
 
-- [ ] Confirmar o Supabase Free como banco de desenvolvimento (ADR-008)
-- [ ] Região do projeto Supabase
-- [ ] Entidades da primeira versão (mínimo: `User`; candidatas na seção 13.1)
-- [ ] Padrão de datas e fuso horário (ex.: armazenar em UTC, exibir em `America/Sao_Paulo`)
-- [ ] Usar ou não PostgreSQL local com Docker Compose
+## Ordem dos passos
 
-## Passos previstos
+| # | Passo | O que entrega | Status |
+|---|---|---|---|
+| 01 | [PostgreSQL local com Docker Compose](01-postgres-local-docker.md) | Banco rodando em `localhost:5432` | ⬜ |
+| 02 | [Projeto no Supabase](02-projeto-supabase.md) | Projeto criado, Data API desativada, strings de conexão guardadas | ⬜ |
+| 03 | [Modelagem de dados e ERD](03-modelagem-e-erd.md) | Entidades, regras e diagrama ER | ⬜ |
+| 04 | [Instalar o Prisma 7](04-instalar-prisma.md) | Pacotes na versão 7 (fixada) | ⬜ |
+| 05 | [Configurar o Prisma](05-configurar-prisma.md) | `prisma7.config.ts`, `schema.prisma`, variáveis e scripts | ⬜ |
+| 06 | [Primeira migration](06-primeira-migration.md) | Tabela `user` criada; Prisma Client gerado | ⬜ |
+| 07 | [Cliente Prisma reutilizável](07-cliente-prisma.md) | `src/lib/db/prisma.ts` | ⬜ |
+| 08 | [Health check com banco](08-health-check.md) | `/api/v1/health` responde 200 ou 503 | ⬜ |
 
-| # | Passo | Status |
-|---|---|---|
-| 01 | Criar o projeto no Supabase e obter as strings de conexão | 📋 |
-| 02 | Modelar as entidades iniciais e o ERD no Draw.io | 📋 |
-| 03 | Instalar o Prisma 7 e o driver adapter `pg` | 📋 |
-| 04 | `prisma.config.ts`, `schema.prisma` e variáveis `.env.local` / `.env.example` | 📋 |
-| 05 | Primeira migration e `prisma generate` | 📋 |
-| 06 | Cliente Prisma reutilizável (`src/lib/db/prisma.ts`) | 📋 |
-| 07 | Seed idempotente do usuário administrador | 📋 |
-| 08 | Health check sem dados sensíveis (`/api/v1/health`) | 📋 |
-| 09 | (Opcional) PostgreSQL local com Docker Compose | 📋 |
+> **Mudança em relação ao plano original:** o seed da conta administradora
+> passou para a Fase 03, porque a senha precisa ser criptografada com o
+> mesmo algoritmo do Better Auth (decisão registrada no ADR-006).
 
-## Pontos de atenção já conhecidos
+## Checklist da fase
 
-- Prisma 7: Node.js ≥ 20.19; `migrate dev` **não** roda `generate` nem `seed`
-  automaticamente; o `.env` não é carregado sozinho (usar `dotenv`).
-- Supabase: pooler *transaction* (porta 6543) para a aplicação e conexão
-  direta ou *session* para migrations. A conexão direta pode exigir IPv6.
-- Nunca versionar `.env.local` nem colar strings de conexão em prints ou issues.
+- [ ] PostgreSQL local rodando via Docker Compose
+- [ ] Projeto Supabase criado, **com a Data API desativada**
+- [ ] Strings de conexão do Supabase guardadas em local seguro (fora do Git)
+- [ ] ERD da primeira versão desenhado
+- [ ] Prisma 7 instalado (sem a versão 8 RC)
+- [ ] `prisma7.config.ts` e `schema.prisma` configurados
+- [ ] `.env.local` com `DATABASE_URL` e `DIRECT_URL`; `.env.example` atualizado
+- [ ] Migration `init` criada e aplicada
+- [ ] Client gerado em `src/generated/prisma` (ignorado pelo Git)
+- [ ] `src/lib/db/prisma.ts` criado
+- [ ] `/api/v1/health` respondendo `200` com o banco no ar e `503` sem ele
 
 ## ✅ Critério de conclusão da fase
 
-Uma rota de servidor consulta o banco com sucesso, `npx prisma migrate status`
-não mostra pendências e o seed pode ser executado duas vezes sem duplicar dados.
+```bash
+npm run db:status   # "Database schema is up to date!"
+npm run typecheck && npm run lint && npm test && npm run build
+curl http://localhost:3000/api/v1/health   # {"status":"ok","database":"up",...}
+```
+
+## Versões validadas (11/11/2026)
+
+| Ferramenta | Versão |
+|---|---|
+| PostgreSQL | 16 |
+| prisma / @prisma/client / @prisma/adapter-pg | 7.10.1 |
+| pg | 8.x |
+| dotenv | 18.x |
+| tsx | 4.x |
 
 ---
 
-← [Fase anterior](../01-setup-frontend/README.md) · [Mapa geral](../../README.md) · [Próxima fase](../03-setup-autenticacao/README.md) →
+← Fase anterior: [01 — Frontend](../01-setup-frontend/README.md) · [Mapa geral](../../README.md) · Próxima fase: [03 — Autenticação](../03-setup-autenticacao/README.md) →
