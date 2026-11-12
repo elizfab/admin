@@ -99,30 +99,30 @@ formulário **envia o formulário**. É uma fonte clássica de bugs.
 }
 
 .primary {
-  color: #ffffff;
-  background: var(--color-primary);
+  color: var(--background);
+  background: var(--accent-color);
 
   &:hover:not(:disabled) {
-    background: var(--color-primary-hover);
+    background: var(--accent-color-hover);
   }
 }
 
 .secondary {
-  color: var(--color-text);
-  background: var(--color-surface);
-  border-color: var(--color-border);
+  color: var(--text-color);
+  background: var(--card-background);
+  border-color: var(--border);
 
   &:hover:not(:disabled) {
-    background: var(--color-background);
+    background: var(--background);
   }
 }
 
 .danger {
-  color: #ffffff;
-  background: var(--color-danger);
+  color: var(--background);
+  background: var(--red);
 
   &:hover:not(:disabled) {
-    background: #a31f1f;
+    background: color-mix(in srgb, var(--red) 88%, black);
   }
 }
 ```
@@ -197,7 +197,7 @@ export function AlertDialogFooter({ className, ...props }: ComponentProps<"div">
   width: calc(100% - #{$space-6});
   max-width: 440px;
   padding: $space-5;
-  background: var(--color-surface);
+  background: var(--card-background);
   border-radius: $radius-lg;
   box-shadow: 0 16px 48px rgb(32 31 37 / 20%);
   transform: translate(-50%, -50%);
@@ -210,7 +210,7 @@ export function AlertDialogFooter({ className, ...props }: ComponentProps<"div">
 
 .description {
   margin: 0 0 $space-5;
-  color: var(--color-muted);
+  color: var(--text-color-secondary);
 }
 
 .footer {
@@ -274,7 +274,7 @@ export function PageHeader({ title, description, action }: PageHeaderProps) {
 
   p {
     margin: 0;
-    color: var(--color-muted);
+    color: var(--text-color-secondary);
   }
 }
 ```

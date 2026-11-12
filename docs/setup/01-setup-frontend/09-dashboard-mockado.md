@@ -165,13 +165,13 @@ export function ModuleCard({ module }: ModuleCardProps) {
   flex-direction: column;
   gap: $space-2;
   padding: $space-5;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
+  background: var(--card-background);
+  border: 1px solid var(--border);
   border-radius: $radius-lg;
   transition: border-color 150ms ease, box-shadow 150ms ease;
 
   &:hover {
-    border-color: var(--color-primary);
+    border-color: var(--accent-color);
     box-shadow: 0 4px 16px rgb(75 63 209 / 10%);
   }
 }
@@ -181,8 +181,8 @@ export function ModuleCard({ module }: ModuleCardProps) {
   place-items: center;
   width: 44px;
   height: 44px;
-  color: var(--color-primary);
-  background: var(--color-primary-soft);
+  color: var(--accent-color);
+  background: var(--selection-color);
   border-radius: $radius-md;
 }
 
@@ -193,7 +193,7 @@ export function ModuleCard({ module }: ModuleCardProps) {
 .description {
   flex-grow: 1;
   margin: 0;
-  color: var(--color-muted);
+  color: var(--text-color-secondary);
 }
 
 .status {
@@ -205,18 +205,18 @@ export function ModuleCard({ module }: ModuleCardProps) {
 }
 
 .status_available {
-  color: #1b5e20;
-  background: #e8f5e9;
+  color: var(--green);
+  background: color-mix(in srgb, var(--green) 14%, transparent);
 }
 
 .status_external {
-  color: var(--color-primary);
-  background: var(--color-primary-soft);
+  color: var(--accent-color);
+  background: var(--selection-color);
 }
 
 .status_soon {
-  color: var(--color-muted);
-  background: var(--color-background);
+  color: var(--text-color-secondary);
+  background: var(--background);
 }
 ```
 
@@ -269,7 +269,7 @@ export default function DashboardPage() {
 
   p {
     margin: 0;
-    color: var(--color-muted);
+    color: var(--text-color-secondary);
   }
 }
 
@@ -358,13 +358,13 @@ usa `h1`. Dentro de outra seção, usa o padrão `h2`.
   gap: $space-3;
   padding: $space-7 $space-4;
   text-align: center;
-  background: var(--color-surface);
-  border: 1px dashed var(--color-border);
+  background: var(--card-background);
+  border: 1px dashed var(--border);
   border-radius: $radius-lg;
 }
 
 .icon {
-  color: var(--color-primary);
+  color: var(--accent-color);
 }
 
 .title {
@@ -374,7 +374,7 @@ usa `h1`. Dentro de outra seção, usa o padrão `h2`.
 .description {
   max-width: 48ch;
   margin: 0;
-  color: var(--color-muted);
+  color: var(--text-color-secondary);
 }
 ```
 

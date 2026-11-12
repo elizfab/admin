@@ -484,23 +484,88 @@ $breakpoints: (
 );
 ```
 
-As **cores** ficam em CSS custom properties em `src/styles/themes/_light.scss`,
-porque mudam com o tema (claro/escuro) em tempo de execução, algo que
-variáveis Sass, resolvidas na compilação, não conseguem fazer:
+As **cores** ficam em CSS custom properties nos arquivos de tema
+(`src/styles/themes/_light.scss` e `_dark.scss`), porque mudam com o tema
+(claro/escuro) em tempo de execução, algo que variáveis Sass, resolvidas na
+compilação, não conseguem fazer. A paleta oficial é a **Dracula**:
 
 ```scss
+// _light.scss (:root — tema padrão)
 :root {
-  --color-primary: #4b3fd1;
-  --color-primary-hover: #3a2fb0;
-  --color-background: #f7f7fb;
-  --color-surface: #ffffff;
-  --color-text: #201f25;
-  --color-muted: #64626e;
+  color-scheme: light;
+
+  --background: #fffbeb;
+  --card-background: #efeddc;
+  --table-background: #efeddc;
+  --light-grey: #cfcfde;
+  --very-light-grey: #efeddc;
+  --overlay-surface-background: #efeddc;
+  --input-color: #fffbeb;
+
+  --selection-color: #cfcfde;
+  --medium-grey: #cfcfde;
+  --border: #cfcfde;
+
+  --text-color: #1f1f1f;
+  --text-color-secondary: #6c664b;
+  --indigo: #6c664b;
+
+  --accent-color: #644ac9;
+  --blue: #644ac9;
+  --purple: #644ac9;
+  --cyan: #036a96;
+  --teal: #036a96;
+  --green: #14710a;
+  --orange: #a34d14;
+  --brown: #a34d14;
+  --pink: #a3144d;
+  --red: #cb3a2a;
+  --yellow: #846e15;
+
+  --accent-color-hover: color-mix(in srgb, var(--accent-color) 88%, black);
+}
+
+// _dark.scss — mesmos tokens, ativados por [data-theme="dark"]
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --background: #282a36;
+  --card-background: #353747;
+  --table-background: #353747;
+  --light-grey: #44475a;
+  --very-light-grey: #343746;
+  --overlay-surface-background: #343746;
+  --input-color: #21222c;
+
+  --selection-color: #44475a;
+  --medium-grey: #44475a;
+  --border: #44475a;
+
+  --text-color: #f8f8f2;
+  --text-color-secondary: #6272a4;
+  --indigo: #6272a4;
+
+  --accent-color: #bd93f9;
+  --blue: #bd93f9;
+  --purple: #bd93f9;
+  --cyan: #8be9fd;
+  --teal: #8be9fd;
+  --green: #50fa7b;
+  --orange: #ffb86c;
+  --brown: #ffb86c;
+  --pink: #ff79c6;
+  --red: #ff5555;
+  --yellow: #f1fa8c;
+
+  --accent-color-hover: color-mix(in srgb, var(--accent-color) 88%, white);
 }
 ```
 
-> O tom de `--color-muted` foi escurecido de `#777582` para `#64626e` para
-> atingir contraste mínimo de 4.5:1 (WCAG AA) sobre o fundo `#f7f7fb`.
+> **Regra obrigatória:** nenhum componente pode usar cor fixa (hex, `rgb()`,
+> nome). Toda cor vem dos tokens acima, que existem nos dois temas. Cor nova
+> = token novo nos dois arquivos de tema. O tema é alternado pelo
+> `ThemeToggle` no Header (`data-theme` no `<html>`, persistido em
+> `localStorage["theme"]`, com fallback para `prefers-color-scheme`).
 
 ### 6.4 Exemplo de mixin
 
@@ -536,8 +601,8 @@ para o celular e cada breakpoint _adiciona_ ajustes para telas maiores.
 .sidebar {
   width: $sidebar-width-collapsed;
   min-height: 100vh;
-  background: var(--color-surface);
-  border-right: 1px solid var(--color-border);
+  background: var(--card-background);
+  border-right: 1px solid var(--border);
 
   @include up("lg") {
     width: $sidebar-width;
@@ -553,8 +618,8 @@ para o celular e cada breakpoint _adiciona_ ajustes para telas maiores.
 }
 
 .itemActive {
-  color: var(--color-primary);
-  background: var(--color-primary-soft);
+  color: var(--accent-color);
+  background: var(--selection-color);
 }
 ```
 
@@ -606,7 +671,7 @@ Um arquivo `src/styles/abstracts/_index.scss` reexporta variáveis e mixins
 @use "@/styles/abstracts" as *;
 
 .card {
-  color: var(--color-text);
+  color: var(--text-color);
   border-radius: $radius-md;
 
   @include up("md") {

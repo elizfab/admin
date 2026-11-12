@@ -92,7 +92,7 @@ test.describe("páginas públicas", () => {
 | # | Teste | Resultado esperado |
 |---|---|---|
 | 1 | `npx playwright test accessibility.spec` | `7 passed` (2 setups + 5 páginas) |
-| 2 | **Prova do alarme:** em `src/styles/themes/_light.scss`, troque `--color-muted` por `#b0b0b0` e rode | Falha com a regra **`color-contrast`**. Desfaça |
+| 2 | **Prova do alarme:** em `src/styles/themes/_light.scss`, troque `--text-color-secondary` por `#b0b0b0` e rode | Falha com a regra **`color-contrast`**. Desfaça |
 
 **Critério de aceite:** os dois testes passam.
 

@@ -130,8 +130,8 @@ export function DropdownMenuSeparator({
 .content {
   min-width: 200px;
   padding: $space-1;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
+  background: var(--card-background);
+  border: 1px solid var(--border);
   border-radius: $radius-md;
   box-shadow: 0 8px 24px rgb(32 31 37 / 12%);
 }
@@ -149,12 +149,12 @@ export function DropdownMenuSeparator({
 
   // O Radix marca o item com foco de teclado/mouse com data-highlighted.
   &[data-highlighted] {
-    color: var(--color-primary);
-    background: var(--color-primary-soft);
+    color: var(--accent-color);
+    background: var(--selection-color);
   }
 
   &[data-disabled] {
-    color: var(--color-muted);
+    color: var(--text-color-secondary);
     cursor: not-allowed;
     opacity: 0.6;
   }
@@ -163,13 +163,13 @@ export function DropdownMenuSeparator({
 .label {
   padding: $space-2 $space-3;
   font-size: $font-size-xs;
-  color: var(--color-muted);
+  color: var(--text-color-secondary);
 }
 
 .separator {
   height: 1px;
   margin: $space-1 0;
-  background: var(--color-border);
+  background: var(--border);
 }
 ```
 

@@ -25,16 +25,16 @@ aninhamento.
 | Pasta | Conteúdo | Gera CSS? |
 |---|---|---|
 | `abstracts/` | Variáveis Sass e mixins (ferramentas) | **Não**; só é usada por outros arquivos |
-| `themes/` | Cores em CSS custom properties (`--color-*`) | Sim, uma vez, no global |
+| `themes/` | Cores em CSS custom properties (`--*` (tokens da paleta)) | Sim, uma vez, no global |
 | `base/` | Reset, tipografia e acessibilidade globais | Sim, uma vez, no global |
 
-### Por que as cores ficam em `--color-*`, e não em `$color-*`
+### Por que as cores ficam em `--*` (tokens da paleta), e não em `$color-*`
 
 - **Variável Sass (`$space-4`)** é resolvida na **compilação** e vira um valor
   fixo no CSS final. É ótima para espaçamentos, bordas e breakpoints.
-- **CSS custom property (`--color-primary`)** existe no **navegador** e pode
-  mudar em tempo de execução. Um tema escuro futuro só redefine as variáveis,
-  sem recompilar nada.
+- **CSS custom property (`--accent-color`)** existe no **navegador** e pode
+  mudar em tempo de execução. Os temas claro e escuro redefinem as
+  variáveis (`data-theme="dark"`), sem recompilar nada.
 
 ### Por que mobile-first
 
@@ -130,7 +130,7 @@ $breakpoints: (
 
 // Anel de foco visível e consistente para navegação por teclado.
 @mixin focus-ring {
-  outline: 2px solid var(--color-focus);
+  outline: 2px solid var(--accent-color);
   outline-offset: 2px;
 }
 
@@ -175,32 +175,56 @@ $breakpoints: (
 💡 `@forward` reexporta. Assim, cada módulo faz **um único**
 `@use "@/styles/abstracts" as *;` e ganha acesso a variáveis e mixins.
 
-### 6. Tema claro — `themes/_light.scss`
+### 6. Temas — `themes/_light.scss` e `themes/_dark.scss`
 
-`src/styles/themes/_light.scss`:
+As cores ficam em CSS custom properties, uma lista por tema. A paleta
+oficial é a **Dracula**; o tema escuro é ativado por
+`<html data-theme="dark">` (o `ThemeToggle` do Header alterna e persiste
+em `localStorage`).
+
+`src/styles/themes/_light.scss` (trecho — a lista completa está no arquivo):
 
 ```scss
-// Tema claro: cores como CSS custom properties.
-// Um tema escuro futuro só precisa redefinir estas variáveis.
 :root {
-  --color-primary: #4b3fd1;
-  --color-primary-hover: #3a2fb0;
-  --color-primary-soft: #eeedfd;
+  color-scheme: light;
 
-  --color-background: #f7f7fb;
-  --color-surface: #ffffff;
-  --color-border: #e8e7ee;
+  --background: #fffbeb;
+  --card-background: #efeddc;
+  --table-background: #efeddc;
+  --overlay-surface-background: #efeddc;
+  --input-color: #fffbeb;
 
-  --color-text: #201f25;
-  --color-muted: #64626e;
+  --selection-color: #cfcfde;
+  --medium-grey: #cfcfde;
+  --border: #cfcfde;
 
-  --color-danger: #c62828;
-  --color-focus: #4b3fd1;
+  --text-color: #1f1f1f;
+  --text-color-secondary: #6c664b;
+  --indigo: #6c664b;
+
+  --accent-color: #644ac9;
+  --blue: #644ac9;
+  --purple: #644ac9;
+  --cyan: #036a96;
+  --teal: #036a96;
+  --green: #14710a;
+  --orange: #a34d14;
+  --brown: #a34d14;
+  --pink: #a3144d;
+  --red: #cb3a2a;
+  --yellow: #846e15;
+
+  --accent-color-hover: color-mix(in srgb, var(--accent-color) 88%, black);
 }
 ```
 
-> O tom de `--color-muted` (`#64626e`) foi escolhido para atingir contraste
-> mínimo de 4.5:1 (WCAG AA) sobre o fundo `#f7f7fb`.
+`src/styles/themes/_dark.scss` usa o mesmo conjunto de tokens dentro de
+`[data-theme="dark"]`, com os valores escuros da paleta Dracula
+(`--background: #282a36`, `--card-background: #353747`,
+`--text-color: #f8f8f2`, `--accent-color: #bd93f9` etc.).
+
+> **Regra do projeto:** componente nenhum usa cor fixa — só tokens de
+> `src/styles/themes/`. Cor nova entra nos dois arquivos de tema.
 
 ### 7. Base global — reset, tipografia e acessibilidade
 
@@ -244,8 +268,8 @@ body {
   font-family: var(--font-geist-sans), system-ui, sans-serif;
   font-size: $font-size-md;
   line-height: 1.5;
-  color: var(--color-text);
-  background: var(--color-background);
+  color: var(--text-color);
+  background: var(--background);
 }
 
 h1,
@@ -304,6 +328,7 @@ Crie `src/app/globals.scss`:
 // Estilos globais: apenas base, tema e acessibilidade.
 // Estilos de componentes ficam em *.module.scss junto do componente.
 @use "../styles/themes/light";
+@use "../styles/themes/dark";
 @use "../styles/base/reset";
 @use "../styles/base/typography";
 @use "../styles/base/accessibility";
@@ -350,6 +375,7 @@ export default function HomePage() {
 | `src/styles/abstracts/_mixins.scss` | Criado | Mixins (breakpoints, foco, acessibilidade) |
 | `src/styles/abstracts/_index.scss` | Criado | Reexporta variáveis e mixins |
 | `src/styles/themes/_light.scss` | Criado | Cores do tema claro |
+| `src/styles/themes/_dark.scss` | Criado | Cores do tema escuro |
 | `src/styles/base/_reset.scss` | Criado | Normalização entre navegadores |
 | `src/styles/base/_typography.scss` | Criado | Fonte, tamanhos e cores do texto |
 | `src/styles/base/_accessibility.scss` | Criado | Foco, movimento reduzido, `.visually-hidden` |
@@ -362,9 +388,9 @@ export default function HomePage() {
 
 | # | Teste | Resultado esperado |
 |---|---|---|
-| 1 | `npm run dev` → `localhost:3000` | Fundo cinza-claro (`#f7f7fb`), texto escuro, fonte Geist |
+| 1 | `npm run dev` → `localhost:3000` | Fundo claro da paleta (`--background`), texto escuro, fonte Geist |
 | 2 | Teclar `Tab` na página | Nenhum erro (ainda não há elementos focáveis) |
-| 3 | DevTools → Elements → `<html>` → Computed | Variáveis `--color-primary` etc. presentes em `:root` |
+| 3 | DevTools → Elements → `<html>` → Computed | Tokens da paleta (`--accent-color`, `--background` etc.) presentes em `:root` |
 | 4 | `npm run build` | Build sem erros |
 | 5 | `npm run lint` e `npm run typecheck` | Sem erros |
 
