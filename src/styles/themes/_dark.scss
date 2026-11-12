@@ -1,0 +1,41 @@
+// Tema escuro: paleta Dracula.
+// Ativado por <html data-theme="dark"> (toggle no Header, persistido em
+// localStorage; fallback: prefers-color-scheme).
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  // Superfícies
+  --background: #282a36;
+  --card-background: #353747;
+  --table-background: #353747;
+  --light-grey: #44475a;
+  --very-light-grey: #343746;
+  --overlay-surface-background: #343746;
+  --input-color: #21222c;
+
+  // Seleção e bordas
+  --selection-color: #44475a;
+  --medium-grey: #44475a;
+  --border: #44475a;
+
+  // Texto
+  --text-color: #f8f8f2;
+  --text-color-secondary: #6272a4;
+  --indigo: #6272a4;
+
+  // Cores de destaque
+  --accent-color: #bd93f9;
+  --blue: #bd93f9;
+  --purple: #bd93f9;
+  --cyan: #8be9fd;
+  --teal: #8be9fd;
+  --green: #50fa7b;
+  --orange: #ffb86c;
+  --brown: #ffb86c;
+  --pink: #ff79c6;
+  --red: #ff5555;
+  --yellow: #f1fa8c;
+
+  // Estados derivados
+  --accent-color-hover: color-mix(in srgb, var(--accent-color) 88%, white);
+}
