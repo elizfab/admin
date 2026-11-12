@@ -1,0 +1,71 @@
+@use "@/styles/abstracts" as *;
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: $space-4;
+  width: 100%;
+  max-width: 380px;
+  padding: $space-6;
+  background: var(--card-background);
+  border: 1px solid var(--border);
+  border-radius: $radius-lg;
+}
+
+.title {
+  font-size: $font-size-xl;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: $space-1;
+
+  label {
+    font-size: $font-size-sm;
+    font-weight: 600;
+  }
+
+  input {
+    padding: $space-3;
+    font: inherit;
+    border: 1px solid var(--border);
+    border-radius: $radius-sm;
+
+    &:focus-visible {
+      @include focus-ring;
+    }
+  }
+}
+
+.error {
+  margin: 0;
+  padding: $space-2 $space-3;
+  font-size: $font-size-sm;
+  color: var(--red);
+  background: color-mix(in srgb, var(--red) 10%, transparent);
+  border-radius: $radius-sm;
+}
+
+.submit {
+  padding: $space-3;
+  font-weight: 600;
+  color: var(--background);
+  background: var(--accent-color);
+  border: none;
+  border-radius: $radius-sm;
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    background: var(--accent-color-hover);
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+}
