@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Admin — Personal Platform
 
-## Getting Started
+Portal administrativo pessoal, privado e extensível: ponto central de acesso
+aos módulos Estudos, Financeiro, PDI e Projetos.
 
-First, run the development server:
+> **Status:** Fase 01 (frontend) concluída. Banco, autenticação e backend nas
+> próximas fases.
+
+## Stack
+
+Next.js (App Router) · TypeScript strict · SCSS Modules · Radix UI · Lucide React · Jest + React Testing Library
+
+Planejado: PostgreSQL + Prisma · Zod · autenticação · Playwright · Vercel
+
+## Pré-requisitos
+
+- Node.js ≥ 20.19
+- npm
+
+## Como rodar
 
 ```bash
+npm install
+cp .env.example .env.local   # quando houver variáveis
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abrir <http://localhost:3000>.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Script                                      | O que faz                          |
+| ------------------------------------------- | ---------------------------------- |
+| `npm run dev`                               | Servidor de desenvolvimento        |
+| `npm run build`                             | Build de produção                  |
+| `npm run start`                             | Executa o build de produção        |
+| `npm run lint` / `lint:fix`                 | ESLint (verificar / corrigir)      |
+| `npm run typecheck`                         | Verificação de tipos do TypeScript |
+| `npm test` / `test:watch` / `test:coverage` | Testes unitários (Jest)            |
 
-## Learn More
+## Documentação
 
-To learn more about Next.js, take a look at the following resources:
+- [Mapa de implementação](docs/README.md): ordem das fases, status e guias passo a passo
+- [Arquitetura](docs/architecture/ARCHITECTURE.md): decisões técnicas e padrões
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Estrutura
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```text
+src/
+├── app/          # rotas (App Router)
+├── components/   # componentes visuais (ui, layout, shared)
+├── modules/      # domínios (dashboard, ...)
+├── lib/          # infraestrutura e utilitários
+└── styles/       # tokens, tema e estilos base
+tests/
+└── unit/         # testes Jest
+```

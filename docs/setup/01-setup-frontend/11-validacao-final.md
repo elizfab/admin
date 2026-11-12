@@ -12,8 +12,7 @@ padrão do Next.js pelo README do projeto e fechar a fase com um commit.
 ## 💡 Por que
 
 É a **vistoria antes da entrega das chaves**: cada item é conferido com um
-teste, não com “acho que está funcionando”. A regra 11 da arquitetura (seção
-26) vale aqui: não afirmar que algo funciona sem testar.
+teste, não com “acho que está funcionando”. A regra 11 da arquitetura (seção 26) vale aqui: não afirmar que algo funciona sem testar.
 
 ## Pré-requisitos
 
@@ -79,14 +78,14 @@ Abrir <http://localhost:3000>.
 
 ## Scripts
 
-| Script | O que faz |
-|---|---|
-| `npm run dev` | Servidor de desenvolvimento |
-| `npm run build` | Build de produção |
-| `npm run start` | Executa o build de produção |
-| `npm run lint` / `lint:fix` | ESLint (verificar / corrigir) |
-| `npm run typecheck` | Verificação de tipos do TypeScript |
-| `npm test` / `test:watch` / `test:coverage` | Testes unitários (Jest) |
+| Script                                      | O que faz                          |
+| ------------------------------------------- | ---------------------------------- |
+| `npm run dev`                               | Servidor de desenvolvimento        |
+| `npm run build`                             | Build de produção                  |
+| `npm run start`                             | Executa o build de produção        |
+| `npm run lint` / `lint:fix`                 | ESLint (verificar / corrigir)      |
+| `npm run typecheck`                         | Verificação de tipos do TypeScript |
+| `npm test` / `test:watch` / `test:coverage` | Testes unitários (Jest)            |
 
 ## Documentação
 
@@ -122,36 +121,36 @@ podem ser adicionadas **fora** do bloco `BEGIN/END:nextjs-agent-rules`.
 
 ## Arquivos criados ou alterados
 
-| Arquivo | Ação | Descrição |
-|---|---|---|
-| `README.md` | Alterado | README do projeto |
+| Arquivo                                                     | Ação      | Descrição         |
+| ----------------------------------------------------------- | --------- | ----------------- |
+| `README.md`                                                 | Alterado  | README do projeto |
 | `docs/README.md` e `docs/setup/01-setup-frontend/README.md` | Alterados | Status atualizado |
 
 ## ✅ Como testar (checklist final da fase)
 
 **Automático**
 
-- [ ] `npm run typecheck`: sem erros
-- [ ] `npm run lint`: sem erros e sem avisos
-- [ ] `npm test`: 7 testes passando
-- [ ] `npm run build`: rotas `/`, `/dashboard`, `/studies`, `/finance`, `/pdi`, `/projects`
+- [ x ] `npm run typecheck`: sem erros
+- [ x ] `npm run lint`: sem erros e sem avisos
+- [ x ] `npm test`: 7 testes passando
+- [ x ] `npm run build`: rotas `/`, `/dashboard`, `/studies`, `/finance`, `/pdi`, `/projects`
 
 **Navegação** (`npm run start`)
 
-- [ ] `/` redireciona para `/dashboard`
-- [ ] Cada item da Sidebar abre sua página e fica destacado
-- [ ] Cada card do dashboard abre o módulo correspondente
-- [ ] Título da aba muda por página (“Financeiro | Admin”)
+- [ x ] `/` redireciona para `/dashboard`
+- [ x ] Cada item da Sidebar abre sua página e fica destacado
+- [ x ] Cada card do dashboard abre o módulo correspondente
+- [ x ] Título da aba muda por página (“Financeiro | Admin”)
 
 **Responsividade** (DevTools, `Ctrl+Shift+M`)
 
-- [ ] 375px: Sidebar só com ícones, 1 coluna de cards, botão do usuário só com ícone
-- [ ] 800px: 2 colunas de cards
-- [ ] 1366px: Sidebar com texto, 4 colunas de cards
+- [ x ] 375px: Sidebar só com ícones, 1 coluna de cards, botão do usuário só com ícone
+- [ x ] 800px: 2 colunas de cards
+- [ x ] 1366px: Sidebar com texto, 4 colunas de cards
 
 **Acessibilidade** (só teclado, sem mouse)
 
-- [ ] `Tab` percorre Sidebar → botão do usuário com contorno de foco visível
+- [ x ] `Tab` percorre Sidebar → botão do usuário com contorno de foco visível
 - [ ] O menu do usuário abre com `Enter`, navega com as setas e fecha com `Esc`
 - [ ] DevTools → Lighthouse → Accessibility em `/dashboard`: anotar a pontuação e corrigir os itens apontados
 
@@ -163,10 +162,10 @@ podem ser adicionadas **fora** do bloco `BEGIN/END:nextjs-agent-rules`.
 
 ## ⚠️ Problemas comuns
 
-| Sintoma | Causa provável | Solução |
-|---|---|---|
-| Lighthouse aponta contraste baixo | Cor alterada no tema | Conferir contraste em <https://webaim.org/resources/contrastchecker/> |
-| `npm run start` mostra versão antiga | Build desatualizado | Rodar `npm run build` antes do `start` |
+| Sintoma                              | Causa provável       | Solução                                                               |
+| ------------------------------------ | -------------------- | --------------------------------------------------------------------- |
+| Lighthouse aponta contraste baixo    | Cor alterada no tema | Conferir contraste em <https://webaim.org/resources/contrastchecker/> |
+| `npm run start` mostra versão antiga | Build desatualizado  | Rodar `npm run build` antes do `start`                                |
 
 ## Commit sugerido
 
@@ -175,7 +174,7 @@ git add README.md docs
 git commit -m "docs: adiciona README do projeto e conclui fase 01 (frontend)"
 ```
 
-Opcional: marcar o marco com uma *tag*:
+Opcional: marcar o marco com uma _tag_:
 
 ```bash
 git tag fase-01-frontend
