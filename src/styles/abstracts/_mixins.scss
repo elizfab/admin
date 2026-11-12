@@ -1,0 +1,41 @@
+@use "sass:map";
+@use "variables" as vars;
+
+// Mobile-first: aplica estilos a partir do breakpoint informado.
+@mixin up($breakpoint) {
+  $value: map.get(vars.$breakpoints, $breakpoint);
+
+  @if not $value {
+    @error "Breakpoint `#{$breakpoint}` não existe em $breakpoints.";
+  }
+
+  @media (min-width: $value) {
+    @content;
+  }
+}
+
+// Anel de foco visível e consistente para navegação por teclado.
+@mixin focus-ring {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+// Esconde visualmente, mas mantém o conteúdo para leitores de tela.
+@mixin visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+// Desfaz o visually-hidden (ex.: mostrar o texto a partir de um breakpoint).
+@mixin visually-shown {
+  position: static;
+  width: auto;
+  height: auto;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}

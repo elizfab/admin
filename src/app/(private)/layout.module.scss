@@ -1,0 +1,22 @@
+@use "@/styles/abstracts" as *;
+
+.shell {
+  display: flex;
+  min-height: 100vh;
+}
+
+.content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0; // evita que conteúdo largo estoure o layout flex
+}
+
+.main {
+  flex: 1;
+  padding: $space-5 $space-4;
+
+  @include up("lg") {
+    padding: $space-6;
+  }
+}

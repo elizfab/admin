@@ -1,0 +1,28 @@
+@use "@/styles/abstracts" as *;
+
+.heading {
+  display: flex;
+  flex-direction: column;
+  gap: $space-1;
+  margin-bottom: $space-5;
+
+  p {
+    margin: 0;
+    color: var(--color-muted);
+  }
+}
+
+// Mobile-first: 1 coluna → 2 (tablet) → 4 (desktop).
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $space-4;
+
+  @include up("md") {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include up("lg") {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}

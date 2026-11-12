@@ -1,0 +1,56 @@
+@use "@/styles/abstracts" as *;
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: $header-height;
+  padding: 0 $space-4;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+
+  @include up("lg") {
+    padding: 0 $space-6;
+  }
+}
+
+.greeting {
+  margin: 0;
+  overflow: hidden;
+  font-weight: 600;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.userButton {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: $space-2;
+  padding: $space-2 $space-3;
+  color: var(--color-text);
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: $radius-sm;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--color-background);
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
+
+// No celular mostra só o ícone; o nome continua acessível.
+.userName {
+  @include visually-hidden;
+
+  @include up("md") {
+    @include visually-shown;
+  }
+}

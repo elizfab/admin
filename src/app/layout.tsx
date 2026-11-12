@@ -1,0 +1,26 @@
+import type { Metadata } from "next";
+import { Open_Sans } from "next/font/google";
+
+import "./globals.scss";
+
+const openSans = Open_Sans({
+  variable: "--font-open-sans",
+  subsets: ["latin"],
+  display: "swap",
+});
+
+export const metadata: Metadata = {
+  title: {
+    default: "Admin",
+    template: "%s | Admin",
+  },
+  description: "Portal administrativo pessoal.",
+};
+
+export default function RootLayout({ children }: LayoutProps<"/">) {
+  return (
+    <html lang="pt-BR" className={openSans.variable}>
+      <body>{children}</body>
+    </html>
+  );
+}

@@ -24,10 +24,10 @@ início.
 - [ x ] Node.js ≥ 20.19 instalado
 - [ x ] npm instalado
 - [ x ] Git instalado, com `user.name` e `user.email` configurados
-- [ ] VS Code com as extensões recomendadas
+- [ x ] VS Code com as extensões recomendadas
 - [ x ] Pasta `_admin` contendo `docs/`
-- [ ] `git init` executado em `_admin`, com branch `main`
-- [ ] Primeiro commit (documentação) realizado
+- [ x ] `git init` executado em `_admin`, com branch `main`
+- [ x ] Primeiro commit (documentação) realizado
 
 ## ✅ Critério de conclusão da fase
 

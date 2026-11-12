@@ -1,0 +1,17 @@
+// Tema claro: cores como CSS custom properties.
+// Um tema escuro futuro só precisa redefinir estas variáveis.
+:root {
+  --color-primary: #4b3fd1;
+  --color-primary-hover: #3a2fb0;
+  --color-primary-soft: #eeedfd;
+
+  --color-background: #f7f7fb;
+  --color-surface: #ffffff;
+  --color-border: #e8e7ee;
+
+  --color-text: #201f25;
+  --color-muted: #64626e;
+
+  --color-danger: #c62828;
+  --color-focus: #4b3fd1;
+}

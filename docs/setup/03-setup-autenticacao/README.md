@@ -1,57 +1,82 @@
-# Fase 03 — Autenticação e Autorização
+# Fase 03 — Autenticação e Autorização (Better Auth)
 
-> **Status:** 🔒 Bloqueada por decisão — passo a passo escrito após a escolha da biblioteca.\
+> **Objetivo da fase:** **não é possível acessar dados privados sem sessão
+> válida e autorização**, e isso é comprovado com testes de acesso direto
+> a páginas e endpoints.\
+> **Tempo estimado:** 5 a 7 horas, divididas em sessões\
 > **Depende de:** [Fase 02 — Banco e Prisma](../02-setup-banco-prisma/README.md) concluída\
-> **Arquitetura:** ARCHITECTURE.md, seção 11 (especialmente 11.0)
-
-## Objetivo da fase
-
-**Não é possível acessar dados privados sem sessão válida e autorização**,
-testando inclusive o acesso direto a URLs, Server Actions e endpoints.
+> **Decisão:** [ADR-006 — Better Auth](../../decisions/ADR-006-autenticacao-better-auth.md)\
+> **Arquitetura:** ARCHITECTURE.md, seção 11 (princípios de segurança)
 
 ## 💡 Autenticação × autorização
 
-- **Autenticação** é a portaria: “quem é você?”.
-- **Autorização** é a chave de cada sala: “você pode entrar *aqui*?”.
+- **Autenticação** é a portaria: “quem é você?”. Login, senha, sessão.
+- **Autorização** é a chave de cada sala: “você pode entrar **aqui**?”. Papel (`role`), dona do registro.
 
-Esconder um botão no frontend não tranca a sala. A verificação precisa
-acontecer no servidor, em toda operação (princípio 1).
+E a regra de ouro do projeto (princípio 1): **esconder o botão não tranca a
+sala**. Toda verificação acontece **no servidor**.
 
-## Antes de começar (decisões e informações necessárias)
+## As três camadas de proteção desta fase
 
-- [ ] **Biblioteca:** Auth.js v5 (beta, em manutenção pelo time do Better Auth) ou Better Auth (ver seção 11.0); registrar em um ADR
-- [ ] Método de login: e-mail e senha (Credentials)?
-- [ ] Haverá mais de uma conta além da administradora?
-- [ ] Duração da sessão (proposta atual: 8 horas)
-- [ ] Estratégia de rate limiting no login
+| Camada | Onde | O que faz | É segura sozinha? |
+|---|---|---|---|
+| 1. `proxy.ts` | Antes da página | Sem cookie de sessão → redireciona para `/login` | ❌ Não valida o cookie; só agiliza |
+| 2. `requireSession()` | Layout privado | Valida a sessão **no banco** | ✅ Para páginas |
+| 3. `getSession()` em cada endpoint/action | Route Handlers e Server Actions | `401` sem sessão válida | ✅ Para dados |
 
-## Passos previstos
+💡 Pense num prédio: o porteiro (proxy) olha se você **tem** um crachá; o
+leitor eletrônico da sala (servidor) confere se o crachá é **válido**. Um
+crachá falsificado passa pelo porteiro, mas não abre a porta (validado no
+passo 10).
 
-| # | Passo | Status |
-|---|---|---|
-| 01 | Registrar a decisão da biblioteca (ADR-006 revisado) | 📋 |
-| 02 | Instalar e configurar a biblioteca e as variáveis de ambiente | 📋 |
-| 03 | Hash de senha e verificação no servidor | 📋 |
-| 04 | Tela de login `(public)/login` e layout público | 📋 |
-| 05 | Sessão, logout e expiração | 📋 |
-| 06 | Proteção do layout privado e `proxy.ts` (Next.js 16) | 📋 |
-| 07 | Helper `requireAuth` para Route Handlers e Server Actions | 📋 |
-| 08 | Rate limiting no login | 📋 |
-| 09 | Testes de acesso direto sem sessão | 📋 |
+## Ordem dos passos
 
-## Pontos de atenção já conhecidos
+| # | Passo | O que entrega | Status |
+|---|---|---|---|
+| 01 | [Registrar a decisão (ADR)](01-registrar-decisao-adr.md) | ADR-006 aceito | ⬜ |
+| 02 | [Instalar e configurar o Better Auth](02-instalar-configurar-better-auth.md) | `lib/auth/auth.ts` e variáveis | ⬜ |
+| 03 | [Gerar as tabelas de autenticação](03-gerar-tabelas-auth.md) | `session`, `account`, `verification`, `rateLimit` | ⬜ |
+| 04 | [Rota de autenticação e cliente](04-rota-e-cliente.md) | `/api/auth/*` e `auth-client.ts` | ⬜ |
+| 05 | [Seed da conta administradora](05-seed-administradora.md) | Conta criada com senha em hash | ⬜ |
+| 06 | [Sessão no servidor e layout protegido](06-sessao-no-servidor.md) | `requireSession()` e raiz condicional | ⬜ |
+| 07 | [Tela de login](07-tela-de-login.md) | `/login` funcional + testes | ⬜ |
+| 08 | [Logout e usuário real no Header](08-logout.md) | “Sair” funcionando | ⬜ |
+| 09 | [Proxy (Next.js 16)](09-proxy.md) | Redirecionamento otimista | ⬜ |
+| 10 | [Endpoint protegido e testes de segurança](10-testes-de-seguranca.md) | `/api/v1/me` + bateria de 13 testes | ⬜ |
 
-- Next.js 16: `middleware.ts` virou `proxy.ts` (função `proxy`); exemplos
-  antigos com `export { auth as middleware }` precisam ser adaptados.
-- O `proxy.ts` melhora a navegação, mas **não substitui** a verificação em
-  cada operação de dados.
-- O menu do usuário (Header) já tem o item “Sair (em breve)” reservado.
+## Checklist da fase
+
+- [ ] ADR-006 revisado e aceito
+- [ ] `better-auth` instalado; `BETTER_AUTH_SECRET` gerado
+- [ ] Cadastro público **desabilitado**
+- [ ] Tabelas do Better Auth criadas via CLI + migration
+- [ ] Administradora criada pelo seed (idempotente)
+- [ ] `/login` funcionando, com mensagem de erro genérica
+- [ ] Layout privado protegido no servidor
+- [ ] Logout encerra a sessão **no banco**
+- [ ] `proxy.ts` redirecionando quem não tem cookie
+- [ ] `/api/v1/me` responde `401` sem sessão
+- [ ] Rate limiting: `429` após 5 tentativas em 1 minuto
+- [ ] Conta desativada (`isActive = false`) não consegue logar
+- [ ] 10 testes unitários passando
 
 ## ✅ Critério de conclusão da fase
 
-Sem sessão: páginas privadas redirecionam para `/login`, e endpoints e
-actions respondem `401`. Com sessão encerrada, o acesso é negado.
+A bateria de testes do [passo 10](10-testes-de-seguranca.md) passa por
+completo, e:
+
+```bash
+npm run typecheck && npm run lint && npm test && npm run build
+```
+
+## Versões validadas (11/11/2026)
+
+| Ferramenta | Versão |
+|---|---|
+| better-auth | 1.7.21 |
+| CLI `auth` | 1.7.21 |
+| server-only | 0.0.1 |
 
 ---
 
-← [Fase anterior](../02-setup-banco-prisma/README.md) · [Mapa geral](../../README.md) · [Próxima fase](../04-setup-backend/README.md) →
+← Fase anterior: [02 — Banco e Prisma](../02-setup-banco-prisma/README.md) · [Mapa geral](../../README.md) · Próxima fase: [04 — Backend](../04-setup-backend/README.md) →
