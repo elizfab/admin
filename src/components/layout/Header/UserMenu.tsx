@@ -1,6 +1,7 @@
 "use client";
 
 import { ChevronDown, LogOut, UserRound } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 import {
     DropdownMenu,
@@ -10,6 +11,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/DropdownMenu/DropdownMenu";
+import { authClient } from "@/lib/auth/auth-client";
 
 import styles from "./Header.module.scss";
 
@@ -18,6 +20,15 @@ type UserMenuProps = {
 };
 
 export function UserMenu({ userName }: UserMenuProps) {
+    const router = useRouter();
+
+    async function handleSignOut() {
+        // Encerra a sessão no servidor (apaga do banco) e remove o cookie.
+        await authClient.signOut();
+        router.push("/login");
+        router.refresh();
+    }
+
     return (
         <DropdownMenu>
             <DropdownMenuTrigger className={styles.userButton}>
@@ -33,10 +44,9 @@ export function UserMenu({ userName }: UserMenuProps) {
                     Perfil (em breve)
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                {/* O logout real será implementado na fase de autenticação. */}
-                <DropdownMenuItem disabled>
+                <DropdownMenuItem onSelect={handleSignOut}>
                     <LogOut size={16} aria-hidden="true" />
-                    Sair (em breve)
+                    Sair
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
