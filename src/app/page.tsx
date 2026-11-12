@@ -1,10 +1,7 @@
-import { LayoutDashboard } from "lucide-react";
+import { redirect } from "next/navigation";
 
+// Fase de frontend: sempre envia para o dashboard.
+// Na fase de autenticação, este redirecionamento passará a depender da sessão.
 export default function HomePage() {
-  return (
-    <main style={{ padding: 32 }}>
-      <h1>Fundação de estilos funcionando</h1>
-      <LayoutDashboard size={32} strokeWidth={1.75} aria-hidden="true" />
-    </main>
-  );
+  redirect("/dashboard");
 }

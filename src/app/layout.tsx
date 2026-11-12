@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Open_Sans } from "next/font/google";
+
 import "./globals.scss";
 
 const openSans = Open_Sans({
@@ -9,8 +10,11 @@ const openSans = Open_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Painel administrativo",
-  description: "Plataforma pessoal de ferramentas e aplicações.",
+  title: {
+    default: "Admin",
+    template: "%s | Admin",
+  },
+  description: "Portal administrativo pessoal.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
