@@ -35,30 +35,30 @@ As **duas portas de entrada** (Server Action e Route Handler) usam o
 
 | # | Passo | O que entrega | Status |
 |---|---|---|---|
-| 01 | [Modelo `Project` no banco](01-modelo-project.md) | Tabela `project` com dona e nome único | ⬜ |
-| 02 | [Zod 4 e schemas de validação](02-zod-schemas.md) | Contratos de entrada + 7 testes | ⬜ |
-| 03 | [Padrão de erros e respostas](03-erros-e-respostas.md) | `AppError`, `{ data }` / `{ error }` + 5 testes | ⬜ |
-| 04 | [Repositório](04-repositorio.md) | Acesso a dados isolado por dona | ⬜ |
-| 05 | [Serviço e API pública do módulo](05-servico.md) | Regras de negócio + 7 testes | ⬜ |
-| 06 | [Route Handlers `/api/v1/projects`](06-route-handlers.md) | API REST com 5 operações | ⬜ |
-| 07 | [Server Actions](07-server-actions.md) | Criar, editar e excluir pela interface | ⬜ |
-| 08 | [Componentes de UI: Button, AlertDialog e PageHeader](08-componentes-ui.md) | Peças reutilizáveis | ⬜ |
-| 09 | [Telas de Projetos](09-telas-projetos.md) | Lista, novo, editar, excluir e página 404 | ⬜ |
-| 10 | [Validação final e testes de isolamento](10-validacao-final.md) | Prova de que uma usuária não vê os dados de outra | ⬜ |
+| 01 | [Modelo `Project` no banco](01-modelo-project.md) | Tabela `project` com dona e nome único | ✅ |
+| 02 | [Zod 4 e schemas de validação](02-zod-schemas.md) | Contratos de entrada + 7 testes | ✅ |
+| 03 | [Padrão de erros e respostas](03-erros-e-respostas.md) | `AppError`, `{ data }` / `{ error }` + 5 testes | ✅ |
+| 04 | [Repositório](04-repositorio.md) | Acesso a dados isolado por dona | ✅ |
+| 05 | [Serviço e API pública do módulo](05-servico.md) | Regras de negócio + 7 testes | ✅ |
+| 06 | [Route Handlers `/api/v1/projects`](06-route-handlers.md) | API REST com 5 operações | ✅ |
+| 07 | [Server Actions](07-server-actions.md) | Criar, editar e excluir pela interface | ✅ |
+| 08 | [Componentes de UI: Button, AlertDialog e PageHeader](08-componentes-ui.md) | Peças reutilizáveis | ✅ |
+| 09 | [Telas de Projetos](09-telas-projetos.md) | Lista, novo, editar, excluir e página 404 | ✅ |
+| 10 | [Validação final e testes de isolamento](10-validacao-final.md) | Prova de que uma usuária não vê os dados de outra | ✅ |
 
 ## Checklist da fase
 
-- [ ] Modelo `Project` com `@@unique([ownerId, name])` e migration aplicada
-- [ ] Zod 4 instalado; schemas de criação e atualização testados
-- [ ] Respostas da API no formato `{ data }` / `{ error: { code, message } }`
-- [ ] Erros inesperados nunca expõem detalhes (testado)
-- [ ] Repositório filtrando **toda** consulta por `ownerId`
-- [ ] Serviço com regras: dona, nome único e “não encontrado” para projeto alheio
-- [ ] `GET/POST /api/v1/projects` e `GET/PATCH/DELETE /api/v1/projects/:id`
-- [ ] Server Actions validando sessão, dados e permissão
-- [ ] Telas: lista, criar, editar e excluir (com confirmação)
-- [ ] Teste de isolamento entre duas usuárias: **404** para projeto alheio
-- [ ] 29 testes unitários passando; bateria de segurança com 16 ok
+- [x] Modelo `Project` com `@@unique([ownerId, name])` e migration aplicada
+- [x] Zod 4 instalado; schemas de criação e atualização testados
+- [x] Respostas da API no formato `{ data }` / `{ error: { code, message } }`
+- [x] Erros inesperados nunca expõem detalhes (testado)
+- [x] Repositório filtrando **toda** consulta por `ownerId`
+- [x] Serviço com regras: dona, nome único e “não encontrado” para projeto alheio
+- [x] `GET/POST /api/v1/projects` e `GET/PATCH/DELETE /api/v1/projects/:id`
+- [x] Server Actions validando sessão, dados e permissão
+- [x] Telas: lista, criar, editar e excluir (com confirmação)
+- [x] Teste de isolamento entre duas usuárias: **404** para projeto alheio
+- [x] 29 testes unitários passando; bateria de segurança com 16 ok
 
 ## ✅ Critério de conclusão da fase
 

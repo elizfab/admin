@@ -50,7 +50,7 @@ Legenda: ⬜ não iniciada · 🟨 em andamento · ✅ concluída · 📋 planej
 | 01 | [`setup/01-setup-frontend`](setup/01-setup-frontend/README.md) | Next.js, TypeScript, SCSS, design system, layout, dashboard mockado e testes unitários | ✅ |
 | 02 | [`setup/02-setup-banco-prisma`](setup/02-setup-banco-prisma/README.md) | PostgreSQL local (Docker), Supabase, ERD, Prisma 7 e health check | ✅ |
 | 03 | [`setup/03-setup-autenticacao`](setup/03-setup-autenticacao/README.md) | Better Auth: login, seed da administradora, sessão, logout, proxy, rate limiting e testes de segurança | ✅ |
-| 04 | [`setup/04-setup-backend`](setup/04-setup-backend/README.md) | Módulo Projetos: Zod 4, erros padrão, repositório, serviço, API REST, Server Actions, telas e testes de isolamento | ⬜ |
+| 04 | [`setup/04-setup-backend`](setup/04-setup-backend/README.md) | Módulo Projetos: Zod 4, erros padrão, repositório, serviço, API REST, Server Actions, telas e testes de isolamento | ✅ |
 | 05 | [`setup/05-setup-testes-e2e`](setup/05-setup-testes-e2e/README.md) | Playwright (auth, navegação, CRUD, isolamento, acessibilidade) e integração com banco | ⬜ |
 | 06 | [`setup/06-setup-deploy`](setup/06-setup-deploy/README.md) | GitHub, Vercel, variáveis por ambiente e backup | 📋 |
 
