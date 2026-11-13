@@ -1,0 +1,21 @@
+@use "@/styles/abstracts" as *;
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-3;
+  margin-bottom: $space-5;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: $space-1;
+
+  p {
+    margin: 0;
+    color: var(--text-color-secondary);
+  }
+}
