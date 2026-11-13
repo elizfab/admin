@@ -4,6 +4,7 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { cache } from "react";
 
+import { UnauthorizedError } from "../errors/app-error";
 import { auth } from "./auth";
 
 /**
@@ -36,3 +37,18 @@ export async function requireRole(role: "ADMIN" | "USER") {
 
     return session;
 }
+
+/**
+ * Para Route Handlers e Server Actions: sem sessão, lança UnauthorizedError
+ * (vira 401 na API). APIs não redirecionam.
+ */
+export async function requireApiSession() {
+    const session = await getSession();
+
+    if (!session) {
+        throw new UnauthorizedError();
+    }
+
+    return session;
+}
+

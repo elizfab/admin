@@ -1,17 +1,14 @@
-import { NextResponse } from "next/server";
-
-import { getSession } from "@/lib/auth/session";
+import { requireApiSession } from "@/lib/auth/session";
+import { apiError, ok } from "@/lib/http/api-response";
 
 export async function GET() {
-    const session = await getSession();
+    try {
+        const session = await requireApiSession();
+        const { id, name, email, role } = session.user;
 
-    // Em APIs não se redireciona: responde 401 (não autenticado).
-    if (!session) {
-        return NextResponse.json({ message: "Não autenticado." }, { status: 401 });
+        // Retorna somente o necessário — nunca tokens ou dados da sessão.
+        return ok({ id, name, email, role });
+    } catch (error) {
+        return apiError(error);
     }
-
-    const { id, name, email, role } = session.user;
-
-    // Retorna somente o necessário — nunca tokens ou dados da sessão.
-    return NextResponse.json({ id, name, email, role });
 }
