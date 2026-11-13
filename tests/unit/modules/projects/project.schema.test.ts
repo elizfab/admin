@@ -1,4 +1,4 @@
-import { createProjectSchema, updateProjectSchema } from "@/modules/schemas/project.schema";
+import { createProjectSchema, updateProjectSchema } from "@/modules/projects/schemas/project.schema";
 
 
 describe("createProjectSchema", () => {
