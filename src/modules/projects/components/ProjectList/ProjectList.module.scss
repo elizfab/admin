@@ -1,0 +1,96 @@
+@use "@/styles/abstracts" as *;
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+  padding: $space-4;
+  background: var(--card-background);
+  border: 1px solid var(--border);
+  border-radius: $radius-lg;
+
+  @include up("md") {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: $space-1;
+  min-width: 0;
+}
+
+.titleRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: $space-2;
+}
+
+.name {
+  font-size: $font-size-md;
+}
+
+.description {
+  margin: 0;
+  color: var(--text-color-secondary);
+}
+
+.meta {
+  margin: 0;
+  font-size: $font-size-xs;
+  color: var(--text-color-secondary);
+
+  a {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    color: var(--accent-color);
+    text-decoration: underline;
+  }
+}
+
+.actions {
+  display: flex;
+  flex-shrink: 0;
+  gap: $space-2;
+}
+
+.status {
+  padding: 2px $space-2;
+  font-size: $font-size-xs;
+  font-weight: 600;
+  border-radius: 999px;
+}
+
+.status_PLANNED {
+  color: var(--text-color-secondary);
+  background: var(--background);
+}
+
+.status_IN_PROGRESS {
+  color: var(--accent-color);
+  background: var(--selection-color);
+}
+
+.status_PAUSED {
+  color: var(--yellow);
+  background: color-mix(in srgb, var(--yellow) 14%, transparent);
+}
+
+.status_DONE {
+  color: var(--green);
+  background: color-mix(in srgb, var(--green) 14%, transparent);
+}
