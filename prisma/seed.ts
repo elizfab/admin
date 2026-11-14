@@ -72,7 +72,7 @@ async function main() {
             }),
         ]);
 
-        console.log(`Administradora criada: ${email}`);
+        console.log(`✅ Administradora criada com sucesso!: ${email}`);
     } finally {
         await prisma.$disconnect();
     }

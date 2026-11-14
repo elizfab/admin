@@ -36,7 +36,10 @@ export default defineConfig({
 
     // Sobe a aplicação de PRODUÇÃO (build + start) apontando para o banco de teste.
     webServer: {
-        command: `npm run build && npm run start -- --port ${E2E_PORT}`,
+        // O banco precisa existir ANTES do servidor subir: o health check
+        // responde 503 sem ele e o Playwright nunca liberaria o webServer
+        // para rodar o globalSetup (que é quem migraria/semeia o banco).
+        command: `npx tsx tests/e2e/support/prepare-database.ts && npm run build && npm run start -- --port ${E2E_PORT}`,
         url: `${E2E_BASE_URL}/api/v1/health`,
         env: e2eServerEnv,
         reuseExistingServer: !process.env.CI,
