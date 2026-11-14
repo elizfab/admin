@@ -26,9 +26,9 @@ mostra o que cada opção faz.
 
 | Opção | Valor | 💡 Por quê |
 |---|---|---|
-| `webServer.command` | `build` + `start` | Testa a aplicação **de produção**, e não o modo dev |
+| `webServer.command` | `prepare-database` + `build` + `start` | Cria o banco de teste, depois testa a aplicação **de produção** (e não o modo dev) |
 | `webServer.env` | `e2eServerEnv` | O servidor de teste usa o `admin_test` |
-| `webServer.url` | `/api/v1/health` | O Playwright só começa quando o health check (Fase 02) responde |
+| `webServer.url` | `/api/v1/health` | O Playwright só começa quando o health check (Fase 02) responde **200** |
 | `reuseExistingServer` | `true` localmente | Se um servidor de teste já estiver de pé na 3100, reaproveita |
 | `workers: 1` | Em série | Todos os testes usam o mesmo banco; em série o resultado é previsível |
 | `projects: setup → chromium` | Dependência | O login das usuárias (passo 03) acontece **antes** dos testes |
@@ -39,6 +39,13 @@ mostra o que cada opção faz.
 💡 O Next.js 16 grava o build do `next dev` em uma pasta separada
 (`.next/dev`). Por isso o `build` dos testes não atrapalha um `npm run dev`
 aberto em outro terminal.
+
+⚠️ **Ordem de execução (importante):** o Playwright sobe o `webServer` e
+espera a `url` responder **antes** de rodar o `globalSetup`. Como o health
+check responde `503` enquanto o banco não existe, o banco precisa ser criado
+**dentro do próprio `webServer.command`** — caso contrário o servidor nunca
+fica "pronto" e os testes falham com `Process from config.webServer exited
+early`. O script `prepare-database.ts` é criado no passo 03.
 
 ## Pré-requisitos
 
@@ -105,7 +112,10 @@ export default defineConfig({
 
   // Sobe a aplicação de PRODUÇÃO (build + start) apontando para o banco de teste.
   webServer: {
-    command: `npm run build && npm run start -- --port ${E2E_PORT}`,
+    // O banco precisa existir ANTES do servidor subir: o health check
+    // responde 503 sem ele e o Playwright nunca liberaria o webServer
+    // para rodar o globalSetup (que é quem migraria/semeia o banco).
+    command: `npx tsx tests/e2e/support/prepare-database.ts && npm run build && npm run start -- --port ${E2E_PORT}`,
     url: `${E2E_BASE_URL}/api/v1/health`,
     env: e2eServerEnv,
     reuseExistingServer: !process.env.CI,

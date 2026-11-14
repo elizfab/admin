@@ -6,8 +6,8 @@
   color-scheme: light;
 
   // Superfícies
-  --background: #fffbeb;
-  --card-background: #efeddc;
+  --background: #ffffff;
+  --card-background: #f2f2f2;
   --table-background: #efeddc;
   --light-grey: #cfcfde;
   --very-light-grey: #efeddc;
@@ -39,4 +39,6 @@
 
   // Estados derivados
   --accent-color-hover: color-mix(in srgb, var(--accent-color) 88%, black);
+  // Accent escurecido para texto sobre --selection-color (contraste WCAG AA ≥ 4.5:1).
+  --accent-on-selection: #553fab;
 }

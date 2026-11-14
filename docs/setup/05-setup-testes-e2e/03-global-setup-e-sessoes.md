@@ -43,7 +43,87 @@ entrada do evento, em vez de mostrar o ingresso em cada sala.
 
 ## Passo a passo
 
-### 1. Preparação global — `tests/e2e/global-setup.ts`
+### 1. Criação antecipada do banco — `tests/e2e/support/test-database.ts` e `prepare-database.ts`
+
+💡 **Por que este passo existe:** o Playwright sobe o `webServer` e espera
+`/api/v1/health` responder **antes** de rodar o `globalSetup`. O health
+check responde `503` enquanto o banco não existe — e quem aplicaria as
+migrations e criaria as tabelas é o próprio `globalSetup`. Sem criar o
+banco antes, o servidor nunca fica pronto e a execução morre com
+`Process from config.webServer exited early` ou
+`Timed out waiting 180000ms from config.webServer`.
+
+A solução é criar **apenas o banco** (sem migrations) no início do
+`webServer.command`, antes do `build`/`start`. O `globalSetup` continua
+responsável por migrations, limpeza e contas.
+
+`tests/e2e/support/test-database.ts`:
+
+```ts
+import { Client } from "pg";
+
+/**
+ * Conecta no banco administrativo "postgres" e cria o banco de teste
+ * se ele ainda não existir. Usado tanto pelo globalSetup quanto pelo
+ * script prepare-database (que roda antes do servidor subir, pois o
+ * health check só responde 200 quando o banco já existe).
+ */
+export async function createDatabaseIfMissing(databaseName: string, connectionString: string) {
+    const adminUrl = new URL(connectionString);
+    adminUrl.pathname = "/postgres";
+
+    const client = new Client({ connectionString: adminUrl.toString() });
+    await client.connect();
+
+    try {
+        const { rowCount } = await client.query("SELECT 1 FROM pg_database WHERE datname = $1", [
+            databaseName,
+        ]);
+
+        if (rowCount === 0) {
+            // Nome já validado por assertTestDatabase (só letras/_ e termina em _test).
+            await client.query(`CREATE DATABASE "${databaseName}"`);
+        }
+    } finally {
+        await client.end();
+    }
+}
+```
+
+`tests/e2e/support/prepare-database.ts`:
+
+```ts
+import { assertTestDatabase, E2E_DATABASE_URL } from "./e2e-env";
+import { createDatabaseIfMissing } from "./test-database";
+
+/**
+ * Executado pelo webServer do Playwright ANTES do `next build`/`next start`:
+ * o health check (/api/v1/health) só responde 200 quando o banco existe,
+ * e o globalSetup (que rodaria depois) só executa quando o servidor
+ * já está no ar. Por isso a criação do banco precisa acontecer aqui.
+ * O restante da preparação (migrations, limpeza e contas) continua
+ * no global-setup.ts.
+ */
+async function main() {
+    const databaseName = assertTestDatabase(E2E_DATABASE_URL);
+    await createDatabaseIfMissing(databaseName, E2E_DATABASE_URL);
+}
+
+main().catch((error) => {
+    console.error("[e2e] falha ao preparar o banco de teste:", error);
+    process.exit(1);
+});
+```
+
+| Arquivo | Papel |
+|---|---|
+| `test-database.ts` | Função `createDatabaseIfMissing` compartilhada (conecta no banco `postgres` e cria o `_test`) |
+| `prepare-database.ts` | Script avulso rodado por `npx tsx` dentro do `webServer.command` |
+
+> O `tsx` já é dependência de desenvolvimento do projeto (usado pelo seed
+> do Prisma), então nenhum pacote novo é necessário.
+
+### 2. Preparação global — `tests/e2e/global-setup.ts`
 
 `tests/e2e/global-setup.ts`:
 
@@ -53,6 +133,7 @@ import { execSync } from "node:child_process";
 import { Client } from "pg";
 
 import { assertTestDatabase, E2E_DATABASE_URL, e2eServerEnv, testUsers } from "./support/e2e-env";
+import { createDatabaseIfMissing } from "./support/test-database";
 
 /**
  * Executado UMA vez antes de todos os testes E2E:
@@ -62,79 +143,56 @@ import { assertTestDatabase, E2E_DATABASE_URL, e2eServerEnv, testUsers } from ".
  * 4. cria as duas contas de teste.
  */
 export default async function globalSetup() {
-  const databaseName = assertTestDatabase(E2E_DATABASE_URL);
-  const env = { ...process.env, ...e2eServerEnv };
+    const databaseName = assertTestDatabase(E2E_DATABASE_URL);
+    const env = { ...process.env, ...e2eServerEnv };
 
-  await createDatabaseIfMissing(databaseName);
+    await createDatabaseIfMissing(databaseName, E2E_DATABASE_URL);
 
-  execSync("npx prisma migrate deploy", { env, stdio: "inherit" });
+    execSync("npx prisma migrate deploy", { env, stdio: "inherit" });
 
-  await truncateAllTables();
+    await truncateAllTables();
 
-  for (const user of Object.values(testUsers)) {
-    execSync("npx prisma db seed", {
-      env: {
-        ...env,
-        SEED_ADMIN_NAME: user.name,
-        SEED_ADMIN_EMAIL: user.email,
-        SEED_ADMIN_PASSWORD: user.password,
-      },
-      stdio: "inherit",
-    });
-  }
-}
-
-async function createDatabaseIfMissing(databaseName: string) {
-  // Conecta no banco administrativo "postgres" para poder criar o de teste.
-  const adminUrl = new URL(E2E_DATABASE_URL);
-  adminUrl.pathname = "/postgres";
-
-  const client = new Client({ connectionString: adminUrl.toString() });
-  await client.connect();
-
-  try {
-    const { rowCount } = await client.query("SELECT 1 FROM pg_database WHERE datname = $1", [
-      databaseName,
-    ]);
-
-    if (rowCount === 0) {
-      // Nome já validado por assertTestDatabase (só letras/_ e termina em _test).
-      await client.query(`CREATE DATABASE "${databaseName}"`);
+    for (const user of Object.values(testUsers)) {
+        execSync("npx prisma db seed", {
+            env: {
+                ...env,
+                SEED_ADMIN_NAME: user.name,
+                SEED_ADMIN_EMAIL: user.email,
+                SEED_ADMIN_PASSWORD: user.password,
+            },
+            stdio: "inherit",
+        });
     }
-  } finally {
-    await client.end();
-  }
 }
 
 async function truncateAllTables() {
-  const client = new Client({ connectionString: E2E_DATABASE_URL });
-  await client.connect();
+    const client = new Client({ connectionString: E2E_DATABASE_URL });
+    await client.connect();
 
-  try {
-    const { rows } = await client.query<{ tablename: string }>(
-      `SELECT tablename FROM pg_tables
+    try {
+        const { rows } = await client.query<{ tablename: string }>(
+            `SELECT tablename FROM pg_tables
        WHERE schemaname = 'public' AND tablename <> '_prisma_migrations'`,
-    );
+        );
 
-    if (rows.length > 0) {
-      const tables = rows.map(({ tablename }) => `"public"."${tablename}"`).join(", ");
-      await client.query(`TRUNCATE ${tables} RESTART IDENTITY CASCADE`);
+        if (rows.length > 0) {
+            const tables = rows.map(({ tablename }) => `"public"."${tablename}"`).join(", ");
+            await client.query(`TRUNCATE ${tables} RESTART IDENTITY CASCADE`);
+        }
+    } finally {
+        await client.end();
     }
-  } finally {
-    await client.end();
-  }
 }
 ```
 
 | Trecho | Explicação |
 |---|---|
 | `assertTestDatabase(...)` | **Primeira linha** da função: se o banco não for `_test`, nada acontece |
-| `adminUrl.pathname = "/postgres"` | Para criar um banco, é preciso estar conectado a **outro** (o administrativo `postgres`) |
-| `$1` no `SELECT` | Parâmetro: o valor nunca é concatenado no SQL |
+| `createDatabaseIfMissing(...)` | Idempotente: se o `prepare-database` já criou o banco, aqui é um no-op |
 | `env: { ...process.env, ...e2eServerEnv }` | O Prisma recebe as URLs do banco de teste (prioridade sobre o `.env.local`) |
 | `RESTART IDENTITY CASCADE` | Zera contadores e respeita as chaves estrangeiras |
 
-### 2. Sessões — `tests/e2e/auth.setup.ts`
+### 3. Sessões — `tests/e2e/auth.setup.ts`
 
 `tests/e2e/auth.setup.ts`:
 
@@ -165,7 +223,30 @@ for (const [key, user] of Object.entries(testUsers)) {
 💡 O cabeçalho `Origin` é exigido pela proteção CSRF do Better Auth (Fase
 03): sem ele, o login responde `403`.
 
-### 3. Primeira execução
+### 4. Ajuste no `playwright.config.ts`
+
+No `webServer` do `playwright.config.ts` (criado no passo 02), troque o
+`command` para executar o `prepare-database.ts` **antes** do build:
+
+```ts
+  // Sobe a aplicação de PRODUÇÃO (build + start) apontando para o banco de teste.
+  webServer: {
+    // O banco precisa existir ANTES do servidor subir: o health check
+    // responde 503 sem ele e o Playwright nunca liberaria o webServer
+    // para rodar o globalSetup (que é quem migraria/semeia o banco).
+    command: `npx tsx tests/e2e/support/prepare-database.ts && npm run build && npm run start -- --port ${E2E_PORT}`,
+    url: `${E2E_BASE_URL}/api/v1/health`,
+    env: e2eServerEnv,
+    reuseExistingServer: !process.env.CI,
+    timeout: 180_000,
+  },
+```
+
+> Se você já tinha copiado a configuração do passo 02 **antes** desta
+> correção, o `command` antigo era só `npm run build && npm run start ...`
+> — é exatamente essa linha que precisa mudar.
+
+### 5. Primeira execução
 
 ```bash
 npm run test:e2e
@@ -174,17 +255,21 @@ npm run test:e2e
 Ainda não há arquivos de teste (`*.spec.ts`), então o Playwright roda
 **só o setup**. Observe no terminal:
 
-1. o `build` da aplicação;
-2. `All migrations have been successfully applied.`;
-3. `Administradora criada: dona.e2e@example.com` e `outra.e2e@example.com`;
-4. `✓ autentica owner` e `✓ autentica other`.
+1. o `prepare-database` (silencioso quando o banco já existe);
+2. o `build` da aplicação;
+3. `All migrations have been successfully applied.`;
+4. `Administradora criada: dona.e2e@example.com` e `outra.e2e@example.com`;
+5. `✓ autentica owner` e `✓ autentica other`.
 
 ## Arquivos criados ou alterados
 
 | Arquivo | Ação | Descrição |
 |---|---|---|
+| `tests/e2e/support/test-database.ts` | Criado | `createDatabaseIfMissing` compartilhada |
+| `tests/e2e/support/prepare-database.ts` | Criado | Cria o banco antes do servidor subir |
 | `tests/e2e/global-setup.ts` | Criado | Banco limpo + contas |
 | `tests/e2e/auth.setup.ts` | Criado | Sessões salvas |
+| `playwright.config.ts` | Alterado | `webServer.command` passa a rodar o `prepare-database` primeiro |
 | `playwright/.auth/*.json` | Gerado | Cookies das contas de teste (**ignorado** pelo Git) |
 
 ## ✅ Como testar
@@ -204,14 +289,15 @@ Ainda não há arquivos de teste (`*.spec.ts`), então o Playwright roda
 | Sintoma | Causa provável | Solução |
 |---|---|---|
 | `ECONNREFUSED 127.0.0.1:5432` | Banco parado | `npm run db:up` |
-| `Timed out waiting 180000ms from config.webServer` | Build falhou ou demorou | Rode `npm run build` sozinho para ver o erro |
+| `Process from config.webServer exited early` ou `Timed out waiting 180000ms from config.webServer`, com o log repetindo `database "admin_test" does not exist` | O `webServer.command` não roda o `prepare-database` antes do `build`/`start` (health check responde 503 sem o banco) | Conferir o `command` no `playwright.config.ts` (passo 4 acima) |
+| `Timed out waiting 180000ms from config.webServer` (outros casos) | Build falhou ou demorou | Rode `npm run build` sozinho para ver o erro |
 | `autentica owner` falha com `403` | Faltou o cabeçalho `Origin` | Conferir o `auth.setup.ts` |
 | Erro de porta 3100 em uso | Outro programa (não o servidor de teste) usando a porta | Encerrar o programa ou trocar `E2E_PORT` no `e2e-env.ts` |
 
 ## Commit sugerido
 
 ```bash
-git add tests/e2e/global-setup.ts tests/e2e/auth.setup.ts
+git add tests/e2e/support tests/e2e/global-setup.ts tests/e2e/auth.setup.ts playwright.config.ts
 git commit -m "test(e2e): prepara banco de teste e sessões das usuárias"
 ```
 

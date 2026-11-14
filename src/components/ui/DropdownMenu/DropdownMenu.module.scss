@@ -22,7 +22,7 @@
 
   // O Radix marca o item com foco de teclado/mouse com data-highlighted.
   &[data-highlighted] {
-    color: var(--accent-color);
+    color: var(--accent-on-selection);
     background: var(--selection-color);
   }
 

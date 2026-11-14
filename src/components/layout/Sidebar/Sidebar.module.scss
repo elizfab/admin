@@ -70,11 +70,11 @@
 }
 
 .itemActive {
-  color: var(--accent-color);
+  color: var(--accent-on-selection);
   background: var(--selection-color);
 
   &:hover {
-    color: var(--accent-color);
+    color: var(--accent-on-selection);
     background: var(--selection-color);
   }
 }

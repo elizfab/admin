@@ -20,17 +20,17 @@
 
   // Texto
   --text-color: #f8f8f2;
-  --text-color-secondary: #6272a4;
+  --text-color-secondary: #a3aed0;
   --indigo: #6272a4;
 
   // Cores de destaque
   --accent-color: #bd93f9;
-  --blue: #bd93f9;
+  --blue: #93bff9;
   --purple: #bd93f9;
   --cyan: #8be9fd;
   --teal: #8be9fd;
   --green: #50fa7b;
-  --orange: #ffb86c;
+  --orange: #e6681a;
   --brown: #ffb86c;
   --pink: #ff79c6;
   --red: #ff5555;
@@ -38,4 +38,6 @@
 
   // Estados derivados
   --accent-color-hover: color-mix(in srgb, var(--accent-color) 88%, white);
+  // Accent clareado para texto sobre --selection-color (contraste WCAG AA ≥ 4.5:1).
+  --accent-on-selection: #d9b8ff;
 }
