@@ -7,6 +7,10 @@ import { prisma } from "@/lib/db/prisma";
 const EIGHT_HOURS = 60 * 60 * 8;
 
 export const auth = betterAuth({
+    // O dev server pode subir em portas alternativas (ex.: 3001 quando a 3000
+    // está ocupada); sem isso o Better Auth rejeita o Origin com 403.
+    trustedOrigins: ["http://localhost:3000", "http://localhost:3001"],
+
     database: prismaAdapter(prisma, { provider: "postgresql" }),
 
     emailAndPassword: {

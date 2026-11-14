@@ -524,6 +524,8 @@ compilação, não conseguem fazer. A paleta oficial é a **Dracula**:
 
   --accent-color-hover: color-mix(in srgb, var(--accent-color) 88%, black);
   --accent-on-selection: #553fab;
+
+  --brand-surface: radial-gradient(120% 90% at 15% 0%, color-mix(in srgb, var(--background) 35%, transparent), transparent 60%), linear-gradient(155deg, #ddd0f7 0%, #c6e2f6 55%, #d2efda 125%);
 }
 
 // _dark.scss — mesmos tokens, ativados por [data-theme="dark"]
@@ -560,6 +562,8 @@ compilação, não conseguem fazer. A paleta oficial é a **Dracula**:
 
   --accent-color-hover: color-mix(in srgb, var(--accent-color) 88%, white);
   --accent-on-selection: #d9b8ff;
+
+  --brand-surface: #21222c;
 }
 ```
 

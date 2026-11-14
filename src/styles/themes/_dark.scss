@@ -40,4 +40,7 @@
   --accent-color-hover: color-mix(in srgb, var(--accent-color) 88%, white);
   // Accent clareado para texto sobre --selection-color (contraste WCAG AA ≥ 4.5:1).
   --accent-on-selection: #d9b8ff;
+
+  // Fundo do painel visual da tela de login (pode ser cor ou gradiente completo).
+  --brand-surface: #21222c;
 }
