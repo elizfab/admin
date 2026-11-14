@@ -1,4 +1,7 @@
 import type { NextConfig } from "next";
+import { PHASE_PRODUCTION_BUILD } from "next/constants";
+
+import { assertProductionEnv } from "./src/lib/env/required-env";
 
 /**
  * Headers de segurança aplicados a todas as respostas.
@@ -34,4 +37,12 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+// Função (e não objeto): o Next.js informa a fase. Só o build de produção
+// exige as variáveis; o `dev` e os testes seguem funcionando sem elas.
+export default function config(phase: string): NextConfig {
+  if (phase === PHASE_PRODUCTION_BUILD) {
+    assertProductionEnv(process.env);
+  }
+
+  return nextConfig;
+}
