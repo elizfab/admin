@@ -20,5 +20,11 @@ export function proxy(request: NextRequest) {
 export const config = {
     // Somente rotas privadas passam pelo proxy. /login, /api/* e estáticos ficam de fora.
     // Ao criar uma rota privada nova, adicione-a aqui.
-    matcher: ["/dashboard/:path*", "/studies/:path*", "/finance/:path*", "/documentation/:path*"],
+    matcher: [
+        "/dashboard/:path*",
+        "/studies/:path*",
+        "/finance/:path*",
+        "/documentation/:path*",
+        "/projects/:path*",
+    ],
 };
