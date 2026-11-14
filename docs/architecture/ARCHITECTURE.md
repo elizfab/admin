@@ -523,6 +523,7 @@ compilação, não conseguem fazer. A paleta oficial é a **Dracula**:
   --yellow: #846e15;
 
   --accent-color-hover: color-mix(in srgb, var(--accent-color) 88%, black);
+  --accent-on-selection: #553fab;
 }
 
 // _dark.scss — mesmos tokens, ativados por [data-theme="dark"]
@@ -542,22 +543,23 @@ compilação, não conseguem fazer. A paleta oficial é a **Dracula**:
   --border: #44475a;
 
   --text-color: #f8f8f2;
-  --text-color-secondary: #6272a4;
+  --text-color-secondary: #a3aed0;
   --indigo: #6272a4;
 
   --accent-color: #bd93f9;
-  --blue: #bd93f9;
+  --blue: #93bff9;
   --purple: #bd93f9;
   --cyan: #8be9fd;
   --teal: #8be9fd;
   --green: #50fa7b;
-  --orange: #ffb86c;
+  --orange: #e6681a;
   --brown: #ffb86c;
   --pink: #ff79c6;
   --red: #ff5555;
   --yellow: #f1fa8c;
 
   --accent-color-hover: color-mix(in srgb, var(--accent-color) 88%, white);
+  --accent-on-selection: #d9b8ff;
 }
 ```
 

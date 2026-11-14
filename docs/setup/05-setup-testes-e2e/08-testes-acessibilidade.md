@@ -45,35 +45,55 @@ import { expect, test } from "@playwright/test";
  * Verificação automática de acessibilidade (WCAG 2.1 A e AA) com axe-core.
  * Pega uns 30–50% dos problemas (contraste, rótulos, ARIA inválido...);
  * o restante ainda exige teste manual com teclado e leitor de tela.
+ * Cada página é verificada nos DOIS temas (claro e escuro).
  */
 
 const WCAG_TAGS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"];
 
-const privatePages = ["/dashboard", "/projects", "/projects/new", "/finance"];
+const privatePages = ["/dashboard", "/projects", "/projects/new", "/documentation", "/finance"];
+
+async function expectNoViolations(page: import("@playwright/test").Page) {
+  const results = await new AxeBuilder({ page }).withTags(WCAG_TAGS).analyze();
+
+  expect(results.violations).toEqual([]);
+}
 
 for (const path of privatePages) {
-  test(`${path} não tem violações de acessibilidade`, async ({ page }) => {
+  test(`${path} não tem violações de acessibilidade (claro e escuro)`, async ({ page }) => {
     await page.goto(path);
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+    await expectNoViolations(page);
 
-    const results = await new AxeBuilder({ page }).withTags(WCAG_TAGS).analyze();
-
-    expect(results.violations).toEqual([]);
+    // Tema escuro: o script inline do layout aplica prefers-color-scheme
+    // quando não há "theme" no localStorage.
+    await page.emulateMedia({ colorScheme: "dark" });
+    await page.reload();
+    await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+    await expectNoViolations(page);
   });
 }
 
 test.describe("páginas públicas", () => {
   test.use({ storageState: { cookies: [], origins: [] } });
 
-  test("/login não tem violações de acessibilidade", async ({ page }) => {
+  test("/login não tem violações de acessibilidade (claro e escuro)", async ({ page }) => {
     await page.goto("/login");
+    await expectNoViolations(page);
 
-    const results = await new AxeBuilder({ page }).withTags(WCAG_TAGS).analyze();
-
-    expect(results.violations).toEqual([]);
+    await page.emulateMedia({ colorScheme: "dark" });
+    await page.reload();
+    await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+    await expectNoViolations(page);
   });
 });
 ```
+
+> **Por que os dois temas:** o primeiro axe pegou um contraste falho só no
+> tema **escuro** (`--text-color-secondary` claro demais sobre o card) e o
+> item ativo da sidebar no **claro** (`--accent-color` sobre
+> `--selection-color` = 4.05:1). As correções foram o token
+> `--accent-on-selection` (nos dois temas) e o novo valor de
+> `--text-color-secondary` no escuro — ambas em `src/styles/themes/`.
 
 | Trecho | Explicação |
 |---|---|
@@ -85,13 +105,13 @@ test.describe("páginas públicas", () => {
 
 | Arquivo | Ação | Descrição |
 |---|---|---|
-| `tests/e2e/accessibility.spec.ts` | Criado | 5 páginas verificadas |
+| `tests/e2e/accessibility.spec.ts` | Criado | 6 páginas verificadas, nos dois temas |
 
 ## ✅ Como testar
 
 | # | Teste | Resultado esperado |
 |---|---|---|
-| 1 | `npx playwright test accessibility.spec` | `7 passed` (2 setups + 5 páginas) |
+| 1 | `npx playwright test accessibility.spec` | `8 passed` (2 setups + 6 testes) |
 | 2 | **Prova do alarme:** em `src/styles/themes/_light.scss`, troque `--text-color-secondary` por `#b0b0b0` e rode | Falha com a regra **`color-contrast`**. Desfaça |
 
 **Critério de aceite:** os dois testes passam.

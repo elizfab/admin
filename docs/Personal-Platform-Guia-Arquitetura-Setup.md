@@ -551,6 +551,8 @@ em tempo de execução. A paleta oficial é a **Dracula**:
   --pink: #a3144d;
   --red: #cb3a2a;
   --yellow: #846e15;
+
+  --accent-on-selection: #553fab;
 }
 
 // _dark.scss — mesmos tokens, ativados por [data-theme="dark"]
@@ -559,6 +561,7 @@ em tempo de execução. A paleta oficial é a **Dracula**:
   --card-background: #353747;
   --text-color: #f8f8f2;
   --accent-color: #bd93f9;
+  --accent-on-selection: #d9b8ff;
   // ... demais tokens com os valores escuros da paleta
 }
 ```

@@ -206,7 +206,7 @@ No `package.json`:
 | # | Teste | Resultado esperado |
 |---|---|---|
 | 1 | `npm run test:integration` | `Tests: 4 passed` |
-| 2 | `npm test` | Continua com `Tests: 29 passed` (sem a integração) |
+| 2 | `npm test` | Continua com os unitários passando (sem a integração) |
 | 3 | **Prova do alarme:** o mesmo bug do passo 07 (`{ where: { id } }` no `findByIdForOwner`) | `1 failed` (“não encontra projeto de outra dona”). Desfaça |
 | 4 | `npm run db:down` e `npm run test:integration` | Falha de conexão (esperado). Depois `npm run db:up` |
 
@@ -219,6 +219,7 @@ No `package.json`:
 | `Must use import to load ES Module: ...query_compiler_fast_bg.postgresql.mjs` | Faltou o mapeamento `.mjs` → `.js` | Conferir o `moduleNameMapper` do item 2 |
 | `database "admin_test" does not exist` | O banco de teste ainda não foi criado | Rodar `npm run test:e2e` uma vez (passo 03) |
 | `Jest did not exit one second after the test run` | Pool de conexões aberto | Manter o `prisma.$disconnect()` no `afterAll` |
+| Aviso do Prisma sugerindo `npm i prisma@latest` | O CLI viu a versão 8 (RC) como novidade | **Ignorar**: a versão fica fixada em `^7` no `package.json`; não atualizar para a RC |
 
 ## Commit sugerido
 

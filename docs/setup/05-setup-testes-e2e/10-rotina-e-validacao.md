@@ -69,18 +69,18 @@ novo: o banco é limpo a cada execução, inclusive o contador de rate limit.
 
 **Automático**
 
-- [ ] `npm run typecheck` e `npm run lint`: sem erros e sem avisos
-- [ ] `npm test`: **29 testes** (unitários)
-- [ ] `npm run test:integration`: **4 testes**
-- [ ] `npm run test:e2e`: **20 testes** (2 setups + 18)
-- [ ] Segunda execução do E2E também passa
+- [x] `npm run typecheck` e `npm run lint`: sem erros e sem avisos
+- [x] `npm test`: **32 testes** (unitários)
+- [x] `npm run test:integration`: **4 testes**
+- [x] `npm run test:e2e`: **22 testes** (2 setups + 20)
+- [x] Segunda execução do E2E também passa
 
 **Provas do alarme** (cada uma falha com o bug e passa sem ele)
 
-- [ ] Isolamento: E2E (passo 07) **e** integração (passo 09)
-- [ ] Formulário mantém o texto (passo 06)
-- [ ] Contraste de cor (passo 08)
-- [ ] Trava `_test` recusa o `admin_dev` (passo 03)
+- [x] Isolamento: E2E (passo 07) **e** integração (passo 09)
+- [x] Formulário mantém o texto (passo 06)
+- [x] Contraste de cor (passo 08)
+- [x] Trava `_test` recusa o `admin_dev` (passo 03)
 
 **Critério de aceite:** todos os itens marcados. **A Fase 05 está concluída.**
 

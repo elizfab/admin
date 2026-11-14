@@ -37,34 +37,35 @@ admin_test  ← testes E2E e de integração (apagado e recriado a cada execuç�
 ```
 
 Os dois ficam no **mesmo** container Docker da Fase 02. O banco de teste é
-criado automaticamente na primeira execução, e uma **trava** recusa qualquer
+criado pelo `prepare-database.ts` **antes do servidor subir** (o health
+check só responde 200 com o banco no ar), e uma **trava** recusa qualquer
 banco cujo nome não termine em `_test`.
 
 ## Ordem dos passos
 
 | # | Passo | O que entrega | Status |
 |---|---|---|---|
-| 01 | [Ambiente de teste e banco isolado](01-ambiente-de-teste.md) | `e2e-env.ts` com a trava `_test` | ⬜ |
-| 02 | [Instalar e configurar o Playwright](02-instalar-playwright.md) | `playwright.config.ts`, scripts e ignores | ⬜ |
-| 03 | [Preparação do banco e das sessões](03-global-setup-e-sessoes.md) | Banco limpo + 2 usuárias logadas | ⬜ |
-| 04 | [Testes de autenticação](04-testes-autenticacao.md) | Login, erro, logout | ⬜ |
-| 05 | [Testes de navegação](05-testes-navegacao.md) | Sidebar, dashboard, 404 | ⬜ |
-| 06 | [Testes do CRUD de projetos](06-testes-projetos.md) | Criar, validar, renomear, excluir | ⬜ |
-| 07 | [Testes de isolamento entre usuárias](07-testes-isolamento.md) | Roteiro da Fase 04 automatizado | ⬜ |
-| 08 | [Testes de acessibilidade com axe](08-testes-acessibilidade.md) | WCAG 2.1 A/AA em 5 páginas | ⬜ |
-| 09 | [Testes de integração com banco (Jest)](09-testes-integracao.md) | Repositório contra o PostgreSQL real | ⬜ |
-| 10 | [Rotina, depuração e validação final](10-rotina-e-validacao.md) | Relatório, trace viewer, checklist | ⬜ |
+| 01 | [Ambiente de teste e banco isolado](01-ambiente-de-teste.md) | `e2e-env.ts` com a trava `_test` | ✅ |
+| 02 | [Instalar e configurar o Playwright](02-instalar-playwright.md) | `playwright.config.ts`, scripts e ignores | ✅ |
+| 03 | [Preparação do banco e das sessões](03-global-setup-e-sessoes.md) | Banco limpo + 2 usuárias logadas | ✅ |
+| 04 | [Testes de autenticação](04-testes-autenticacao.md) | Login, erro, logout | ✅ |
+| 05 | [Testes de navegação](05-testes-navegacao.md) | Sidebar, dashboard, 404 | ✅ |
+| 06 | [Testes do CRUD de projetos](06-testes-projetos.md) | Criar, validar, renomear, excluir | ✅ |
+| 07 | [Testes de isolamento entre usuárias](07-testes-isolamento.md) | Roteiro da Fase 04 automatizado | ✅ |
+| 08 | [Testes de acessibilidade com axe](08-testes-acessibilidade.md) | WCAG 2.1 A/AA nos dois temas | ✅ |
+| 09 | [Testes de integração com banco (Jest)](09-testes-integracao.md) | Repositório contra o PostgreSQL real | ✅ |
+| 10 | [Rotina, depuração e validação final](10-rotina-e-validacao.md) | Relatório, trace viewer, checklist | ✅ |
 
 ## Checklist da fase
 
-- [ ] Banco `admin_test` criado automaticamente, com a trava `_test`
-- [ ] Playwright instalado, com o Chromium baixado
-- [ ] `npm run test:e2e`: **20 testes** passando
-- [ ] Rodar duas vezes seguidas passa nas duas (os testes são repetíveis)
-- [ ] Prova do alarme: o bug de isolamento é detectado pelo E2E **e** pela integração
-- [ ] `npm run test:integration`: **4 testes** passando
-- [ ] `npm test` continua com **29** (unitários), sem rodar E2E nem integração
-- [ ] `npm run lint` ignora os relatórios do Playwright
+- [x] Banco `admin_test` criado pelo `prepare-database.ts`, com a trava `_test`
+- [x] Playwright instalado, com o Chromium baixado
+- [x] `npm run test:e2e`: **22 testes** passando (2 setups + 20)
+- [x] Rodar duas vezes seguidas passa nas duas (os testes são repetíveis)
+- [x] Prova do alarme: o bug de isolamento é detectado pelo E2E **e** pela integração
+- [x] `npm run test:integration`: **4 testes** passando
+- [x] `npm test` continua com **32** (unitários), sem rodar E2E nem integração
+- [x] `npm run lint` ignora os relatórios do Playwright
 
 ## ✅ Critério de conclusão da fase
 
