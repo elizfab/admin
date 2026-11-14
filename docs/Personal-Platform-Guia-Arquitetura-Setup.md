@@ -220,7 +220,7 @@ independentes
 
 ### 3.3 Repositório e estratégia Git
 
-Nome sugerido: `personal-platform-admin`.
+Nome sugerido: `admin`.
 
 Branches sugeridas:
 
@@ -553,7 +553,13 @@ em tempo de execução. A paleta oficial é a **Dracula**:
   --yellow: #846e15;
 
   --accent-on-selection: #553fab;
-  --brand-surface: radial-gradient(120% 90% at 15% 0%, color-mix(in srgb, var(--background) 35%, transparent), transparent 60%), linear-gradient(155deg, #ddd0f7 0%, #c6e2f6 55%, #d2efda 125%);
+  --brand-surface:
+    radial-gradient(
+      120% 90% at 15% 0%,
+      color-mix(in srgb, var(--background) 35%, transparent),
+      transparent 60%
+    ),
+    linear-gradient(155deg, #ddd0f7 0%, #c6e2f6 55%, #d2efda 125%);
 }
 
 // _dark.scss — mesmos tokens, ativados por [data-theme="dark"]
@@ -2138,7 +2144,7 @@ Admin não será automaticamente compartilhada com outra aplicação.
 ## 20. Estrutura proposta
 
 ```text
-personal-platform-admin/
+admin/
 │
 ├── docs/
 │   ├── architecture/

@@ -12,23 +12,23 @@ integração. E combinar um fluxo de trabalho com branches e PRs.
 
 ## 💡 Por que
 
-O CI (*Continuous Integration*) é um **colega incansável** que, a cada
+O CI (_Continuous Integration_) é um **colega incansável** que, a cada
 mudança, roda a bateria inteira numa máquina limpa e coloca ✅ ou ❌ no
 commit. Ele pega o “funciona na minha máquina” e o “esqueci de rodar o
 E2E”.
 
 ### O que o workflow faz
 
-| Etapa | Por quê |
-|---|---|
-| `services: postgres` | Sobe um PostgreSQL só para o job, com o banco `admin_test` |
-| `setup-node` com `node-version-file: .nvmrc` | A mesma versão do Node do projeto e da Vercel |
-| `cache: npm` | Reaproveita downloads entre execuções (mais rápido) |
-| `npm ci` | Instala **exatamente** o `package-lock.json` e gera o Prisma Client |
-| E2E **antes** da integração | O global setup do E2E cria e migra o `admin_test`, que a integração reutiliza |
-| `upload-artifact` se falhar | O relatório do Playwright fica disponível para download por 7 dias |
-| `concurrency` | Um push novo cancela a execução antiga do mesmo branch |
-| `permissions: contents: read` | Princípio do menor privilégio: o job só **lê** o código |
+| Etapa                                        | Por quê                                                                       |
+| -------------------------------------------- | ----------------------------------------------------------------------------- |
+| `services: postgres`                         | Sobe um PostgreSQL só para o job, com o banco `admin_test`                    |
+| `setup-node` com `node-version-file: .nvmrc` | A mesma versão do Node do projeto e da Vercel                                 |
+| `cache: npm`                                 | Reaproveita downloads entre execuções (mais rápido)                           |
+| `npm ci`                                     | Instala **exatamente** o `package-lock.json` e gera o Prisma Client           |
+| E2E **antes** da integração                  | O global setup do E2E cria e migra o `admin_test`, que a integração reutiliza |
+| `upload-artifact` se falhar                  | O relatório do Playwright fica disponível para download por 7 dias            |
+| `concurrency`                                | Um push novo cancela a execução antiga do mesmo branch                        |
+| `permissions: contents: read`                | Princípio do menor privilégio: o job só **lê** o código                       |
 
 💡 No CI, a variável `CI=true` é definida automaticamente. O
 `playwright.config.ts` já reage a ela: 2 tentativas por teste, sem
@@ -152,7 +152,9 @@ execução leva alguns minutos (download do Chromium e build).
 No `README.md` do projeto, abaixo do título:
 
 ```markdown
-[![CI](https://github.com/elizfab/personal-platform-admin/actions/workflows/ci.yml/badge.svg)](https://github.com/elizfab/personal-platform-admin/actions/workflows/ci.yml)
+[![CI](https://github.com/elizfab/
+admin/actions/workflows/ci.yml/badge.svg)](https://github.com/elizfab/
+admin/actions/workflows/ci.yml)
 ```
 
 ### 4. Fluxo de trabalho recomendado
@@ -167,11 +169,11 @@ main ─────●──────────────●────
 2. Commits pequenos, com mensagens no padrão já usado (`feat:`, `fix:`, `test:`…).
 3. `git push -u origin feature/nome-curto` e abra o **Pull Request**.
 4. Espere o **CI ✅** e teste o **preview** da Vercel (passo 08).
-5. **Merge** (prefira *Squash and merge* para um histórico limpo).
+5. **Merge** (prefira _Squash and merge_ para um histórico limpo).
 6. Nunca faça push direto na `main`, mesmo podendo (regra combinada consigo mesma).
 
 > Se um dia o repositório for para um plano pago, ative em **Settings →
-> Rules → Rulesets** a regra *Require status checks to pass* com o check
+> Rules → Rulesets** a regra _Require status checks to pass_ com o check
 > **Qualidade e testes**.
 
 ### 5. Consumo de minutos
@@ -182,27 +184,27 @@ leva poucos minutos; para um projeto individual, a cota costuma sobrar.
 
 ## Arquivos criados ou alterados
 
-| Arquivo | Ação | Descrição |
-|---|---|---|
-| `.github/workflows/ci.yml` | Criado | Integração contínua |
-| `README.md` | Alterado (opcional) | Selo de status |
+| Arquivo                    | Ação                | Descrição           |
+| -------------------------- | ------------------- | ------------------- |
+| `.github/workflows/ci.yml` | Criado              | Integração contínua |
+| `README.md`                | Alterado (opcional) | Selo de status      |
 
 ## ✅ Como testar
 
-| # | Teste | Resultado esperado |
-|---|---|---|
-| 1 | Aba **Actions** após o push | Job **Qualidade e testes** com ✅ |
-| 2 | **Prova do alarme:** num branch `test/ci-alarme`, quebre um teste (ex.: troque `"Financeiro"` em `navigation.ts`), faça push e abra um PR | O PR mostra **❌**, e o relatório do Playwright fica em *Artifacts*. Feche o PR sem merge e apague o branch |
+| #   | Teste                                                                                                                                     | Resultado esperado                                                                                          |
+| --- | ----------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| 1   | Aba **Actions** após o push                                                                                                               | Job **Qualidade e testes** com ✅                                                                           |
+| 2   | **Prova do alarme:** num branch `test/ci-alarme`, quebre um teste (ex.: troque `"Financeiro"` em `navigation.ts`), faça push e abra um PR | O PR mostra **❌**, e o relatório do Playwright fica em _Artifacts_. Feche o PR sem merge e apague o branch |
 
 **Critério de aceite:** os dois testes passam.
 
 ## ⚠️ Problemas comuns
 
-| Sintoma | Causa provável | Solução |
-|---|---|---|
-| `npm ci` falha com `package-lock.json` desatualizado | Instalou um pacote sem commitar o lock | `npm install`, commit do `package-lock.json` |
-| E2E falha só no CI, com timeout | Máquina do CI mais lenta | Baixar o relatório em *Artifacts* e ver o trace; o config já tem 2 retries |
-| `database "admin_test" does not exist` na integração | A ordem das etapas mudou | O E2E precisa rodar **antes** da integração |
+| Sintoma                                              | Causa provável                         | Solução                                                                    |
+| ---------------------------------------------------- | -------------------------------------- | -------------------------------------------------------------------------- |
+| `npm ci` falha com `package-lock.json` desatualizado | Instalou um pacote sem commitar o lock | `npm install`, commit do `package-lock.json`                               |
+| E2E falha só no CI, com timeout                      | Máquina do CI mais lenta               | Baixar o relatório em _Artifacts_ e ver o trace; o config já tem 2 retries |
+| `database "admin_test" does not exist` na integração | A ordem das etapas mudou               | O E2E precisa rodar **antes** da integração                                |
 
 ## Referências
 

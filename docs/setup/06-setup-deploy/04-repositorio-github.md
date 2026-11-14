@@ -50,7 +50,7 @@ outro) e peça ajuda para limpar o histórico antes de publicar.
 **Opção A: pelo site**
 
 1. <https://github.com/organizations/elizfab/repositories/new>
-2. **Repository name:** `personal-platform-admin`
+2. **Repository name:** `admin`
 3. **Private**
 4. **Não** marque README, `.gitignore` nem licença: o repositório precisa
    nascer **vazio**, para receber o seu histórico.
@@ -59,7 +59,7 @@ outro) e peça ajuda para limpar o histórico antes de publicar.
 Depois, no terminal:
 
 ```bash
-git remote add origin https://github.com/elizfab/personal-platform-admin.git
+git remote add origin https://github.com/elizfab/admin.git
 git push -u origin main
 git push --tags
 ```
@@ -67,7 +67,7 @@ git push --tags
 **Opção B: pela GitHub CLI** (se tiver o `gh` instalado e autenticado)
 
 ```bash
-gh repo create elizfab/personal-platform-admin --private --source=. --remote=origin --push
+gh repo create elizfab/admin --private --source=. --remote=origin --push
 git push --tags
 ```
 
@@ -86,29 +86,29 @@ repositório.
 
 ## Arquivos criados ou alterados
 
-| Arquivo | Ação | Descrição |
-|---|---|---|
-| `.git/config` | Alterado | Remoto `origin` |
+| Arquivo          | Ação     | Descrição           |
+| ---------------- | -------- | ------------------- |
+| `.git/config`    | Alterado | Remoto `origin`     |
 | `docs/README.md` | Alterado | Link do repositório |
 
 ## ✅ Como testar
 
-| # | Teste | Resultado esperado |
-|---|---|---|
-| 1 | Auditoria do item 1 | Nenhuma saída |
-| 2 | `git remote -v` | `origin https://github.com/elizfab/personal-platform-admin.git` |
-| 3 | `git status` | `Your branch is up to date with 'origin/main'` |
-| 4 | Aba **Actions** do repositório | O workflow **CI** começou a rodar (ele é configurado no passo 05; se o `ci.yml` ainda não existir, a aba fica vazia) |
+| #   | Teste                          | Resultado esperado                                                                                                   |
+| --- | ------------------------------ | -------------------------------------------------------------------------------------------------------------------- |
+| 1   | Auditoria do item 1            | Nenhuma saída                                                                                                        |
+| 2   | `git remote -v`                | `origin https://github.com/elizfab/admin.git`                                                                        |
+| 3   | `git status`                   | `Your branch is up to date with 'origin/main'`                                                                       |
+| 4   | Aba **Actions** do repositório | O workflow **CI** começou a rodar (ele é configurado no passo 05; se o `ci.yml` ainda não existir, a aba fica vazia) |
 
 **Critério de aceite:** os testes 1 a 3 passam.
 
 ## ⚠️ Problemas comuns
 
-| Sintoma | Causa provável | Solução |
-|---|---|---|
-| `remote: Repository not found` | Sem permissão na organização ou nome errado | Conferir o acesso à `elizfab` e a URL |
-| `! [rejected] main -> main (fetch first)` | O repositório foi criado **com** README | Apague-o e recrie vazio, ou faça `git pull --rebase origin main` |
-| Pede usuário e senha | O GitHub não aceita senha no HTTPS | Usar `gh auth login`, um *Personal Access Token* ou SSH |
+| Sintoma                                   | Causa provável                              | Solução                                                          |
+| ----------------------------------------- | ------------------------------------------- | ---------------------------------------------------------------- |
+| `remote: Repository not found`            | Sem permissão na organização ou nome errado | Conferir o acesso à `elizfab` e a URL                            |
+| `! [rejected] main -> main (fetch first)` | O repositório foi criado **com** README     | Apague-o e recrie vazio, ou faça `git pull --rebase origin main` |
+| Pede usuário e senha                      | O GitHub não aceita senha no HTTPS          | Usar `gh auth login`, um _Personal Access Token_ ou SSH          |
 
 ## Commit sugerido
 

@@ -7,7 +7,7 @@
 ## Objetivo
 
 Saber **o que fazer quando algo der errado** (um roteiro de incidentes, o
-*runbook*) e fechar o projeto com o checklist final de go-live.
+_runbook_) e fechar o projeto com o checklist final de go-live.
 
 ## 💡 Por que escrever o roteiro antes do problema
 
@@ -19,8 +19,8 @@ ser seguido sob pressão.
 
 ### 1. Deploy novo quebrou a produção
 
-1. **Voltar primeiro, investigar depois.** Vercel → projeto → *Production
-   Deployment* → **Instant Rollback**. No plano Hobby, só é possível voltar
+1. **Voltar primeiro, investigar depois.** Vercel → projeto → _Production
+   Deployment_ → **Instant Rollback**. No plano Hobby, só é possível voltar
    para o deploy de produção **imediatamente anterior**.
 2. O rollback **não desfaz migrations**. Se o deploy quebrado aplicou uma
    migration, confira se a versão anterior funciona com o schema novo (o
@@ -35,23 +35,23 @@ ser seguido sob pressão.
 O build para e a versão anterior **continua no ar** (nada a reverter).
 Corrija a migration num branch e valide no preview.
 
-> **Expandir e depois contrair** (*expand and contract*): para renomear ou
+> **Expandir e depois contrair** (_expand and contract_): para renomear ou
 > remover uma coluna, faça em **dois deploys**. No 1º, crie a coluna nova e
 > faça o código usar as duas. No 2º, remova a antiga. Assim, um rollback
 > nunca encontra o banco sem a coluna que o código antigo espera.
 
 ### 3. Suspeita de vazamento de segredo
 
-| Segredo vazado | Ação imediata |
-|---|---|
-| `BETTER_AUTH_SECRET` | Gerar outro (`openssl rand -base64 32`), trocar na Vercel e fazer **Redeploy**. Todas as sessões são invalidadas: o login é exigido de novo |
-| Senha do banco | Supabase → **Database → Reset database password**; atualizar `DATABASE_URL` e `DIRECT_URL` na Vercel; **Redeploy** |
-| Sua senha de login | Trocar a senha (por um novo seed numa conta nova, ou por uma tela de troca de senha futura) e apagar as linhas da tabela `session` da sua conta |
+| Segredo vazado       | Ação imediata                                                                                                                                   |
+| -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| `BETTER_AUTH_SECRET` | Gerar outro (`openssl rand -base64 32`), trocar na Vercel e fazer **Redeploy**. Todas as sessões são invalidadas: o login é exigido de novo     |
+| Senha do banco       | Supabase → **Database → Reset database password**; atualizar `DATABASE_URL` e `DIRECT_URL` na Vercel; **Redeploy**                              |
+| Sua senha de login   | Trocar a senha (por um novo seed numa conta nova, ou por uma tela de troca de senha futura) e apagar as linhas da tabela `session` da sua conta |
 
 ### 4. Supabase pausado
 
 Supabase → projeto → **Restore**. Depois, confira na aba **Actions** do
-GitHub se o *Keep-alive* está rodando diariamente.
+GitHub se o _Keep-alive_ está rodando diariamente.
 
 ### 5. “Esqueci minha senha”
 
@@ -67,19 +67,19 @@ Prisma Studio apontado para a produção, desativar a conta antiga
 
 ## Melhorias registradas para o futuro
 
-| Melhoria | Por quê | Fase |
-|---|---|---|
-| CSP completa com *nonce* (`script-src`) | Bloqueia scripts injetados (XSS) | Expansão |
-| Tela de troca de senha | Hoje só por seed | Expansão |
-| Monitoramento de erros (ex.: Sentry) | Saber do erro antes da usuária | Expansão |
-| Proteger o Docusaurus | Hoje é público (seção 19.2) | Expansão |
-| Alinhar o PostgreSQL local e do CI à versão do Supabase | Paridade total entre ambientes | Manutenção |
+| Melhoria                                                | Por quê                          | Fase       |
+| ------------------------------------------------------- | -------------------------------- | ---------- |
+| CSP completa com _nonce_ (`script-src`)                 | Bloqueia scripts injetados (XSS) | Expansão   |
+| Tela de troca de senha                                  | Hoje só por seed                 | Expansão   |
+| Monitoramento de erros (ex.: Sentry)                    | Saber do erro antes da usuária   | Expansão   |
+| Proteger o Docusaurus                                   | Hoje é público (seção 19.2)      | Expansão   |
+| Alinhar o PostgreSQL local e do CI à versão do Supabase | Paridade total entre ambientes   | Manutenção |
 
 ## ✅ Checklist final de go-live
 
 **Código e repositório**
 
-- [ ] `elizfab/personal-platform-admin` privado, sem segredos no histórico
+- [ ] `elizfab/admin` privado, sem segredos no histórico
 - [ ] CI ✅ na `main`
 - [ ] Headers de segurança presentes em produção
 - [ ] Build falha se faltar variável obrigatória

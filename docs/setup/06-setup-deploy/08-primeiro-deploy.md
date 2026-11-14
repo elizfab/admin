@@ -33,7 +33,7 @@ git push -u origin chore/primeiro-preview
 ```
 
 Abra o PR no GitHub. Em poucos minutos aparecem **dois** checks: o **CI** e
-o **Vercel** (com o link *Visit Preview*).
+o **Vercel** (com o link _Visit Preview_).
 
 #### 2. Conferir o build do preview
 
@@ -65,10 +65,10 @@ npx prisma db seed
 2. A aplicação abre em `/login`. Entre com a conta do item 3.
 3. Crie e exclua um projeto.
 
-| Se acontecer | Causa | Solução |
-|---|---|---|
-| Login responde 403 / “Invalid origin” | `BETTER_AUTH_ALLOWED_HOSTS` não casa com a URL do preview | Compare o padrão com a URL real (o `<slug>` do passo 07) e use **Redeploy** |
-| Erro 500 com `Host ... is not in the allowed hosts list` nos logs | Mesmo caso acima | Idem |
+| Se acontecer                                                      | Causa                                                     | Solução                                                                     |
+| ----------------------------------------------------------------- | --------------------------------------------------------- | --------------------------------------------------------------------------- |
+| Login responde 403 / “Invalid origin”                             | `BETTER_AUTH_ALLOWED_HOSTS` não casa com a URL do preview | Compare o padrão com a URL real (o `<slug>` do passo 07) e use **Redeploy** |
+| Erro 500 com `Host ... is not in the allowed hosts list` nos logs | Mesmo caso acima                                          | Idem                                                                        |
 
 #### 5. Merge
 
@@ -102,7 +102,7 @@ apertar Enter.
 #### 8. Verificação de produção
 
 ```bash
-PROD=https://personal-platform-admin.vercel.app
+PROD=https://admin.vercel.app
 
 # Saúde (banco respondendo)
 curl -s $PROD/api/v1/health
@@ -129,24 +129,24 @@ a URL de produção.
 
 ## ✅ Como testar
 
-| # | Teste | Resultado esperado |
-|---|---|---|
-| 1 | PR de teste | CI ✅ + Vercel ✅ + login no preview funcionando |
-| 2 | `curl $PROD/api/v1/health` | `{"status":"ok","database":"up",...}` |
-| 3 | Headers | Os 6 headers presentes |
-| 4 | `security-check.sh` contra a produção | `Resultado: 16 ok, 0 falha(s).` |
-| 5 | Login real pelo navegador | Dashboard com o seu nome |
+| #   | Teste                                 | Resultado esperado                               |
+| --- | ------------------------------------- | ------------------------------------------------ |
+| 1   | PR de teste                           | CI ✅ + Vercel ✅ + login no preview funcionando |
+| 2   | `curl $PROD/api/v1/health`            | `{"status":"ok","database":"up",...}`            |
+| 3   | Headers                               | Os 6 headers presentes                           |
+| 4   | `security-check.sh` contra a produção | `Resultado: 16 ok, 0 falha(s).`                  |
+| 5   | Login real pelo navegador             | Dashboard com o seu nome                         |
 
 **Critério de aceite:** os cinco testes passam. 🎉 **A aplicação está no ar.**
 
 ## ⚠️ Problemas comuns
 
-| Sintoma | Causa provável | Solução |
-|---|---|---|
-| Build falha com `Build interrompido — variáveis de ambiente inválidas` | Variável faltando naquele ambiente | Cadastrar (passo 07) e **Redeploy** |
-| Build falha em `prisma migrate deploy` com timeout ou `P1001` | `DIRECT_URL` com a conexão direta (IPv6) | Usar o **Session pooler** |
-| `/api/v1/health` responde `503` em produção | `DATABASE_URL` errada ou banco pausado | Conferir a variável e o status do projeto no Supabase; ver os **Runtime Logs** da Vercel |
-| Supabase “Paused” | Inatividade no plano Free | **Restore** no painel; configure o keep-alive (passo 09) |
+| Sintoma                                                                | Causa provável                           | Solução                                                                                  |
+| ---------------------------------------------------------------------- | ---------------------------------------- | ---------------------------------------------------------------------------------------- |
+| Build falha com `Build interrompido — variáveis de ambiente inválidas` | Variável faltando naquele ambiente       | Cadastrar (passo 07) e **Redeploy**                                                      |
+| Build falha em `prisma migrate deploy` com timeout ou `P1001`          | `DIRECT_URL` com a conexão direta (IPv6) | Usar o **Session pooler**                                                                |
+| `/api/v1/health` responde `503` em produção                            | `DATABASE_URL` errada ou banco pausado   | Conferir a variável e o status do projeto no Supabase; ver os **Runtime Logs** da Vercel |
+| Supabase “Paused”                                                      | Inatividade no plano Free                | **Restore** no painel; configure o keep-alive (passo 09)                                 |
 
 ## Referências
 

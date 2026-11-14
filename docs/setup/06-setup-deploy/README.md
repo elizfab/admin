@@ -25,54 +25,54 @@ concessionária (produção).
 
 ## Decisões desta fase
 
-| Decisão | Valor adotado | Pode mudar? |
-|---|---|---|
-| Repositório | `elizfab/personal-platform-admin`, **privado** | Sim: troque o nome nos comandos |
-| Domínio | `https://personal-platform-admin.vercel.app` (gratuito, da Vercel) | Domínio próprio é opcional (passo 07) |
-| Bancos | 2 projetos Supabase Free: **produção** e **preview** | O plano Free permite 2 projetos ativos |
-| Região | São Paulo: Supabase `sa-east-1` e funções Vercel `gru1` | Mantenha **as duas na mesma região** |
+| Decisão     | Valor adotado                                           | Pode mudar?                            |
+| ----------- | ------------------------------------------------------- | -------------------------------------- |
+| Repositório | `elizfab/admin`, **privado**                            | Sim: troque o nome nos comandos        |
+| Domínio     | `https://admin.vercel.app` (gratuito, da Vercel)        | Domínio próprio é opcional (passo 07)  |
+| Bancos      | 2 projetos Supabase Free: **produção** e **preview**    | O plano Free permite 2 projetos ativos |
+| Região      | São Paulo: Supabase `sa-east-1` e funções Vercel `gru1` | Mantenha **as duas na mesma região**   |
 
 ## Limitações dos planos gratuitos (descobertas na pesquisa desta fase)
 
-| Plano | Limitação | Como o projeto lida |
-|---|---|---|
-| GitHub Free (organização) | **Não** permite branch protection nem rulesets em repositório **privado** | Fluxo disciplinado com PR + CI visível (passo 05) |
-| Supabase Free | Pausa o projeto após ~7 dias com pouca atividade no banco | Workflow diário de *keep-alive* (passo 09) |
-| Supabase Free | **Sem** backup diário | Script de backup + teste de restauração (passo 09) |
-| Supabase | Conexão direta só por **IPv6**; a Vercel não faz conexões IPv6 | `DIRECT_URL` com o *session pooler* (IPv4) |
-| Vercel Hobby | Rollback só para o deploy **imediatamente anterior** | Roteiro de incidentes (passo 10) |
-| Vercel Hobby | Previews protegidos por login da Vercel; produção pública | Correto aqui: a aplicação já exige login próprio |
+| Plano                     | Limitação                                                                 | Como o projeto lida                                |
+| ------------------------- | ------------------------------------------------------------------------- | -------------------------------------------------- |
+| GitHub Free (organização) | **Não** permite branch protection nem rulesets em repositório **privado** | Fluxo disciplinado com PR + CI visível (passo 05)  |
+| Supabase Free             | Pausa o projeto após ~7 dias com pouca atividade no banco                 | Workflow diário de _keep-alive_ (passo 09)         |
+| Supabase Free             | **Sem** backup diário                                                     | Script de backup + teste de restauração (passo 09) |
+| Supabase                  | Conexão direta só por **IPv6**; a Vercel não faz conexões IPv6            | `DIRECT_URL` com o _session pooler_ (IPv4)         |
+| Vercel Hobby              | Rollback só para o deploy **imediatamente anterior**                      | Roteiro de incidentes (passo 10)                   |
+| Vercel Hobby              | Previews protegidos por login da Vercel; produção pública                 | Correto aqui: a aplicação já exige login próprio   |
 
 ## Ordem dos passos
 
-| # | Passo | O que entrega | Status |
-|---|---|---|---|
-| 01 | [Headers de segurança](01-headers-de-seguranca.md) | 6 headers em todas as respostas | ⬜ |
-| 02 | [Validação de variáveis no build](02-validacao-de-variaveis.md) | Build falha cedo se faltar segredo | ⬜ |
-| 03 | [Preparar o projeto para a Vercel](03-preparar-para-vercel.md) | Versão do Node, `vercel.json`, URL dinâmica para previews | ⬜ |
-| 04 | [Repositório no GitHub](04-repositorio-github.md) | `elizfab/personal-platform-admin` privado, com histórico | ⬜ |
-| 05 | [CI no GitHub Actions e fluxo de trabalho](05-ci-github-actions.md) | Testes automáticos a cada push e PR | ⬜ |
-| 06 | [Bancos Supabase de produção e preview](06-bancos-supabase.md) | 2 projetos, Data API desligada | ⬜ |
-| 07 | [Projeto na Vercel e variáveis](07-projeto-vercel.md) | Variáveis por ambiente, região, proteção | ⬜ |
-| 08 | [Primeiro deploy e verificação](08-primeiro-deploy.md) | Preview e produção no ar, administradora criada | ⬜ |
-| 09 | [Backup, restauração e keep-alive](09-backup-e-keepalive.md) | Backup criptografado e restauração testada | ⬜ |
-| 10 | [Operação e checklist de go-live](10-operacao-e-go-live.md) | Roteiro de incidentes + checklist final | ⬜ |
+| #   | Passo                                                               | O que entrega                                             | Status |
+| --- | ------------------------------------------------------------------- | --------------------------------------------------------- | ------ |
+| 01  | [Headers de segurança](01-headers-de-seguranca.md)                  | 6 headers em todas as respostas                           | ⬜     |
+| 02  | [Validação de variáveis no build](02-validacao-de-variaveis.md)     | Build falha cedo se faltar segredo                        | ⬜     |
+| 03  | [Preparar o projeto para a Vercel](03-preparar-para-vercel.md)      | Versão do Node, `vercel.json`, URL dinâmica para previews | ⬜     |
+| 04  | [Repositório no GitHub](04-repositorio-github.md)                   | `elizfab/admin` privado, com histórico                    | ⬜     |
+| 05  | [CI no GitHub Actions e fluxo de trabalho](05-ci-github-actions.md) | Testes automáticos a cada push e PR                       | ⬜     |
+| 06  | [Bancos Supabase de produção e preview](06-bancos-supabase.md)      | 2 projetos, Data API desligada                            | ⬜     |
+| 07  | [Projeto na Vercel e variáveis](07-projeto-vercel.md)               | Variáveis por ambiente, região, proteção                  | ⬜     |
+| 08  | [Primeiro deploy e verificação](08-primeiro-deploy.md)              | Preview e produção no ar, administradora criada           | ⬜     |
+| 09  | [Backup, restauração e keep-alive](09-backup-e-keepalive.md)        | Backup criptografado e restauração testada                | ⬜     |
+| 10  | [Operação e checklist de go-live](10-operacao-e-go-live.md)         | Roteiro de incidentes + checklist final                   | ⬜     |
 
 ## ✅ Critério de conclusão da fase
 
-- Um *pull request* gera CI verde e um preview funcional, com login.
+- Um _pull request_ gera CI verde e um preview funcional, com login.
 - O merge na `main` publica em produção, e `/api/v1/health` responde `200`.
 - A bateria `security-check.sh` passa **contra a produção**.
 - Existe um backup de produção **restaurado com sucesso** pelo menos uma vez.
 
 ## Versões validadas (11/11/2026)
 
-| Item | Versão / valor |
-|---|---|
-| Node.js (`.nvmrc`) | 22 |
-| GitHub Actions | `actions/checkout@v4`, `actions/setup-node@v4`, `actions/upload-artifact@v4` |
-| PostgreSQL no CI | 16 (igual ao Docker local) |
-| `pg_dump` / `pg_restore` dos scripts | Imagem `postgres:17-alpine` (ajustável) |
+| Item                                 | Versão / valor                                                               |
+| ------------------------------------ | ---------------------------------------------------------------------------- |
+| Node.js (`.nvmrc`)                   | 22                                                                           |
+| GitHub Actions                       | `actions/checkout@v4`, `actions/setup-node@v4`, `actions/upload-artifact@v4` |
+| PostgreSQL no CI                     | 16 (igual ao Docker local)                                                   |
+| `pg_dump` / `pg_restore` dos scripts | Imagem `postgres:17-alpine` (ajustável)                                      |
 
 > **O que foi validado aqui, e o que só pode ser validado na sua conta:** o
 > CI foi executado localmente com `CI=true` (mesmos comandos e banco), os

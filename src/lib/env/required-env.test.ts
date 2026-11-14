@@ -3,7 +3,7 @@ import { assertProductionEnv, findEnvProblems } from "@/lib/env/required-env";
 const valid = {
     DATABASE_URL: "postgresql://u:p@host:6543/postgres",
     BETTER_AUTH_SECRET: "a".repeat(32),
-    BETTER_AUTH_URL: "https://personal-platform-admin.vercel.app",
+    BETTER_AUTH_URL: "https://admin.vercel.app",
 };
 
 describe("findEnvProblems", () => {

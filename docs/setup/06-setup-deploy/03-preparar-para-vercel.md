@@ -42,19 +42,19 @@ O Better Auth confere se cada requisição vem da **URL oficial** da aplicação
 preview tem uma URL diferente, como:
 
 ```text
-personal-platform-admin-a1b2c3d4-elizfab.vercel.app        (por deploy)
-personal-platform-admin-git-minha-branch-elizfab.vercel.app (por branch)
+admin-a1b2c3d4-elizfab.vercel.app        (por deploy)
+admin-git-minha-branch-elizfab.vercel.app (por branch)
 ```
 
 Com `BETTER_AUTH_ALLOWED_HOSTS`, o Better Auth aceita **só os hosts que
 batem com o padrão** e recusa o resto. Validado aqui:
 
-| Situação simulada | Resultado |
-|---|---|
-| Login vindo de `personal-platform-admin-git-feature-x-elizfab.vercel.app` | `200` ✅ |
-| Origem `golpe-elizfab.vercel.app` | `403` (origem inválida) ✅ |
-| Host `golpe.vercel.app` | Recusado (host fora da lista) ✅ |
-| Cookie `__Secure-better-auth.session_token` (HTTPS) no `proxy.ts` e no servidor | Sessão reconhecida ✅ |
+| Situação simulada                                                               | Resultado                        |
+| ------------------------------------------------------------------------------- | -------------------------------- |
+| Login vindo de `admin-git-feature-x-elizfab.vercel.app`                         | `200` ✅                         |
+| Origem `golpe-elizfab.vercel.app`                                               | `403` (origem inválida) ✅       |
+| Host `golpe.vercel.app`                                                         | Recusado (host fora da lista) ✅ |
+| Cookie `__Secure-better-auth.session_token` (HTTPS) no `proxy.ts` e no servidor | Sessão reconhecida ✅            |
 
 ⚠️ **Não use `*.vercel.app`**: qualquer pessoa pode publicar algo em
 `*.vercel.app`, e esse padrão confiaria em todos. Use o prefixo do **seu**
@@ -141,26 +141,26 @@ No bloco de autenticação, acrescente:
 
 ```bash
 # Somente nos PREVIEWS da Vercel (no lugar de BETTER_AUTH_URL):
-# BETTER_AUTH_ALLOWED_HOSTS="personal-platform-admin-*-elizfab.vercel.app"
+# BETTER_AUTH_ALLOWED_HOSTS="admin-*-elizfab.vercel.app"
 ```
 
 ## Arquivos criados ou alterados
 
-| Arquivo | Ação | Descrição |
-|---|---|---|
-| `.nvmrc` | Criado | Versão do Node |
-| `package.json` | Alterado | `engines` e `vercel-build` |
-| `vercel.json` | Criado | Comando de build e região |
-| `src/lib/auth/auth.ts` | Alterado | `resolveBaseURL()` |
-| `.env.example` | Alterado | Documenta `BETTER_AUTH_ALLOWED_HOSTS` |
+| Arquivo                | Ação     | Descrição                             |
+| ---------------------- | -------- | ------------------------------------- |
+| `.nvmrc`               | Criado   | Versão do Node                        |
+| `package.json`         | Alterado | `engines` e `vercel-build`            |
+| `vercel.json`          | Criado   | Comando de build e região             |
+| `src/lib/auth/auth.ts` | Alterado | `resolveBaseURL()`                    |
+| `.env.example`         | Alterado | Documenta `BETTER_AUTH_ALLOWED_HOSTS` |
 
 ## ✅ Como testar
 
-| # | Teste | Resultado esperado |
-|---|---|---|
-| 1 | `npm run typecheck && npm run lint && npm test` | Tudo passa |
-| 2 | `npm run vercel-build` (com o banco local rodando) | `No pending migrations to apply.` e build concluído |
-| 3 | `npm run test:e2e` | `20 passed` (o `BETTER_AUTH_URL` fixo continua funcionando) |
+| #   | Teste                                              | Resultado esperado                                          |
+| --- | -------------------------------------------------- | ----------------------------------------------------------- |
+| 1   | `npm run typecheck && npm run lint && npm test`    | Tudo passa                                                  |
+| 2   | `npm run vercel-build` (com o banco local rodando) | `No pending migrations to apply.` e build concluído         |
+| 3   | `npm run test:e2e`                                 | `20 passed` (o `BETTER_AUTH_URL` fixo continua funcionando) |
 
 A URL dinâmica será testada de verdade no primeiro preview (passo 08).
 

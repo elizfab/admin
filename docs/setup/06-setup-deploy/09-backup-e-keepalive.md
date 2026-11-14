@@ -83,12 +83,12 @@ echo "Backup concluído: $FILE ($(du -h "$FILE" | cut -f1))"
 echo "Próximo passo: criptografe com  gpg --symmetric --cipher-algo AES256 \"$FILE\"  e apague o arquivo aberto."
 ```
 
-| Opção | 💡 Por quê |
-|---|---|
+| Opção                           | 💡 Por quê                                                                                                                                   |
+| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
 | `postgres:17-alpine` via Docker | O `pg_dump` precisa ser da **mesma versão do servidor ou mais nova**. Use a versão anotada no passo 06 (`PG_IMAGE=postgres:<versão>-alpine`) |
-| `--format=custom` | Arquivo compactado, que permite restaurar tabelas específicas |
-| `--schema=public` | Só os dados da aplicação, sem os schemas internos do Supabase, que não existem num PostgreSQL comum |
-| `--no-owner --no-privileges` | O backup restaura em qualquer servidor, com qualquer usuário |
+| `--format=custom`               | Arquivo compactado, que permite restaurar tabelas específicas                                                                                |
+| `--schema=public`               | Só os dados da aplicação, sem os schemas internos do Supabase, que não existem num PostgreSQL comum                                          |
+| `--no-owner --no-privileges`    | O backup restaura em qualquer servidor, com qualquer usuário                                                                                 |
 
 ### 2. Script de teste de restauração
 
@@ -218,50 +218,50 @@ jobs:
 2. No GitHub: **Settings → Secrets and variables → Actions → aba
    Variables → New repository variable**:
    - **Name:** `PRODUCTION_URL`
-   - **Value:** `https://personal-platform-admin.vercel.app` (sem barra no final)
+   - **Value:** `https://admin.vercel.app` (sem barra no final)
 3. **Actions → Keep-alive → Run workflow** para testar na hora.
 
-💡 É uma **variable** (não um *secret*) porque a URL de produção não é
+💡 É uma **variable** (não um _secret_) porque a URL de produção não é
 segredo. O workflow não precisa de nenhuma permissão (`permissions: {}`).
 
 ### 8. Rotina recomendada
 
-| Quando | O quê |
-|---|---|
-| **Mensalmente** (lembrete no calendário) | Backup → teste de restauração → criptografar → guardar |
-| **Antes de toda migration destrutiva** (`DROP`, renomear coluna) | Backup extra |
-| **A cada 3 meses** | Abrir um backup antigo e restaurar, para provar que ainda funciona |
+| Quando                                                           | O quê                                                              |
+| ---------------------------------------------------------------- | ------------------------------------------------------------------ |
+| **Mensalmente** (lembrete no calendário)                         | Backup → teste de restauração → criptografar → guardar             |
+| **Antes de toda migration destrutiva** (`DROP`, renomear coluna) | Backup extra                                                       |
+| **A cada 3 meses**                                               | Abrir um backup antigo e restaurar, para provar que ainda funciona |
 
 ## Arquivos criados ou alterados
 
-| Arquivo | Ação | Descrição |
-|---|---|---|
-| `scripts/db-backup.sh` | Criado | Backup do schema `public` |
-| `scripts/db-restore-check.sh` | Criado | Restauração de teste com trava |
-| `.github/workflows/keepalive.yml` | Criado | Ping diário |
-| `.gitignore` | Alterado | Ignora `/backups/` |
+| Arquivo                           | Ação     | Descrição                      |
+| --------------------------------- | -------- | ------------------------------ |
+| `scripts/db-backup.sh`            | Criado   | Backup do schema `public`      |
+| `scripts/db-restore-check.sh`     | Criado   | Restauração de teste com trava |
+| `.github/workflows/keepalive.yml` | Criado   | Ping diário                    |
+| `.gitignore`                      | Alterado | Ignora `/backups/`             |
 
 ## ✅ Como testar
 
-| # | Teste | Resultado esperado |
-|---|---|---|
-| 1 | Backup de produção | `Backup concluído: backups/admin-….dump` |
-| 2 | `ls -l backups/` | Arquivo com permissão `-rw-------` |
-| 3 | Restauração | Contagens coerentes com a produção |
-| 4 | **Prova da trava:** `RESTORE_TARGET_URL=postgresql://postgres:postgres@localhost:5432/admin_dev bash scripts/db-restore-check.sh backups/<arquivo>` | `Recusado: o banco de destino precisa terminar em _restore_test` |
-| 5 | GPG ida e volta (`--symmetric` e depois `--decrypt`) | Arquivo restaurado idêntico |
-| 6 | Actions → Keep-alive → Run workflow | ✅ e `{"status":"ok","database":"up",...}` no log |
-| 7 | `git status` | `backups/` não aparece |
+| #   | Teste                                                                                                                                               | Resultado esperado                                               |
+| --- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
+| 1   | Backup de produção                                                                                                                                  | `Backup concluído: backups/admin-….dump`                         |
+| 2   | `ls -l backups/`                                                                                                                                    | Arquivo com permissão `-rw-------`                               |
+| 3   | Restauração                                                                                                                                         | Contagens coerentes com a produção                               |
+| 4   | **Prova da trava:** `RESTORE_TARGET_URL=postgresql://postgres:postgres@localhost:5432/admin_dev bash scripts/db-restore-check.sh backups/<arquivo>` | `Recusado: o banco de destino precisa terminar em _restore_test` |
+| 5   | GPG ida e volta (`--symmetric` e depois `--decrypt`)                                                                                                | Arquivo restaurado idêntico                                      |
+| 6   | Actions → Keep-alive → Run workflow                                                                                                                 | ✅ e `{"status":"ok","database":"up",...}` no log                |
+| 7   | `git status`                                                                                                                                        | `backups/` não aparece                                           |
 
 **Critério de aceite:** os sete testes passam.
 
 ## ⚠️ Problemas comuns
 
-| Sintoma | Causa provável | Solução |
-|---|---|---|
-| `server version mismatch` | `pg_dump` mais antigo que o servidor | `PG_IMAGE=postgres:<versão-do-supabase>-alpine` |
-| `Network is unreachable` no backup | Usou a conexão direta (IPv6) | Use o **Session pooler** |
-| Keep-alive falha com `Defina a variável PRODUCTION_URL` | Variável não criada, ou criada como *secret* | Criar em **Variables** (não em Secrets) |
+| Sintoma                                                 | Causa provável                               | Solução                                         |
+| ------------------------------------------------------- | -------------------------------------------- | ----------------------------------------------- |
+| `server version mismatch`                               | `pg_dump` mais antigo que o servidor         | `PG_IMAGE=postgres:<versão-do-supabase>-alpine` |
+| `Network is unreachable` no backup                      | Usou a conexão direta (IPv6)                 | Use o **Session pooler**                        |
+| Keep-alive falha com `Defina a variável PRODUCTION_URL` | Variável não criada, ou criada como _secret_ | Criar em **Variables** (não em Secrets)         |
 
 ## Referências
 
