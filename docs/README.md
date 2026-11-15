@@ -51,15 +51,14 @@ Legenda: ⬜ não iniciada · 🟨 em andamento · ✅ concluída · 📋 planej
 | 02 | [`setup/02-setup-banco-prisma`](setup/02-setup-banco-prisma/README.md) | PostgreSQL local (Docker), Supabase, ERD, Prisma 7 e health check | ✅ |
 | 03 | [`setup/03-setup-autenticacao`](setup/03-setup-autenticacao/README.md) | Better Auth: login, seed da administradora, sessão, logout, proxy, rate limiting e testes de segurança | ✅ |
 | 04 | [`setup/04-setup-backend`](setup/04-setup-backend/README.md) | Módulo Projetos: Zod 4, erros padrão, repositório, serviço, API REST, Server Actions, telas e testes de isolamento | ✅ |
-| 05 | [`setup/05-setup-testes-e2e`](setup/05-setup-testes-e2e/README.md) | Playwright (auth, navegação, CRUD, isolamento, acessibilidade) e integração com banco | ⬜ |
-| 06 | [`setup/06-setup-deploy`](setup/06-setup-deploy/README.md) | GitHub, Vercel, variáveis por ambiente e backup | 📋 |
+| 05 | [`setup/05-setup-testes-e2e`](setup/05-setup-testes-e2e/README.md) | Playwright (auth, navegação, CRUD, isolamento, acessibilidade) e integração com banco | ✅ |
+| 06 | [`setup/06-setup-deploy`](setup/06-setup-deploy/README.md) | GitHub, Vercel, variáveis por ambiente e backup | ✅ |
 
-> As fases 00 a 05 têm passo a passo **completo e validado**. A fase 06
-> está **planejada**: cada pasta descreve o escopo e os critérios de
-> conclusão, e o passo a passo será escrito quando a fase começar, com as
-> versões das ferramentas conferidas naquele momento.
-> Isso segue a regra da seção 24 do documento de arquitetura: não antecipar
-> implementação.
+> Todas as fases (00 a 06) estão **concluídas**: a aplicação está no ar em
+> <https://admin-elizabetefabri.vercel.app/> (produção) com CI no GitHub
+> Actions, bancos Supabase de produção e preview, e variáveis por ambiente
+> documentadas em `VERCEL-ENV.md`. Rotinas contínuas (backup, keep-alive,
+> operação) seguem os guias da fase 06.
 
 ### Correspondência com o documento de arquitetura
 
