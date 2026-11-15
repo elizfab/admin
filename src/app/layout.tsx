@@ -15,6 +15,7 @@ export const metadata: Metadata = {
     template: "%s | Admin",
   },
   description: "Portal administrativo pessoal.",
+  manifest: "/site.webmanifest",
 };
 
 // Aplica o tema salvo (ou o do sistema) antes da primeira pintura,

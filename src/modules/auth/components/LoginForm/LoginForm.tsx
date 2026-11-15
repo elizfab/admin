@@ -1,6 +1,7 @@
 "use client";
 
-import { Eye, EyeOff, ShieldLock } from "lucide-react";
+import Image from "next/image";
+import { Eye, EyeOff } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 
@@ -45,7 +46,14 @@ export function LoginForm() {
         <div className={styles.card}>
             <div className={styles.visual}>
                 <div className={styles.brandBadge}>
-                    <ShieldLock className={styles.brandIcon} size={56} aria-hidden="true" />
+                    <Image
+                        src="/admin.png"
+                        alt=""
+                        width={56}
+                        height={56}
+                        className={styles.brandIcon}
+                        aria-hidden="true"
+                    />
                 </div>
             </div>
 
