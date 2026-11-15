@@ -6,7 +6,32 @@ import { prisma } from "@/lib/db/prisma";
 
 const EIGHT_HOURS = 60 * 60 * 8;
 
+/**
+ * URL base da autenticação.
+ * - Local, testes e produção: BETTER_AUTH_URL (uma URL fixa).
+ * - Previews da Vercel: cada deploy tem uma URL diferente. Nesse caso, defina
+ *   BETTER_AUTH_ALLOWED_HOSTS com os padrões de host permitidos (separados por
+ *   vírgula). Hosts fora da lista são recusados.
+ */
+function resolveBaseURL() {
+    const allowedHosts = process.env.BETTER_AUTH_ALLOWED_HOSTS?.split(",")
+        .map((host) => host.trim())
+        .filter(Boolean);
+
+    if (allowedHosts && allowedHosts.length > 0) {
+        return { allowedHosts, protocol: "https" as const };
+    }
+
+    return process.env.BETTER_AUTH_URL;
+}
+
 export const auth = betterAuth({
+    // O dev server pode subir em portas alternativas (ex.: 3001 quando a 3000
+    // está ocupada); sem isso o Better Auth rejeita o Origin com 403.
+    trustedOrigins: ["http://localhost:3000", "http://localhost:3001"],
+
+    baseURL: resolveBaseURL(),
+
     database: prismaAdapter(prisma, { provider: "postgresql" }),
 
     emailAndPassword: {

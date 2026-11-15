@@ -7,13 +7,13 @@
   gap: $space-3;
   padding: $space-7 $space-4;
   text-align: center;
-  background: var(--color-surface);
-  border: 1px dashed var(--color-border);
+  background: var(--card-background);
+  border: 1px dashed var(--border);
   border-radius: $radius-lg;
 }
 
 .icon {
-  color: var(--color-primary);
+  color: var(--accent-color);
 }
 
 .title {
@@ -23,5 +23,5 @@
 .description {
   max-width: 48ch;
   margin: 0;
-  color: var(--color-muted);
+  color: var(--text-color-secondary);
 }

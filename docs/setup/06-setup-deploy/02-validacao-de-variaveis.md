@@ -18,17 +18,17 @@ primeira tentativa.
 
 💡 É o **checklist do piloto antes da decolagem**: é muito melhor o avião
 não sair do chão do que descobrir no ar que falta combustível. Esse
-princípio se chama *fail fast* (falhar cedo).
+princípio se chama _fail fast_ (falhar cedo).
 
-| Variável | Regra |
-|---|---|
-| `DATABASE_URL` | Obrigatória |
-| `BETTER_AUTH_SECRET` | Obrigatória, com **32+ caracteres** |
+| Variável                                             | Regra                                                                    |
+| ---------------------------------------------------- | ------------------------------------------------------------------------ |
+| `DATABASE_URL`                                       | Obrigatória                                                              |
+| `BETTER_AUTH_SECRET`                                 | Obrigatória, com **32+ caracteres**                                      |
 | `BETTER_AUTH_URL` **ou** `BETTER_AUTH_ALLOWED_HOSTS` | Uma das duas (produção usa a primeira; previews, a segunda, no passo 03) |
 
 ### Por que só no build de produção
 
-O `next.config.ts` pode exportar uma **função** que recebe a *fase* em que o
+O `next.config.ts` pode exportar uma **função** que recebe a _fase_ em que o
 Next.js está. A validação roda só em `PHASE_PRODUCTION_BUILD`: o `npm run
 dev`, o Jest e o typecheck continuam funcionando sem essas variáveis.
 
@@ -69,7 +69,9 @@ export function findEnvProblems(env: Env): string[] {
   }
 
   if (!env.BETTER_AUTH_URL && !env.BETTER_AUTH_ALLOWED_HOSTS) {
-    problems.push("Defina BETTER_AUTH_URL (URL fixa) ou BETTER_AUTH_ALLOWED_HOSTS (previews).");
+    problems.push(
+      "Defina BETTER_AUTH_URL (URL fixa) ou BETTER_AUTH_ALLOWED_HOSTS (previews).",
+    );
   }
 
   return problems;
@@ -100,7 +102,7 @@ import { assertProductionEnv, findEnvProblems } from "@/lib/env/required-env";
 const valid = {
   DATABASE_URL: "postgresql://u:p@host:6543/postgres",
   BETTER_AUTH_SECRET: "a".repeat(32),
-  BETTER_AUTH_URL: "https://personal-platform-admin.vercel.app",
+  BETTER_AUTH_URL: "https://admin.vercel.app",
 };
 
 describe("findEnvProblems", () => {
@@ -119,12 +121,12 @@ describe("findEnvProblems", () => {
   });
 
   it("aponta segredo ausente ou curto", () => {
-    expect(findEnvProblems({ ...valid, BETTER_AUTH_SECRET: undefined })).toContain(
-      "BETTER_AUTH_SECRET não definida.",
-    );
-    expect(findEnvProblems({ ...valid, BETTER_AUTH_SECRET: "curto" })).toContain(
-      "BETTER_AUTH_SECRET precisa ter pelo menos 32 caracteres.",
-    );
+    expect(
+      findEnvProblems({ ...valid, BETTER_AUTH_SECRET: undefined }),
+    ).toContain("BETTER_AUTH_SECRET não definida.");
+    expect(
+      findEnvProblems({ ...valid, BETTER_AUTH_SECRET: "curto" }),
+    ).toContain("BETTER_AUTH_SECRET precisa ter pelo menos 32 caracteres.");
   });
 
   it("lista todos os problemas de uma vez", () => {
@@ -170,10 +172,14 @@ const securityHeaders = [
   // CSP básica: sem iframes externos, sem <object>, formulários só para o próprio site.
   {
     key: "Content-Security-Policy",
-    value: "frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'",
+    value:
+      "frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'",
   },
   // Força HTTPS por 2 anos nas próximas visitas (ignorado em http://localhost).
-  { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains" },
+  {
+    key: "Strict-Transport-Security",
+    value: "max-age=63072000; includeSubDomains",
+  },
 ];
 
 const nextConfig: NextConfig = {
@@ -198,20 +204,20 @@ export default function config(phase: string): NextConfig {
 
 ## Arquivos criados ou alterados
 
-| Arquivo | Ação | Descrição |
-|---|---|---|
-| `src/lib/env/required-env.ts` | Criado | Regras das variáveis obrigatórias |
-| `tests/unit/lib/env/required-env.test.ts` | Criado | 5 testes |
-| `next.config.ts` | Alterado | Exporta uma função por fase e valida no build |
+| Arquivo                                   | Ação     | Descrição                                     |
+| ----------------------------------------- | -------- | --------------------------------------------- |
+| `src/lib/env/required-env.ts`             | Criado   | Regras das variáveis obrigatórias             |
+| `tests/unit/lib/env/required-env.test.ts` | Criado   | 5 testes                                      |
+| `next.config.ts`                          | Alterado | Exporta uma função por fase e valida no build |
 
 ## ✅ Como testar
 
-| # | Teste | Resultado esperado |
-|---|---|---|
-| 1 | `npm test` | `Tests: 34 passed` (29 + 5) |
-| 2 | **Prova:** `mv .env.local /tmp/env.bak && npx next build; mv /tmp/env.bak .env.local` | Build **interrompido**, listando as 3 variáveis ausentes (código de saída 1) |
-| 3 | `npm run build` (com o `.env.local`) | Build normal |
-| 4 | `npm run test:e2e` | `20 passed` (o servidor de teste recebe as variáveis do `e2e-env.ts`) |
+| #   | Teste                                                                                 | Resultado esperado                                                           |
+| --- | ------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| 1   | `npm test`                                                                            | `Tests: 34 passed` (29 + 5)                                                  |
+| 2   | **Prova:** `mv .env.local /tmp/env.bak && npx next build; mv /tmp/env.bak .env.local` | Build **interrompido**, listando as 3 variáveis ausentes (código de saída 1) |
+| 3   | `npm run build` (com o `.env.local`)                                                  | Build normal                                                                 |
+| 4   | `npm run test:e2e`                                                                    | `20 passed` (o servidor de teste recebe as variáveis do `e2e-env.ts`)        |
 
 ⚠️ No teste 2, **não esqueça** o `mv` de volta: o `;` garante que ele rode
 mesmo com o build falhando.

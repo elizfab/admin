@@ -33,32 +33,32 @@ passo 10).
 
 | # | Passo | O que entrega | Status |
 |---|---|---|---|
-| 01 | [Registrar a decisão (ADR)](01-registrar-decisao-adr.md) | ADR-006 aceito | ⬜ |
-| 02 | [Instalar e configurar o Better Auth](02-instalar-configurar-better-auth.md) | `lib/auth/auth.ts` e variáveis | ⬜ |
-| 03 | [Gerar as tabelas de autenticação](03-gerar-tabelas-auth.md) | `session`, `account`, `verification`, `rateLimit` | ⬜ |
-| 04 | [Rota de autenticação e cliente](04-rota-e-cliente.md) | `/api/auth/*` e `auth-client.ts` | ⬜ |
-| 05 | [Seed da conta administradora](05-seed-administradora.md) | Conta criada com senha em hash | ⬜ |
-| 06 | [Sessão no servidor e layout protegido](06-sessao-no-servidor.md) | `requireSession()` e raiz condicional | ⬜ |
-| 07 | [Tela de login](07-tela-de-login.md) | `/login` funcional + testes | ⬜ |
-| 08 | [Logout e usuário real no Header](08-logout.md) | “Sair” funcionando | ⬜ |
-| 09 | [Proxy (Next.js 16)](09-proxy.md) | Redirecionamento otimista | ⬜ |
-| 10 | [Endpoint protegido e testes de segurança](10-testes-de-seguranca.md) | `/api/v1/me` + bateria de 13 testes | ⬜ |
+| 01 | [Registrar a decisão (ADR)](01-registrar-decisao-adr.md) | ADR-006 aceito | ✅ |
+| 02 | [Instalar e configurar o Better Auth](02-instalar-configurar-better-auth.md) | `lib/auth/auth.ts` e variáveis | ✅ |
+| 03 | [Gerar as tabelas de autenticação](03-gerar-tabelas-auth.md) | `session`, `account`, `verification`, `rateLimit` | ✅ |
+| 04 | [Rota de autenticação e cliente](04-rota-e-cliente.md) | `/api/auth/*` e `auth-client.ts` | ✅ |
+| 05 | [Seed da conta administradora](05-seed-administradora.md) | Conta criada com senha em hash | ✅ |
+| 06 | [Sessão no servidor e layout protegido](06-sessao-no-servidor.md) | `requireSession()` e raiz condicional | ✅ |
+| 07 | [Tela de login](07-tela-de-login.md) | `/login` funcional + testes | ✅ |
+| 08 | [Logout e usuário real no Header](08-logout.md) | “Sair” funcionando | ✅ |
+| 09 | [Proxy (Next.js 16)](09-proxy.md) | Redirecionamento otimista | ✅ |
+| 10 | [Endpoint protegido e testes de segurança](10-testes-de-seguranca.md) | `/api/v1/me` + bateria de 13 testes | ✅ |
 
 ## Checklist da fase
 
-- [ ] ADR-006 revisado e aceito
-- [ ] `better-auth` instalado; `BETTER_AUTH_SECRET` gerado
-- [ ] Cadastro público **desabilitado**
-- [ ] Tabelas do Better Auth criadas via CLI + migration
-- [ ] Administradora criada pelo seed (idempotente)
-- [ ] `/login` funcionando, com mensagem de erro genérica
-- [ ] Layout privado protegido no servidor
-- [ ] Logout encerra a sessão **no banco**
-- [ ] `proxy.ts` redirecionando quem não tem cookie
-- [ ] `/api/v1/me` responde `401` sem sessão
-- [ ] Rate limiting: `429` após 5 tentativas em 1 minuto
-- [ ] Conta desativada (`isActive = false`) não consegue logar
-- [ ] 10 testes unitários passando
+- [x] ADR-006 revisado e aceito
+- [x] `better-auth` instalado; `BETTER_AUTH_SECRET` gerado
+- [x] Cadastro público **desabilitado**
+- [x] Tabelas do Better Auth criadas via CLI + migration
+- [x] Administradora criada pelo seed (idempotente)
+- [x] `/login` funcionando, com mensagem de erro genérica
+- [x] Layout privado protegido no servidor
+- [x] Logout encerra a sessão **no banco**
+- [x] `proxy.ts` redirecionando quem não tem cookie
+- [x] `/api/v1/me` responde `401` sem sessão
+- [x] Rate limiting: `429` após 5 tentativas em 1 minuto
+- [x] Conta desativada (`isActive = false`) não consegue logar
+- [x] 13 testes unitários passando
 
 ## ✅ Critério de conclusão da fase
 

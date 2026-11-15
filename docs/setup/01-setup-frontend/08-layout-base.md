@@ -216,8 +216,8 @@ export function Sidebar() {
   width: $sidebar-width-collapsed;
   height: 100vh;
   padding: $space-4 $space-3;
-  background: var(--color-surface);
-  border-right: 1px solid var(--color-border);
+  background: var(--card-background);
+  border-right: 1px solid var(--border);
 
   @include up("lg") {
     width: $sidebar-width;
@@ -238,8 +238,8 @@ export function Sidebar() {
   flex-shrink: 0;
   width: 40px;
   height: 40px;
-  color: #ffffff;
-  background: var(--color-primary);
+  color: var(--background);
+  background: var(--accent-color);
   border-radius: $radius-md;
 }
 
@@ -258,13 +258,13 @@ export function Sidebar() {
   justify-content: center;
   gap: $space-3;
   padding: $space-3;
-  color: var(--color-muted);
+  color: var(--text-color-secondary);
   border-radius: $radius-sm;
   transition: background-color 150ms ease, color 150ms ease;
 
   &:hover {
-    color: var(--color-text);
-    background: var(--color-background);
+    color: var(--text-color);
+    background: var(--background);
   }
 
   @include up("lg") {
@@ -274,12 +274,12 @@ export function Sidebar() {
 }
 
 .itemActive {
-  color: var(--color-primary);
-  background: var(--color-primary-soft);
+  color: var(--accent-color);
+  background: var(--selection-color);
 
   &:hover {
-    color: var(--color-primary);
-    background: var(--color-primary-soft);
+    color: var(--accent-color);
+    background: var(--selection-color);
   }
 }
 
@@ -387,8 +387,8 @@ export function Header({ userName }: HeaderProps) {
   justify-content: space-between;
   height: $header-height;
   padding: 0 $space-4;
-  background: var(--color-surface);
-  border-bottom: 1px solid var(--color-border);
+  background: var(--card-background);
+  border-bottom: 1px solid var(--border);
 
   @include up("lg") {
     padding: 0 $space-6;
@@ -409,14 +409,14 @@ export function Header({ userName }: HeaderProps) {
   flex-shrink: 0;
   gap: $space-2;
   padding: $space-2 $space-3;
-  color: var(--color-text);
+  color: var(--text-color);
   background: transparent;
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--border);
   border-radius: $radius-sm;
   cursor: pointer;
 
   &:hover {
-    background: var(--color-background);
+    background: var(--background);
   }
 
   &:focus-visible {

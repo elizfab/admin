@@ -43,3 +43,11 @@ next-env.d.ts
 
 # prisma (código gerado: recriado por `npm install` / `npm run db:generate`)
 /src/generated/
+
+# playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
+

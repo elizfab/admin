@@ -1,0 +1,61 @@
+@use "@/styles/abstracts" as *;
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: $space-4;
+  max-width: 640px;
+  padding: $space-5;
+  background: var(--card-background);
+  border: 1px solid var(--border);
+  border-radius: $radius-lg;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: $space-1;
+
+  label {
+    font-size: $font-size-sm;
+    font-weight: 600;
+  }
+
+  input,
+  textarea,
+  select {
+    padding: $space-3;
+    font: inherit;
+    background: var(--card-background);
+    border: 1px solid var(--border);
+    border-radius: $radius-sm;
+
+    &:focus-visible {
+      @include focus-ring;
+    }
+
+    &[aria-invalid="true"] {
+      border-color: var(--red);
+    }
+  }
+}
+
+.fieldError {
+  margin: 0;
+  font-size: $font-size-sm;
+  color: var(--red);
+}
+
+.formError {
+  margin: 0;
+  padding: $space-2 $space-3;
+  color: var(--red);
+  background: color-mix(in srgb, var(--red) 10%, transparent);
+  border-radius: $radius-sm;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: $space-2;
+}

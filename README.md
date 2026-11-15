@@ -55,3 +55,5 @@ src/
 tests/
 └── unit/         # testes Jest
 ```
+
+[![CI](https://github.com/elizfab/admin/actions/workflows/ci.yml/badge.svg)](https://github.com/elizfab/admin/actions/workflows/ci.yml)

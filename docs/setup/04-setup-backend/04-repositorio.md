@@ -53,7 +53,10 @@ import { Prisma } from "@/generated/prisma/client";
 
 /** P2002 = violação de restrição única (ex.: @@unique([ownerId, name])). */
 export function isUniqueConstraintError(error: unknown): boolean {
-  return error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002";
+  return (
+    error instanceof Prisma.PrismaClientKnownRequestError &&
+    error.code === "P2002"
+  );
 }
 ```
 
@@ -70,7 +73,10 @@ import { ConflictError } from "@/lib/errors/app-error";
 import { prisma } from "@/lib/db/prisma";
 import { isUniqueConstraintError } from "@/lib/db/errors";
 
-import type { CreateProjectInput, UpdateProjectInput } from "../schemas/project.schema";
+import type {
+  CreateProjectInput,
+  UpdateProjectInput,
+} from "../schemas/project.schema";
 
 const DUPLICATE_NAME = "Já existe um projeto com este nome.";
 
@@ -103,7 +109,8 @@ export const projectRepository = {
       return await prisma.project.create({ data: { ...data, ownerId } });
     } catch (error) {
       // Rede de segurança para corrida entre duas requisições simultâneas.
-      if (isUniqueConstraintError(error)) throw new ConflictError(DUPLICATE_NAME);
+      if (isUniqueConstraintError(error))
+        throw new ConflictError(DUPLICATE_NAME);
       throw error;
     }
   },
@@ -112,7 +119,8 @@ export const projectRepository = {
     try {
       return await prisma.project.update({ where: { id }, data });
     } catch (error) {
-      if (isUniqueConstraintError(error)) throw new ConflictError(DUPLICATE_NAME);
+      if (isUniqueConstraintError(error))
+        throw new ConflictError(DUPLICATE_NAME);
       throw error;
     }
   },
@@ -123,27 +131,27 @@ export const projectRepository = {
 };
 ```
 
-| Método | Observação |
-|---|---|
-| `listByOwner` | Ordena pelos atualizados mais recentemente |
-| `findByIdForOwner` | `findFirst` com `id` **e** `ownerId` |
-| `findByNameForOwner` | Usa a chave composta `ownerId_name`, gerada pelo `@@unique` |
-| `create` | `ownerId` entra **aqui**, vindo do serviço (que o recebe da sessão) |
-| `update` / `delete` | Por `id`: o serviço **já confirmou** a dona antes de chamar |
+| Método               | Observação                                                          |
+| -------------------- | ------------------------------------------------------------------- |
+| `listByOwner`        | Ordena pelos atualizados mais recentemente                          |
+| `findByIdForOwner`   | `findFirst` com `id` **e** `ownerId`                                |
+| `findByNameForOwner` | Usa a chave composta `ownerId_name`, gerada pelo `@@unique`         |
+| `create`             | `ownerId` entra **aqui**, vindo do serviço (que o recebe da sessão) |
+| `update` / `delete`  | Por `id`: o serviço **já confirmou** a dona antes de chamar         |
 
 ## Arquivos criados ou alterados
 
-| Arquivo | Ação | Descrição |
-|---|---|---|
-| `src/lib/db/errors.ts` | Criado | Detecta violação de unicidade |
-| `src/modules/projects/repositories/project.repository.ts` | Criado | Acesso a dados de projetos |
+| Arquivo                                                   | Ação   | Descrição                     |
+| --------------------------------------------------------- | ------ | ----------------------------- |
+| `src/lib/db/errors.ts`                                    | Criado | Detecta violação de unicidade |
+| `src/modules/projects/repositories/project.repository.ts` | Criado | Acesso a dados de projetos    |
 
 ## ✅ Como testar
 
-| # | Teste | Resultado esperado |
-|---|---|---|
-| 1 | `npm run typecheck` | Sem erros (confirma os nomes gerados, como `ownerId_name`) |
-| 2 | `npm run lint` | Sem erros |
+| #   | Teste               | Resultado esperado                                         |
+| --- | ------------------- | ---------------------------------------------------------- |
+| 1   | `npm run typecheck` | Sem erros (confirma os nomes gerados, como `ownerId_name`) |
+| 2   | `npm run lint`      | Sem erros                                                  |
 
 O comportamento é testado pelo serviço (passo 05) e pela API (passo 10).
 

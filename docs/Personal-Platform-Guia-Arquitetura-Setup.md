@@ -220,7 +220,7 @@ independentes
 
 ### 3.3 Repositório e estratégia Git
 
-Nome sugerido: `personal-platform-admin`.
+Nome sugerido: `admin`.
 
 Branches sugeridas:
 
@@ -517,24 +517,67 @@ src/
 
 ### 6.3 Exemplo de variáveis
 
-`src/styles/abstracts/_variables.scss`:
+`src/styles/abstracts/_variables.scss` guarda tokens **estáticos**
+(espaçamentos, bordas, tipografia, layout, breakpoints). As **cores** ficam
+em CSS custom properties nos arquivos de tema
+(`src/styles/themes/_light.scss` e `_dark.scss`), porque mudam com o tema
+em tempo de execução. A paleta oficial é a **Dracula**:
 
 ```scss
-$color-primary: #4b3fd1;
-$color-primary-hover: #3a2fb0;
+// _light.scss (:root — tema padrão)
+:root {
+  --background: #fffbeb;
+  --card-background: #efeddc;
+  --table-background: #efeddc;
+  --overlay-surface-background: #efeddc;
+  --input-color: #fffbeb;
 
-$color-background: #f7f7fb;
-$color-surface: #ffffff;
-$color-text: #201f25;
-$color-muted: #777582;
+  --selection-color: #cfcfde;
+  --medium-grey: #cfcfde;
+  --border: #cfcfde;
 
-$radius-sm: 6px;
-$radius-md: 10px;
-$radius-lg: 16px;
+  --text-color: #1f1f1f;
+  --text-color-secondary: #6c664b;
+  --indigo: #6c664b;
 
-$sidebar-width: 260px;
-$header-height: 64px;
+  --accent-color: #644ac9;
+  --blue: #644ac9;
+  --purple: #644ac9;
+  --cyan: #036a96;
+  --teal: #036a96;
+  --green: #14710a;
+  --orange: #a34d14;
+  --brown: #a34d14;
+  --pink: #a3144d;
+  --red: #cb3a2a;
+  --yellow: #846e15;
+
+  --accent-on-selection: #553fab;
+  --brand-surface:
+    radial-gradient(
+      120% 90% at 15% 0%,
+      color-mix(in srgb, var(--background) 35%, transparent),
+      transparent 60%
+    ),
+    linear-gradient(155deg, #ddd0f7 0%, #c6e2f6 55%, #d2efda 125%);
+}
+
+// _dark.scss — mesmos tokens, ativados por [data-theme="dark"]
+[data-theme="dark"] {
+  --background: #282a36;
+  --card-background: #353747;
+  --text-color: #f8f8f2;
+  --accent-color: #bd93f9;
+  --accent-on-selection: #d9b8ff;
+  --brand-surface: #21222c;
+  // ... demais tokens com os valores escuros da paleta
+}
 ```
+
+> **Regra obrigatória:** nenhum componente usa cor fixa (hex, `rgb()`,
+> nome). Toda cor vem dos tokens dos dois arquivos de tema. Cor nova =
+> token novo nos dois temas. O tema é alternado pelo `ThemeToggle` no
+> Header (`data-theme` no `<html>`, persistido em `localStorage`).
 
 ### 6.4 Exemplo de mixin
 
@@ -564,8 +607,8 @@ $header-height: 64px;
 .sidebar {
   width: 260px;
   min-height: 100vh;
-  background: #ffffff;
-  border-right: 1px solid #e8e7ee;
+  background: var(--card-background);
+  border-right: 1px solid var(--border);
 }
 
 .sidebar__item {
@@ -577,8 +620,8 @@ $header-height: 64px;
 }
 
 .sidebar__itemActive {
-  color: #4b3fd1;
-  background: #eeedfd;
+  color: var(--accent-color);
+  background: var(--selection-color);
 }
 ```
 
@@ -605,15 +648,14 @@ export function Sidebar() {
 Quando um módulo precisar de variáveis ou mixins, utilizar `@use`:
 
 ```scss
-@use "@/styles/abstracts/variables" as vars;
-@use "@/styles/abstracts/mixins" as mixins;
+@use "@/styles/abstracts" as *;
 
 .card {
-  color: vars.$color-text;
-  border-radius: vars.$radius-md;
+  color: var(--text-color);
+  border-radius: $radius-md;
 
-  @include mixins.respond-to(mobile) {
-    width: 100%;
+  @include up("md") {
+    width: 50%;
   }
 }
 ```
@@ -624,8 +666,9 @@ Quando um módulo precisar de variáveis ou mixins, utilizar `@use`:
 - Não criar um arquivo global para cada componente.
 - Não usar `@import` legado; preferir `@use` e `@forward`.
 - Evitar `!important`.
-- Utilizar variáveis de design para cores, espaçamentos, tipografia e
-  bordas.
+- **Obrigatório:** cores somente via tokens de `src/styles/themes/`
+  (paleta Dracula, temas claro e escuro); nunca cor fixa em componente.
+- Utilizar variáveis de design para espaçamentos, tipografia e bordas.
 - Pensar em mobile-first.
 - Garantir estados `hover`, `focus-visible`, `disabled`, `active` e
   `error`.
@@ -2101,7 +2144,7 @@ Admin não será automaticamente compartilhada com outra aplicação.
 ## 20. Estrutura proposta
 
 ```text
-personal-platform-admin/
+admin/
 │
 ├── docs/
 │   ├── architecture/

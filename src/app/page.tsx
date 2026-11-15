@@ -1,7 +1,10 @@
 import { redirect } from "next/navigation";
 
-// Fase de frontend: sempre envia para o dashboard.
-// Na fase de autenticação, este redirecionamento passará a depender da sessão.
-export default function HomePage() {
-  redirect("/dashboard");
+import { getSession } from "@/lib/auth/session";
+
+// Raiz: envia para o dashboard (com sessão) ou para o login (sem sessão).
+export default async function HomePage() {
+    const session = await getSession();
+
+    redirect(session ? "/dashboard" : "/login");
 }

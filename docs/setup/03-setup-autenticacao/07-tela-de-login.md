@@ -192,8 +192,8 @@ export function LoginForm() {
   width: 100%;
   max-width: 380px;
   padding: $space-6;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
+  background: var(--card-background);
+  border: 1px solid var(--border);
   border-radius: $radius-lg;
 }
 
@@ -214,7 +214,7 @@ export function LoginForm() {
   input {
     padding: $space-3;
     font: inherit;
-    border: 1px solid var(--color-border);
+    border: 1px solid var(--border);
     border-radius: $radius-sm;
 
     &:focus-visible {
@@ -227,22 +227,22 @@ export function LoginForm() {
   margin: 0;
   padding: $space-2 $space-3;
   font-size: $font-size-sm;
-  color: var(--color-danger);
-  background: #fdecea;
+  color: var(--red);
+  background: color-mix(in srgb, var(--red) 10%, transparent);
   border-radius: $radius-sm;
 }
 
 .submit {
   padding: $space-3;
   font-weight: 600;
-  color: #ffffff;
-  background: var(--color-primary);
+  color: var(--background);
+  background: var(--accent-color);
   border: none;
   border-radius: $radius-sm;
   cursor: pointer;
 
   &:hover:not(:disabled) {
-    background: var(--color-primary-hover);
+    background: var(--accent-color-hover);
   }
 
   &:focus-visible {

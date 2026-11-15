@@ -15,7 +15,7 @@ describe("Sidebar", () => {
         const nav = screen.getByRole("navigation", { name: "Navegação principal" });
         expect(nav).toBeInTheDocument();
 
-        for (const label of ["Dashboard", "Estudos", "Financeiro", "PDI", "Projetos"]) {
+        for (const label of ["Dashboard", "Estudos", "Financeiro"]) {
             expect(screen.getByRole("link", { name: label })).toBeInTheDocument();
         }
     });

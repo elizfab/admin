@@ -17,11 +17,11 @@ correto.
 
 ### Ambientes da Vercel
 
-| Ambiente | Quando é usado | Banco |
-|---|---|---|
-| **Production** | Push/merge na `main` | `personal-platform` |
-| **Preview** | Qualquer outro branch ou PR | `personal-platform-preview` |
-| **Development** | `vercel dev` / `vercel env pull` (não usado; o local usa `.env.local`) | — |
+| Ambiente        | Quando é usado                                                         | Banco                       |
+| --------------- | ---------------------------------------------------------------------- | --------------------------- |
+| **Production**  | Push/merge na `main`                                                   | `personal-platform`         |
+| **Preview**     | Qualquer outro branch ou PR                                            | `personal-platform-preview` |
+| **Development** | `vercel dev` / `vercel env pull` (não usado; o local usa `.env.local`) | —                           |
 
 💡 Cada variável é cadastrada **por ambiente**. É como ter **duas chaves
 diferentes** para o mesmo cadeado em dois prédios: a do prédio de testes não
@@ -38,9 +38,9 @@ abre o prédio real.
 
 1. <https://vercel.com/new> → **Import Git Repository**.
 2. Se a `elizfab` não aparecer: **Adjust GitHub App Permissions** → conceda
-   acesso ao repositório `personal-platform-admin`.
+   acesso ao repositório `admin`.
 3. Selecione o repositório. Confira:
-   - **Project Name:** `personal-platform-admin` (define a URL `personal-platform-admin.vercel.app`, se estiver livre)
+   - **Project Name:** `admin` (define a URL `admin.vercel.app`, se estiver livre)
    - **Framework Preset:** Next.js
    - **Root Directory:** `./` (raiz)
    - **Build Command:** pode deixar o padrão; o `vercel.json` define `npm run vercel-build`
@@ -67,13 +67,13 @@ Salve os dois no gerenciador de senhas.
 Em **Settings → Environment Variables**, cadastre cada linha marcando
 **somente** o ambiente indicado:
 
-| Variável | Production | Preview |
-|---|---|---|
-| `DATABASE_URL` | `PROD — DATABASE_URL` | `PREVIEW — DATABASE_URL` |
-| `DIRECT_URL` | `PROD — DIRECT_URL` | `PREVIEW — DIRECT_URL` |
-| `BETTER_AUTH_SECRET` | segredo de Production | segredo de Preview |
-| `BETTER_AUTH_URL` | `https://personal-platform-admin.vercel.app` | **não cadastrar** |
-| `BETTER_AUTH_ALLOWED_HOSTS` | **não cadastrar** | `personal-platform-admin-*-<slug>.vercel.app` |
+| Variável                    | Production                 | Preview                     |
+| --------------------------- | -------------------------- | --------------------------- |
+| `DATABASE_URL`              | `PROD — DATABASE_URL`      | `PREVIEW — DATABASE_URL`    |
+| `DIRECT_URL`                | `PROD — DIRECT_URL`        | `PREVIEW — DIRECT_URL`      |
+| `BETTER_AUTH_SECRET`        | segredo de Production      | segredo de Preview          |
+| `BETTER_AUTH_URL`           | `https://admin.vercel.app` | **não cadastrar**           |
+| `BETTER_AUTH_ALLOWED_HOSTS` | **não cadastrar**          | `admin-*-<slug>.vercel.app` |
 
 Sobre o `<slug>`: é o identificador da sua conta ou do time na Vercel. Ele
 aparece no final das URLs de preview (ex.: `…-elizfab.vercel.app` ou
@@ -89,7 +89,7 @@ salvas, não podem mais ser lidas pelo painel.
 
 ### 4. Conferir proteção e região
 
-- **Settings → Deployment Protection:** *Vercel Authentication* ligado, com
+- **Settings → Deployment Protection:** _Vercel Authentication_ ligado, com
   **Standard Protection** (o padrão em projetos novos). Os previews só abrem
   para quem está logado na sua conta Vercel; a produção fica pública, o que
   aqui é correto, porque a aplicação exige o login próprio.
@@ -110,11 +110,11 @@ Nenhum no repositório; tudo fica nas configurações da Vercel.
 
 ## ✅ Como testar
 
-| # | Teste | Resultado esperado |
-|---|---|---|
-| 1 | Settings → Environment Variables | 5 variáveis em Production e 4 em Preview, conforme a tabela |
-| 2 | Nenhuma variável marcada para **Development** | Correto |
-| 3 | Deployment Protection | Vercel Authentication + Standard Protection |
+| #   | Teste                                         | Resultado esperado                                          |
+| --- | --------------------------------------------- | ----------------------------------------------------------- |
+| 1   | Settings → Environment Variables              | 5 variáveis em Production e 4 em Preview, conforme a tabela |
+| 2   | Nenhuma variável marcada para **Development** | Correto                                                     |
+| 3   | Deployment Protection                         | Vercel Authentication + Standard Protection                 |
 
 **Critério de aceite:** os três testes passam.
 

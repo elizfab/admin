@@ -185,8 +185,8 @@ export function ProjectForm({ action, project, submitLabel }: ProjectFormProps) 
   gap: $space-4;
   max-width: 640px;
   padding: $space-5;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
+  background: var(--card-background);
+  border: 1px solid var(--border);
   border-radius: $radius-lg;
 }
 
@@ -205,8 +205,8 @@ export function ProjectForm({ action, project, submitLabel }: ProjectFormProps) 
   select {
     padding: $space-3;
     font: inherit;
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
+    background: var(--card-background);
+    border: 1px solid var(--border);
     border-radius: $radius-sm;
 
     &:focus-visible {
@@ -214,7 +214,7 @@ export function ProjectForm({ action, project, submitLabel }: ProjectFormProps) 
     }
 
     &[aria-invalid="true"] {
-      border-color: var(--color-danger);
+      border-color: var(--red);
     }
   }
 }
@@ -222,14 +222,14 @@ export function ProjectForm({ action, project, submitLabel }: ProjectFormProps) 
 .fieldError {
   margin: 0;
   font-size: $font-size-sm;
-  color: var(--color-danger);
+  color: var(--red);
 }
 
 .formError {
   margin: 0;
   padding: $space-2 $space-3;
-  color: var(--color-danger);
-  background: #fdecea;
+  color: var(--red);
+  background: color-mix(in srgb, var(--red) 10%, transparent);
   border-radius: $radius-sm;
 }
 
@@ -416,8 +416,8 @@ export function ProjectList({ projects }: ProjectListProps) {
   flex-direction: column;
   gap: $space-3;
   padding: $space-4;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
+  background: var(--card-background);
+  border: 1px solid var(--border);
   border-radius: $radius-lg;
 
   @include up("md") {
@@ -447,19 +447,19 @@ export function ProjectList({ projects }: ProjectListProps) {
 
 .description {
   margin: 0;
-  color: var(--color-muted);
+  color: var(--text-color-secondary);
 }
 
 .meta {
   margin: 0;
   font-size: $font-size-xs;
-  color: var(--color-muted);
+  color: var(--text-color-secondary);
 
   a {
     display: inline-flex;
     align-items: center;
     gap: 2px;
-    color: var(--color-primary);
+    color: var(--accent-color);
     text-decoration: underline;
   }
 }
@@ -478,23 +478,23 @@ export function ProjectList({ projects }: ProjectListProps) {
 }
 
 .status_PLANNED {
-  color: var(--color-muted);
-  background: var(--color-background);
+  color: var(--text-color-secondary);
+  background: var(--background);
 }
 
 .status_IN_PROGRESS {
-  color: var(--color-primary);
-  background: var(--color-primary-soft);
+  color: var(--accent-color);
+  background: var(--selection-color);
 }
 
 .status_PAUSED {
-  color: #8a5a00;
-  background: #fff4dc;
+  color: var(--yellow);
+  background: color-mix(in srgb, var(--yellow) 14%, transparent);
 }
 
 .status_DONE {
-  color: #1b5e20;
-  background: #e8f5e9;
+  color: var(--green);
+  background: color-mix(in srgb, var(--green) 14%, transparent);
 }
 ```
 

@@ -32,6 +32,7 @@ model User {
 
   sessions Session[]
   accounts Account[]
+  projects Project[]
 
   @@map("user")
 }
@@ -92,4 +93,32 @@ model RateLimit {
 
   @@unique([key])
   @@map("rateLimit")
+}
+
+// ─── Projetos ────────────────────────────────────────────────
+
+enum ProjectStatus {
+  PLANNED
+  IN_PROGRESS
+  PAUSED
+  DONE
+}
+
+model Project {
+  id            String        @id @default(cuid())
+  name          String        @db.VarChar(100)
+  description   String?       @db.VarChar(500)
+  status        ProjectStatus @default(PLANNED)
+  repositoryUrl String?
+  ownerId       String
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  // Restrict: não é possível apagar um usuário que ainda tem projetos.
+  owner User @relation(fields: [ownerId], references: [id], onDelete: Restrict)
+
+  // Um mesmo usuário não pode ter dois projetos com o mesmo nome.
+  // Este índice composto também acelera as buscas por ownerId.
+  @@unique([ownerId, name])
+  @@map("project")
 }

@@ -13,14 +13,6 @@ export const dashboardModulesMock: DashboardModule[] = [
         status: "external",
     },
     {
-        id: "studies",
-        title: "Estudos",
-        description: "Acesso ao portal de documentação de estudos.",
-        href: "/studies",
-        icon: BookOpen,
-        status: "soon",
-    },
-    {
         id: "finance",
         title: "Financeiro",
         description: "Receitas, despesas e indicadores.",

@@ -71,13 +71,15 @@ test("redireciona visitante sem sessão para o login", async ({ page }) => {
   await page.goto("/projects");
 
   await expect(page).toHaveURL(/\/login$/);
-  await expect(page.getByRole("heading", { name: "Entrar" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Bem-vinda de volta" })).toBeVisible();
 });
 
 test("mostra mensagem genérica para credenciais inválidas", async ({ page }) => {
   await page.goto("/login");
   await page.getByLabel("E-mail").fill(owner.email);
-  await page.getByLabel("Senha").fill("senha-errada-123");
+  // exact: o botão do olhinho tem aria-label "Mostrar senha", que também
+  // contém a palavra "Senha" — sem exact o localizador acha 2 elementos.
+  await page.getByLabel("Senha", { exact: true }).fill("senha-errada-123");
   await page.getByRole("button", { name: "Entrar" }).click();
 
   await expect(page.locator("form").getByRole("alert")).toHaveText("E-mail ou senha inválidos.");
@@ -87,7 +89,7 @@ test("mostra mensagem genérica para credenciais inválidas", async ({ page }) =
 test("faz login, mostra o nome, sai e não consegue voltar", async ({ page }) => {
   await page.goto("/login");
   await page.getByLabel("E-mail").fill(owner.email);
-  await page.getByLabel("Senha").fill(owner.password);
+  await page.getByLabel("Senha", { exact: true }).fill(owner.password);
   await page.getByRole("button", { name: "Entrar" }).click();
 
   await expect(page).toHaveURL(/\/dashboard$/);
@@ -139,6 +141,7 @@ npx playwright test auth.spec
 | Sintoma | Causa provável | Solução |
 |---|---|---|
 | `strict mode violation: getByRole('alert') resolved to 2 elements` | Pegou também o anunciador de rotas do Next.js | Restringir: `page.locator("form").getByRole("alert")` |
+| `strict mode violation: getByLabel('Senha') resolved to 2 elements` | O botão do olhinho tem `aria-label` "Mostrar senha" | Usar `getByLabel("Senha", { exact: true })` |
 | Login falha com “Muitas tentativas” | Mais de 5 logins no mesmo minuto | Não criar testes que façam login pela tela; usar as sessões salvas |
 
 ## Commit sugerido

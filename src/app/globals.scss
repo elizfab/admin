@@ -1,6 +1,7 @@
 // Estilos globais: apenas base, tema e acessibilidade.
 // Estilos de componentes ficam em *.module.scss junto do componente.
 @use "../styles/themes/light";
+@use "../styles/themes/dark";
 @use "../styles/base/reset";
 @use "../styles/base/typography";
 @use "../styles/base/accessibility";

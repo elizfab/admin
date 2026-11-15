@@ -24,3 +24,7 @@ a {
 button {
   font: inherit;
 }
+
+::selection {
+  background: var(--selection-color);
+}

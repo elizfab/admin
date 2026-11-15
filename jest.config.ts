@@ -14,8 +14,12 @@ const config: Config = {
     moduleNameMapper: {
         "^@/(.*)$": "<rootDir>/src/$1",
     },
-    // Os testes E2E (Playwright) ficarão em tests/e2e e não devem rodar no Jest.
-    testPathIgnorePatterns: ["<rootDir>/node_modules/", "<rootDir>/tests/e2e/"],
+    // E2E (Playwright) e integração (precisa de banco) têm comandos próprios.
+    testPathIgnorePatterns: [
+        "<rootDir>/node_modules/",
+        "<rootDir>/tests/e2e/",
+        "<rootDir>/tests/integration/",
+    ],
     collectCoverageFrom: [
         "src/**/*.{ts,tsx}",
         "!src/**/*.d.ts",
