@@ -5,6 +5,7 @@ import { expect, test } from "@playwright/test";
 // Módulos do menu lateral (src/components/layout/Sidebar/navigation.ts).
 const modules = [
     { label: "Dashboard", path: "/dashboard" },
+    { label: "Projetos", path: "/projects" },
     { label: "Estudos", path: "/studies" },
     { label: "Financeiro", path: "/finance" },
 ];
