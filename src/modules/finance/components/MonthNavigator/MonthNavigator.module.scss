@@ -1,0 +1,18 @@
+@use "@/styles/abstracts" as *;
+
+.navigator {
+  display: flex;
+  align-items: center;
+  gap: $space-3;
+}
+
+.label {
+  min-width: 12ch;
+  margin: 0;
+  font-size: $font-size-lg;
+  text-align: center;
+  // "novembro de 2026" → "Novembro de 2026"
+  &::first-letter {
+    text-transform: uppercase;
+  }
+}
