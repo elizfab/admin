@@ -58,3 +58,50 @@ test("o projeto da dona continua intacto", async ({ request }) => {
     expect(response.status()).toBe(200);
     expect((await response.json()).data.name).toBe("Projeto confidencial da dona");
 });
+
+test.describe("Financeiro: a OUTRA usuária não acessa transações da dona", () => {
+    let transactionId: string;
+
+    test.beforeAll(async ({ playwright }) => {
+        const owner = await playwright.request.newContext({
+            baseURL: E2E_BASE_URL,
+            storageState: testUsers.owner.storageState,
+        });
+
+        const response = await owner.post("/api/v1/finance/transactions", {
+            data: {
+                type: "EXPENSE",
+                description: "Despesa confidencial da dona",
+                amountCents: 12300,
+                occurredOn: "2026-06-15",
+            },
+            headers: { Origin: E2E_BASE_URL },
+        });
+        expect(response.status()).toBe(201);
+        transactionId = (await response.json()).data.id;
+
+        await owner.dispose();
+    });
+
+    test.use({ storageState: testUsers.other.storageState });
+
+    test("API responde 404 e o resumo da outra não soma a despesa", async ({ request }) => {
+        const headers = { Origin: E2E_BASE_URL };
+        const url = `/api/v1/finance/transactions/${transactionId}`;
+
+        expect((await request.get(url)).status()).toBe(404);
+        const patch = await request.patch(url, { data: { description: "invadido" }, headers });
+        expect(patch.status()).toBe(404);
+        expect((await request.delete(url, { headers })).status()).toBe(404);
+
+        const summary = await request.get("/api/v1/finance/summary?month=2026-06");
+        expect((await summary.json()).data.expenseCents).toBe(0);
+    });
+
+    test("a tela de edição responde página não encontrada", async ({ page }) => {
+        await page.goto(`/finance/transactions/${transactionId}/edit`);
+
+        await expect(page.getByRole("heading", { name: "Página não encontrada" })).toBeVisible();
+    });
+});
+

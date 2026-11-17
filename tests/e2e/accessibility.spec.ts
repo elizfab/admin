@@ -10,7 +10,14 @@ import { expect, test } from "@playwright/test";
 
 const WCAG_TAGS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"];
 
-const privatePages = ["/dashboard", "/projects", "/projects/new", "/documentation", "/finance"];
+const privatePages = [
+    "/dashboard",
+    "/projects",
+    "/projects/new",
+    "/documentation",
+    "/finance",
+    "/finance/transactions/new",
+];
 
 async function expectNoViolations(page: import("@playwright/test").Page) {
     const results = await new AxeBuilder({ page }).withTags(WCAG_TAGS).analyze();
