@@ -1,0 +1,28 @@
+@use "@/styles/abstracts" as *;
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: $space-5;
+}
+
+.transactions {
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+
+  h3 {
+    margin: 0;
+    font-size: $font-size-md;
+  }
+}
+
+.empty {
+  margin: 0;
+  padding: $space-5;
+  text-align: center;
+  color: var(--text-color-secondary);
+  background: var(--card-background);
+  border: 1px dashed var(--border);
+  border-radius: $radius-lg;
+}

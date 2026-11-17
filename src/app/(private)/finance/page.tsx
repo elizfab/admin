@@ -1,19 +1,60 @@
-import { Wallet } from "lucide-react";
+import { Plus } from "lucide-react";
 import type { Metadata } from "next";
+import Link from "next/link";
 
-import { EmptyState } from "@/components/shared/EmptyState/EmptyState";
+import { PageHeader } from "@/components/shared/PageHeader/PageHeader";
+import { buttonClassName } from "@/components/ui/Button/Button";
+import { requireSession } from "@/lib/auth/session";
+import { currentMonth } from "@/lib/dates/month";
+import { monthSchema } from "@/modules/finance";
+import { MonthlySummary } from "@/modules/finance/components/MonthlySummary/MonthlySummary";
+import { MonthNavigator } from "@/modules/finance/components/MonthNavigator/MonthNavigator";
+import { TransactionList } from "@/modules/finance/components/TransactionList/TransactionList";
+import { getMonthlySummary, listTransactions } from "@/modules/finance/server";
+
+import styles from "./page.module.scss";
 
 export const metadata: Metadata = {
     title: "Financeiro",
 };
 
-export default function FinancePage() {
+export default async function FinancePage({ searchParams }: PageProps<"/finance">) {
+    const session = await requireSession();
+
+    // ?month=2026-11 — mês ausente ou inválido cai no mês atual (sem erro na tela).
+    const parsedMonth = monthSchema.safeParse((await searchParams).month);
+    const month = parsedMonth.success ? parsedMonth.data : currentMonth();
+
+    // As duas consultas não dependem uma da outra: rodam em paralelo.
+    const [summary, transactions] = await Promise.all([
+        getMonthlySummary(session.user.id, month),
+        listTransactions(session.user.id, month),
+    ]);
+
     return (
-        <EmptyState
-            icon={<Wallet size={32} aria-hidden="true" />}
-            headingLevel="h1"
-            title="Financeiro"
-            description="Em breve: receitas, despesas e indicadores."
-        />
+        <div className={styles.page}>
+            <PageHeader
+                title="Financeiro"
+                description="Receitas, despesas e saldo do mês."
+                action={
+                    <Link href="/finance/transactions/new" className={buttonClassName("primary")}>
+                        <Plus size={16} aria-hidden="true" />
+                        Nova transação
+                    </Link>
+                }
+            />
+
+            <MonthNavigator month={month} />
+            <MonthlySummary summary={summary} />
+
+            <section aria-labelledby="transactions-title" className={styles.transactions}>
+                <h3 id="transactions-title">Lançamentos</h3>
+                {transactions.length > 0 ? (
+                    <TransactionList transactions={transactions} />
+                ) : (
+                    <p className={styles.empty}>Nenhuma transação neste mês.</p>
+                )}
+            </section>
+        </div>
     );
 }
