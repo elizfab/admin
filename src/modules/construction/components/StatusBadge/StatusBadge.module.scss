@@ -1,0 +1,25 @@
+@use "@/styles/abstracts" as *;
+
+.badge {
+  display: inline-block;
+  padding: $space-1 $space-2;
+  font-size: $font-size-xs;
+  font-weight: 700;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.paid {
+  color: var(--green);
+  background: color-mix(in srgb, var(--green) 15%, transparent);
+}
+
+.partial {
+  color: var(--orange);
+  background: color-mix(in srgb, var(--orange) 15%, transparent);
+}
+
+.pending {
+  color: var(--red);
+  background: color-mix(in srgb, var(--red) 15%, transparent);
+}
