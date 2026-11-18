@@ -15,7 +15,7 @@ export const dashboardModulesMock: DashboardModule[] = [
     {
         id: "finance",
         title: "Financeiro",
-        description: "Receitas, despesas e indicadores.",
+        description: "Receitas, despesas, saldo e obra.",
         href: "/finance",
         icon: Wallet,
         status: "soon",

@@ -1,5 +1,5 @@
 import { monthRange } from "@/lib/dates/month";
-import { NotFoundError } from "@/lib/errors/app-error";
+import { ConflictError, NotFoundError } from "@/lib/errors/app-error";
 import { CreateTransactionInput, MonthlySummary, UpdateTransactionInput } from "..";
 import { transactionRepository } from "../repositories/transaction.repository";
 
@@ -28,18 +28,32 @@ export async function createTransaction(ownerId: string, input: CreateTransactio
     return transactionRepository.create(ownerId, input);
 }
 
+/**
+ * Lançamentos gerados pela Obra (pagamento de serviço ou parcela de material)
+ * só mudam pela Obra: senão o Financeiro e a Obra mostrariam valores diferentes.
+ */
+async function getEditableTransaction(ownerId: string, id: string) {
+    const transaction = await getTransaction(ownerId, id);
+
+    if (transaction.servicePayment || transaction.materialInstallment) {
+        throw new ConflictError("Lançamento gerado pela Obra: altere em Financeiro → Obra.");
+    }
+
+    return transaction;
+}
+
 export async function updateTransaction(
     ownerId: string,
     id: string,
     input: UpdateTransactionInput,
 ) {
-    await getTransaction(ownerId, id);
+    await getEditableTransaction(ownerId, id);
 
     return transactionRepository.update(id, input);
 }
 
 export async function deleteTransaction(ownerId: string, id: string) {
-    await getTransaction(ownerId, id);
+    await getEditableTransaction(ownerId, id);
     await transactionRepository.delete(id);
 }
 

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 
 import { Button, buttonClassName } from "@/components/ui/Button/Button";
 import { dayToInput } from "@/lib/dates/month";
@@ -17,10 +17,28 @@ import {
     transactionTypeLabel,
     type Transaction,
 } from "../../types/transaction.types";
+import {
+    ConstructionPaymentFields,
+    type ObraPaymentProject,
+} from "@/modules/construction/components/ConstructionPaymentFields/ConstructionPaymentFields";
+import type { FormState as ObraFormState } from "@/modules/construction/actions/project.actions";
 import styles from "./TransactionForm.module.scss";
+
+/** Action vazia estável para o useActionState quando a página não tem obras. */
+const noopAction = async (): Promise<ObraFormState> => null;
 
 type TransactionFormProps = {
     action: (state: TransactionFormState, formData: FormData) => Promise<TransactionFormState>;
+    /**
+     * Fase 09 — atalho "Obra": presente só em "Nova transação". Quando a
+     * categoria escolhida é CONSTRUCTION ("Obra"), o formulário troca os
+     * campos pelos da obra e o submit vai para `constructionAction`.
+     */
+    obraProjects?: ObraPaymentProject[];
+    constructionAction?: (
+        state: ObraFormState,
+        formData: FormData,
+    ) => Promise<ObraFormState>;
     transaction?: Pick<
         Transaction,
         "type" | "description" | "amountCents" | "category" | "occurredOn"
@@ -33,13 +51,24 @@ type TransactionFormProps = {
 
 export function TransactionForm({
     action,
+    obraProjects,
+    constructionAction,
     transaction,
     defaultDate,
     cancelHref,
     submitLabel,
 }: TransactionFormProps) {
     const [state, formAction, pending] = useActionState(action, null);
+    const [obraState, obraFormAction, obraPending] = useActionState(
+        constructionAction ?? noopAction,
+        null,
+    );
+    const [isObra, setIsObra] = useState(false);
+    // "Obra" é opção SÓ do formulário (não entra em transactionCategoryValues,
+    // que é o contrato da API): escolher ela troca os campos e a action.
+    const OBRA_VALUE = "__OBRA_PAYMENT__";
     const errors = state?.fieldErrors;
+    const obraErrors = obraState?.fieldErrors;
     // Depois de um erro, mostra o que foi enviado; senão, os dados atuais (edição).
     const values = state?.values ?? {
         type: transaction?.type ?? "EXPENSE",
@@ -58,6 +87,7 @@ export function TransactionForm({
             )}
 
             {/* fieldset + legend: o leitor de tela anuncia "Tipo" ao entrar nas opções. */}
+            {!isObra && (
             <fieldset className={styles.field}>
                 <legend>Tipo *</legend>
                 <div className={styles.radioGroup}>
@@ -75,7 +105,10 @@ export function TransactionForm({
                 </div>
                 {errors?.type && <p className={styles.fieldError}>{errors.type[0]}</p>}
             </fieldset>
+            )}
 
+            {!isObra && (
+            <>
             <div className={styles.field}>
                 <label htmlFor="description">Descrição *</label>
                 <input
@@ -133,25 +166,49 @@ export function TransactionForm({
                     )}
                 </div>
             </div>
+            </>
+            )}
 
             <div className={styles.field}>
                 <label htmlFor="category">Categoria</label>
-                <select id="category" name="category" defaultValue={values.category}>
+                <select
+                    id="category"
+                    name="category"
+                    defaultValue={values.category}
+                    onChange={(event) => setIsObra(event.target.value === OBRA_VALUE)}
+                >
                     {transactionCategoryValues.map((category) => (
                         <option key={category} value={category}>
                             {transactionCategoryLabel[category]}
                         </option>
                     ))}
+                    {obraProjects && (
+                        <option value={OBRA_VALUE}>Obra</option>
+                    )}
                 </select>
             </div>
+
+            {isObra && obraProjects && (
+                <ConstructionPaymentFields
+                    projects={obraProjects}
+                    errors={obraErrors}
+                    message={obraState?.message}
+                />
+            )}
 
             <div className={styles.actions}>
                 <Link href={cancelHref} className={buttonClassName("secondary")}>
                     Cancelar
                 </Link>
-                <Button type="submit" disabled={pending}>
-                    {pending ? "Salvando…" : submitLabel}
-                </Button>
+                {isObra && constructionAction ? (
+                    <Button type="submit" formAction={obraFormAction} disabled={obraPending}>
+                        {obraPending ? "Salvando…" : "Registrar pagamento"}
+                    </Button>
+                ) : (
+                    <Button type="submit" disabled={pending}>
+                        {pending ? "Salvando…" : submitLabel}
+                    </Button>
+                )}
             </div>
         </form>
     );

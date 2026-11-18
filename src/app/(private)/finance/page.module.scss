@@ -17,6 +17,11 @@
   }
 }
 
+.actions {
+  display: flex;
+  gap: $space-3;
+}
+
 .empty {
   margin: 0;
   padding: $space-5;

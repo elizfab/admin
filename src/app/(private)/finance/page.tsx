@@ -35,12 +35,17 @@ export default async function FinancePage({ searchParams }: PageProps<"/finance"
         <div className={styles.page}>
             <PageHeader
                 title="Financeiro"
-                description="Receitas, despesas e saldo do mês."
+                description="Receitas, despesas, saldo e obra."
                 action={
-                    <Link href="/finance/transactions/new" className={buttonClassName("primary")}>
-                        <Plus size={16} aria-hidden="true" />
-                        Nova transação
-                    </Link>
+                    <div className={styles.actions}>
+                        <Link href="/finance/construction" className={buttonClassName("secondary")}>
+                            Obra
+                        </Link>
+                        <Link href="/finance/transactions/new" className={buttonClassName("primary")}>
+                            <Plus size={16} aria-hidden="true" />
+                            Nova transação
+                        </Link>
+                    </div>
                 }
             />
 

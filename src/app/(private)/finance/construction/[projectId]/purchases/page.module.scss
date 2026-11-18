@@ -1,0 +1,53 @@
+@use "@/styles/abstracts" as *;
+
+.empty {
+  color: var(--text-color-secondary);
+}
+
+.purchase {
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+  margin-bottom: $space-5;
+  padding: $space-4;
+  background: var(--card-background);
+  border: 1px solid var(--border);
+  border-radius: $radius-lg;
+}
+
+.purchaseHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: $space-3;
+}
+
+.purchaseTitle {
+  margin: 0;
+  font-size: $font-size-md;
+  color: var(--text-color);
+}
+
+.sub {
+  margin: $space-1 0 0;
+  font-size: $font-size-sm;
+  color: var(--text-color-secondary);
+}
+
+.money {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.actions {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.totals {
+  margin: 0;
+  font-size: $font-size-sm;
+  font-weight: 600;
+  color: var(--text-color);
+}

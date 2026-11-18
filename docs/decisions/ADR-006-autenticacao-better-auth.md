@@ -1,73 +1,73 @@
-# ADR-006 — Autenticação com Better Auth
+# ADR-007 — Portal Dev protegido, servido pelo Admin
 
-| Campo | Valor |
-|---|---|
-| **Status** | Aceita |
-| **Data** | 11/11/2026 |
-| **Substitui** | Proposta original da seção 11 do ARCHITECTURE.md (Auth.js Credentials + JWT) |
-| **Decisora** | Liza (Elizabete Fabri) |
+| Campo        | Valor                                                                                      |
+| ------------ | ------------------------------------------------------------------------------------------ |
+| **Status**   | Aceita                                                                                     |
+| **Data**     | 17/11/2026                                                                                 |
+| **Resolve**  | Decisão pendente da seção 19.2 do ARCHITECTURE.md ("Estratégia de proteção do Docusaurus") |
+| **Decisora** | Liza (Elizabete Fabri)                                                                     |
 
 ## Contexto
 
-A proposta inicial usava Auth.js v5 com Credentials Provider e sessão JWT.
-Na revisão de 11/11/2026 foram constatados os seguintes fatos:
+O Portal Dev (repositório `elizfab/portal-dev`) é um site Docusaurus
+publicado no GitHub Pages, **público**. O ARCHITECTURE.md (seção 19.1)
+já registrava o problema: o GitHub Pages não tem autenticação, e esconder o
+link no dashboard não impede o acesso direto à URL. A seção 19.2 exigia que a
+proteção acontecesse **antes de entregar os arquivos**, nunca com um
+formulário de login só no frontend.
 
-- Desde setembro de 2025, o projeto Auth.js faz parte do Better Auth. A
-  manutenção continua para segurança e questões urgentes, sem novas
-  funcionalidades.
-- O `next-auth` v5 nunca saiu do beta (`5.0.0-beta.32`); a versão estável é a 4.x.
-- Os próprios mantenedores indicam o Better Auth para projetos novos.
+Fatos que pesaram:
 
-Requisitos do projeto (ARCHITECTURE.md, seções 11.1 e 11.10): uma conta
-administradora, sem cadastro público, login por e-mail e senha, hash forte,
-rate limiting, logout, expiração de sessão, proteção no servidor e
-possibilidade futura de revogar sessões por dispositivo.
+- O Admin já tem sessão validada no banco (Better Auth, ADR-006).
+- O repositório do Admin é **público** (exigência do plano Hobby da Vercel
+  para repositórios de organização), então o build do portal **não pode**
+  ser commitado nele.
+- O proxy do Admin é **otimista**: só confere se o cookie existe. Arquivos em
+  `public/` seriam entregues pela CDN sem validação real de sessão.
+- O build do portal tem cerca de 12 MB e 330 arquivos (2,5 MB compactado).
 
 ## Decisão
 
-Adotar o **Better Auth** com:
-
-- `emailAndPassword` habilitado e **`disableSignUp: true`** (sem cadastro público);
-- sessões **persistidas no banco** (tabela `session`), via `prismaAdapter` (Prisma 7);
-- expiração de **8 horas**, renovada no máximo uma vez por hora de uso;
-- **rate limiting** com armazenamento em banco (5 tentativas de login por minuto);
-- campos adicionais `role` e `isActive` no usuário, **não editáveis pelo cliente**;
-- bloqueio de login de contas com `isActive = false` (hook antes de criar a sessão);
-- conta administradora criada por **seed** com o hash do próprio Better Auth (scrypt).
+1. O `portal-dev` passa a ser **privado**, e o GitHub Pages é **desligado**.
+2. O CI do `portal-dev` gera o build com `baseUrl: /portal/` e o publica como
+   asset da release `portal-build`; depois aciona o **deploy hook** do Admin.
+3. O `vercel-build` do Admin baixa esse asset com um **token de leitura**
+   (`PORTAL_DEV_TOKEN`) e o extrai em `.portal/` (fora de `public/`, fora do Git).
+4. Um **Route Handler** `/portal/[[...path]]` entrega os arquivos **somente
+   depois de validar a sessão no banco**, com `Cache-Control: private`.
+5. A página `/documentation` do Admin lista as seções a partir do
+   `portal-build.json` gerado pelo CI do portal.
 
 ## Alternativas consideradas
 
-| Alternativa | Por que não |
-|---|---|
-| Auth.js v5 (beta) | Sem evolução; v5 nunca estável; Credentials não traz rate limiting nem hash prontos |
-| Auth.js v4 (estável) | API legada, anterior ao App Router |
-| Clerk / Auth0 | Serviço externo pago por usuário; dados de identidade fora do próprio banco |
-| Implementação própria | Alto risco de falhas de segurança; reinventaria o que a biblioteca já entrega testado |
+| Alternativa                            | Por que não                                                                         |
+| -------------------------------------- | ----------------------------------------------------------------------------------- |
+| Manter público, com atalho no Admin    | Não atende ao pedido de proteção; conteúdo indexável                                |
+| Cloudflare Access na frente do Pages   | Segundo login, domínio próprio obrigatório, sessão separada da do Admin             |
+| Copiar o build para `public/` do Admin | `public/` é servido sem validar a sessão, e o repositório do Admin é público        |
+| Renderizar os `.mdx` dentro do Admin   | Reescrever sidebar, busca, Mermaid e tema do Docusaurus: muito esforço, pouco ganho |
+| Vercel Deployment Protection           | Recurso pago e independente da conta do Admin                                       |
 
 ## Consequências
 
 **Positivas**
 
-- Hash de senha, rate limiting, cookies seguros e proteção CSRF (verificação
-  de `Origin`) prontos e mantidos.
-- Sessão no banco: o logout **invalida de fato** a sessão (validado: o cookie
-  antigo deixa de funcionar), e a revogação por dispositivo fica viável
-  (seção 11.9).
-- Dados de identidade no próprio PostgreSQL, sob o mesmo Prisma.
+- Uma só sessão: quem está logado no Admin lê o portal; quem não está, vai para o `/login`.
+- O conteúdo deixa de ser público (repositório e site).
+- O Docusaurus continua igual para escrever (busca, sidebar, Mermaid, tema).
 
-**Negativas / cuidados**
+**Negativas e mitigação**
 
-- Cada validação de sessão consulta o banco (mitigável com `cookieCache` no futuro).
-- O CLI do Better Auth não carrega arquivos com `import "server-only"`; essa
-  proteção fica nos módulos consumidores (`lib/auth/session.ts`).
-- O adapter do Better Auth **não suporta Prisma 8**; manter o Prisma fixado em `@7`.
-- As tabelas `user`, `session`, `account`, `verification` e `rateLimit`
-  seguem o formato do Better Auth; mudanças de estrutura devem usar
-  `npx auth generate` + migration.
+| Custo                                                                        | Mitigação                                                                                     |
+| ---------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| Cada arquivo do portal passa por uma função e uma consulta de sessão         | Assets com hash ficam no cache do navegador por 1 ano (`immutable`); só HTML e JSON revalidam |
+| O deploy do Admin depende do GitHub (download do pacote)                     | Falha explícita no build; o deploy anterior continua no ar                                    |
+| Publicar conteúdo novo exige um deploy do Admin                              | Deploy hook automático no CI do portal                                                        |
+| O link "← Admin" do portal aponta para a URL de produção também nos previews | Aceito: é só um atalho de navegação                                                           |
+| Token com prazo de validade                                                  | Data de expiração anotada; renovação no passo 06 da Fase 08                                   |
 
 ## Referências
 
-- [Auth.js is now part of Better Auth](https://github.com/nextauthjs/next-auth/discussions/13252)
-- [Better Auth — Documentação](https://www.better-auth.com/docs)
-- [Better Auth — Prisma adapter](https://www.better-auth.com/docs/adapters/prisma)
-- [Better Auth — Next.js](https://www.better-auth.com/docs/integrations/next)
+- ARCHITECTURE.md, seção 19
+- Fase 08 — [`setup/08-portal-dev`](../setup/08-portal-dev/README.md)
+- [Next.js — `outputFileTracingIncludes`](https://nextjs.org/docs/app/api-reference/config/next-config-js/output)

@@ -34,6 +34,18 @@
   overflow-wrap: anywhere;
 }
 
+.obraBadge {
+  display: inline-block;
+  margin-left: $space-2;
+  padding: 0 $space-2;
+  font-size: $font-size-xs;
+  font-weight: 700;
+  vertical-align: middle;
+  color: var(--accent-on-selection);
+  background: var(--selection-color);
+  border-radius: 999px;
+}
+
 .meta {
   margin: 0;
   font-size: $font-size-xs;

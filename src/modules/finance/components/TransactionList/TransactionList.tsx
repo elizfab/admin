@@ -9,13 +9,13 @@ import { cn } from "@/lib/utils/cn";
 import {
     transactionCategoryLabel,
     transactionTypeLabel,
-    type Transaction,
+    type TransactionWithOrigin,
 } from "../../types/transaction.types";
 import { DeleteTransactionButton } from "../DeleteTransactionButton/DeleteTransactionButton";
 import styles from "./TransactionList.module.scss";
 
 type TransactionListProps = {
-    transactions: Transaction[];
+    transactions: TransactionWithOrigin[];
 };
 
 export function TransactionList({ transactions }: TransactionListProps) {
@@ -23,11 +23,20 @@ export function TransactionList({ transactions }: TransactionListProps) {
         <ul className={styles.list}>
             {transactions.map((transaction) => {
                 const isIncome = transaction.type === "INCOME";
+                // Origem "Obra" (Fase 09): o lançamento só muda pela tela da obra.
+                const obraHref = transaction.servicePayment
+                    ? `/finance/construction/${transaction.servicePayment.service.projectId}/phases/${transaction.servicePayment.service.phase.number}`
+                    : transaction.materialInstallment
+                      ? `/finance/construction/${transaction.materialInstallment.purchase.projectId}/purchases`
+                      : null;
 
                 return (
                     <li key={transaction.id} className={styles.item}>
                         <div className={styles.info}>
-                            <p className={styles.description}>{transaction.description}</p>
+                            <p className={styles.description}>
+                                {transaction.description}
+                                {obraHref && <span className={styles.obraBadge}>Obra</span>}
+                            </p>
                             <p className={styles.meta}>
                                 {formatDay(transaction.occurredOn)} ·{" "}
                                 {transactionCategoryLabel[transaction.category]}
@@ -43,19 +52,27 @@ export function TransactionList({ transactions }: TransactionListProps) {
                             {formatCents(transaction.amountCents)}
                         </p>
 
-                        <div className={styles.actions}>
-                            <Link
-                                href={`/finance/transactions/${transaction.id}/edit`}
-                                className={buttonClassName("secondary")}
-                                aria-label={`Editar a transação ${transaction.description}`}
-                            >
-                                <Pencil size={16} aria-hidden="true" />
-                            </Link>
-                            <DeleteTransactionButton
-                                transactionId={transaction.id}
-                                description={transaction.description}
-                            />
-                        </div>
+                        {obraHref ? (
+                            <div className={styles.actions}>
+                                <Link href={obraHref} className={buttonClassName("secondary")}>
+                                    Ver na obra
+                                </Link>
+                            </div>
+                        ) : (
+                            <div className={styles.actions}>
+                                <Link
+                                    href={`/finance/transactions/${transaction.id}/edit`}
+                                    className={buttonClassName("secondary")}
+                                    aria-label={`Editar a transação ${transaction.description}`}
+                                >
+                                    <Pencil size={16} aria-hidden="true" />
+                                </Link>
+                                <DeleteTransactionButton
+                                    transactionId={transaction.id}
+                                    description={transaction.description}
+                                />
+                            </div>
+                        )}
                     </li>
                 );
             })}

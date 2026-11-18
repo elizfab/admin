@@ -1,0 +1,37 @@
+@use "@/styles/abstracts" as *;
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: $space-1;
+  min-width: 0;
+  padding: $space-4;
+  background: var(--card-background);
+  border: 1px solid var(--border);
+  border-radius: $radius-lg;
+}
+
+.label {
+  font-size: $font-size-sm;
+  color: var(--text-color-secondary);
+}
+
+.value {
+  font-size: $font-size-xl;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-color);
+}
+
+.footer {
+  font-size: $font-size-xs;
+  color: var(--text-color-secondary);
+}
+
+.alert .value {
+  color: var(--yellow);
+}
+
+.ok .value {
+  color: var(--green);
+}

@@ -21,11 +21,31 @@ export const transactionRepository = {
         return prisma.transaction.findMany({
             where: ownerInRange(ownerId, range),
             orderBy: [{ occurredOn: "desc" }, { createdAt: "desc" }],
+            // Origem "Obra" (Fase 09): um dos dois vem preenchido → selo + "Ver na obra".
+            include: {
+                servicePayment: {
+                    select: {
+                        service: {
+                            select: { projectId: true, phase: { select: { number: true } } },
+                        },
+                    },
+                },
+                materialInstallment: {
+                    select: { purchase: { select: { projectId: true } } },
+                },
+            },
         });
     },
 
     findByIdForOwner(id: string, ownerId: string) {
-        return prisma.transaction.findFirst({ where: { id, ownerId } });
+        return prisma.transaction.findFirst({
+            where: { id, ownerId },
+            // Lançamento gerado pela Obra (Fase 09): um dos dois vem preenchido.
+            include: {
+                servicePayment: { select: { id: true } },
+                materialInstallment: { select: { id: true } },
+            },
+        });
     },
 
     create(ownerId: string, data: CreateTransactionInput) {
