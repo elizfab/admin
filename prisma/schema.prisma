@@ -30,9 +30,10 @@ model User {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
-  sessions Session[]
-  accounts Account[]
-  projects Project[]
+  sessions     Session[]
+  accounts     Account[]
+  projects     Project[]
+  transactions Transaction[]
 
   @@map("user")
 }
@@ -121,4 +122,42 @@ model Project {
   // Este índice composto também acelera as buscas por ownerId.
   @@unique([ownerId, name])
   @@map("project")
+}
+
+// ─── Financeiro ──────────────────────────────────────────────
+
+enum TransactionType {
+  INCOME
+  EXPENSE
+}
+
+enum TransactionCategory {
+  SALARY
+  HOUSING
+  FOOD
+  TRANSPORT
+  HEALTH
+  EDUCATION
+  LEISURE
+  OTHER
+}
+
+model Transaction {
+  id          String              @id @default(cuid())
+  type        TransactionType
+  description String              @db.VarChar(120)
+  // Dinheiro em CENTAVOS (inteiro): R$ 12,34 = 1234. Sem erro de arredondamento.
+  amountCents Int
+  category    TransactionCategory @default(OTHER)
+  // Só a data (sem hora): o dia em que a receita/despesa aconteceu.
+  occurredOn  DateTime            @db.Date
+  ownerId     String
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+
+  owner User @relation(fields: [ownerId], references: [id], onDelete: Restrict)
+
+  // As consultas sempre filtram por dona + período (resumo do mês).
+  @@index([ownerId, occurredOn])
+  @@map("transaction")
 }
