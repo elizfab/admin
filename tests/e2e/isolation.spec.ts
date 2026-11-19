@@ -8,6 +8,8 @@ import { E2E_BASE_URL, testUsers } from "./support/e2e-env";
  */
 
 let projectId: string;
+// Nome único por execução: o teste precisa passar com --repeat-each=3 (nome único por dona).
+const projectName = `Projeto confidencial da dona ${Date.now()}`;
 
 test.beforeAll(async ({ playwright }) => {
     const owner = await playwright.request.newContext({
@@ -16,7 +18,7 @@ test.beforeAll(async ({ playwright }) => {
     });
 
     const response = await owner.post("/api/v1/projects", {
-        data: { name: "Projeto confidencial da dona" },
+        data: { name: projectName },
         headers: { Origin: E2E_BASE_URL },
     });
     expect(response.status()).toBe(201);
@@ -42,7 +44,7 @@ test.describe("como a OUTRA usuária", () => {
     test("a lista não mostra o projeto da dona", async ({ page }) => {
         await page.goto("/projects");
 
-        await expect(page.getByText("Projeto confidencial da dona")).toBeHidden();
+        await expect(page.getByText(projectName)).toBeHidden();
     });
 
     test("a tela de edição responde página não encontrada", async ({ page }) => {
@@ -52,11 +54,20 @@ test.describe("como a OUTRA usuária", () => {
     });
 });
 
+test.afterAll(async ({ playwright }) => {
+    const owner = await playwright.request.newContext({
+        baseURL: E2E_BASE_URL,
+        storageState: testUsers.owner.storageState,
+    });
+    await owner.delete(`/api/v1/projects/${projectId}`, { headers: { Origin: E2E_BASE_URL } });
+    await owner.dispose();
+});
+
 test("o projeto da dona continua intacto", async ({ request }) => {
     const response = await request.get(`/api/v1/projects/${projectId}`);
 
     expect(response.status()).toBe(200);
-    expect((await response.json()).data.name).toBe("Projeto confidencial da dona");
+    expect((await response.json()).data.name).toBe(projectName);
 });
 
 test.describe("Financeiro: a OUTRA usuária não acessa transações da dona", () => {
