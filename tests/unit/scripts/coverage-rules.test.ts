@@ -1,6 +1,7 @@
 import {
     checkBaseline,
     checkChangedFiles,
+    checksChangedFiles,
     isInCoverageScope,
     parseIgnoreRevs,
     toBaseline,
@@ -107,5 +108,18 @@ describe("linha de base do total", () => {
             "ramos caiu de 40% para 38%",
             "funções caiu de 40% para 38%",
         ]);
+    });
+});
+
+describe("checksChangedFiles (qual PR confere arquivo por arquivo)", () => {
+    it.each([
+        ["develop", true],
+        [undefined, true],
+        ["", true],
+        ["main", false],
+    ])("base %j → %s", (baseRef, expected) => {
+        // develop ← feature/*: confere cada arquivo. main ← develop (release): os
+        // arquivos já foram conferidos nos PRs das features; só o total conta.
+        expect(checksChangedFiles(baseRef)).toBe(expected);
     });
 });

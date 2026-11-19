@@ -9,6 +9,7 @@ import { relative, resolve } from "node:path";
 import {
     checkBaseline,
     checkChangedFiles,
+    checksChangedFiles,
     COVERAGE_TARGET,
     parseIgnoreRevs,
     toBaseline,
@@ -78,7 +79,8 @@ if (process.argv.includes("--update-baseline")) {
 }
 
 const baseline = JSON.parse(readFileSync(BASELINE_PATH, "utf8")) as Baseline;
-const fileProblems = checkChangedFiles(changedFiles(), summaries);
+const perFile = checksChangedFiles(process.env.GITHUB_BASE_REF);
+const fileProblems = perFile ? checkChangedFiles(changedFiles(), summaries) : [];
 const baselineProblems = checkBaseline(total, baseline);
 const current = toBaseline(total);
 
@@ -92,11 +94,13 @@ report([
     `| Ramos | ${current.branches}% | ${baseline.branches}% |`,
     `| Funções | ${current.functions}% | ${baseline.functions}% |`,
     "",
-    fileProblems.length === 0
-        ? `✅ Todos os arquivos novos/alterados do escopo têm ≥ ${COVERAGE_TARGET}%.`
-        : `❌ Arquivos novos/alterados abaixo de ${COVERAGE_TARGET}%:\n\n${fileProblems
-              .map(({ file, problems }) => `- \`${file}\`: ${problems.join(", ")}`)
-              .join("\n")}`,
+    !perFile
+        ? "ℹ️ Release (develop → main): os arquivos já foram conferidos nos PRs das features; aqui só o total conta."
+        : fileProblems.length === 0
+          ? `✅ Todos os arquivos novos/alterados do escopo têm ≥ ${COVERAGE_TARGET}%.`
+          : `❌ Arquivos novos/alterados abaixo de ${COVERAGE_TARGET}%:\n\n${fileProblems
+                .map(({ file, problems }) => `- \`${file}\`: ${problems.join(", ")}`)
+                .join("\n")}`,
     "",
     baselineProblems.length === 0
         ? "✅ O total não caiu."

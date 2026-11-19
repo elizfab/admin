@@ -64,6 +64,15 @@ export function checkChangedFiles(
     return result;
 }
 
+/**
+ * O PR confere a cobertura arquivo por arquivo? Sim para feature/* → develop.
+ * No release (develop → main) os arquivos já foram conferidos nos PRs das features
+ * (e o que veio antes da regra não é cobrado de novo): só o total é conferido.
+ */
+export function checksChangedFiles(baseRef: string | undefined): boolean {
+    return baseRef !== "main";
+}
+
 /** SHAs do `.git-blame-ignore-revs` (commits só de formatação: não contam como alteração). */
 export function parseIgnoreRevs(text: string): string[] {
     return text
