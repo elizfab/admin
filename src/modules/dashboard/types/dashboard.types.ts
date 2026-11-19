@@ -1,12 +1,14 @@
-import type { LucideIcon } from "lucide-react";
+import type { DashboardModule, DashboardModuleStatus } from "@/generated/prisma/client";
 
-export type ModuleStatus = "available" | "external" | "soon";
+// O módulo expõe seus próprios tipos; quem usa não importa do Prisma diretamente.
+export type { DashboardModule, DashboardModuleStatus };
 
-export type DashboardModule = {
-    id: string;
-    title: string;
-    description: string;
-    href: string;
-    icon: LucideIcon;
-    status: ModuleStatus;
+/**
+ * Texto em português de cada status. O banco e a API guardam a chave em inglês
+ * (AVAILABLE, EXTERNAL, SOON); a tela mostra este rótulo.
+ */
+export const dashboardModuleStatusLabel: Record<DashboardModuleStatus, string> = {
+    AVAILABLE: "Disponível",
+    EXTERNAL: "Aplicação externa",
+    SOON: "Em breve",
 };
