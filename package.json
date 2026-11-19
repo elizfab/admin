@@ -9,7 +9,7 @@
     "lint": "eslint",
     "lint:fix": "eslint --fix",
     "typecheck": "SKIP_ENV_VALIDATION=1 next typegen && tsc --noEmit",
-    "test": "jest",
+    "test": "jest --coverage --coverageReporters=text --coverageReporters=text-summary",
     "test:integration": "jest -c jest.integration.config.ts",
     "test:watch": "jest --watch",
     "test:coverage": "jest -c jest.coverage.config.ts",

@@ -37,6 +37,12 @@ Tecnicamente:
 
 ## Passo a passo
 
+### 0. No dia a dia: `npm test`
+
+`npm test` já imprime a tabela de cobertura arquivo por arquivo **dos unitários** (mesmo escopo,
+`jest.coverage-scope.mjs`). O número é menor que o da meta porque não inclui a integração
+(repositórios contra o banco). Para a meta (R16), use os passos 1 e 2.
+
 ### 1. Gerar o relatório
 
 ```bash
@@ -72,6 +78,7 @@ npx jest tests/unit/modules/x/x.service.test.ts --coverage --collectCoverageFrom
 
 | Arquivo | Ação | Descrição |
 |---|---|---|
+| `jest.coverage-scope.mjs` | Criado (T-0018) | Escopo único da cobertura (usado por `npm test` e `test:coverage`) |
 | `jest.coverage.config.ts` | Criado | Unitários + integração; escopo e formatos do relatório |
 | `scripts/coverage-rules.ts` | Criado | Regras puras (escopo, 95% por arquivo, linha de base) |
 | `scripts/coverage-check.ts` | Criado | Lê o relatório e o `git diff`, imprime a tabela, sai 1 se falhar |

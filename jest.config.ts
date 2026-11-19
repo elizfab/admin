@@ -1,6 +1,8 @@
 import type { Config } from "jest";
 import nextJest from "next/jest.js";
 
+import { coverageScope } from "./jest.coverage-scope.mjs";
+
 const createJestConfig = nextJest({
     // Caminho da aplicação Next.js: carrega next.config.ts e arquivos .env nos testes.
     dir: "./",
@@ -20,7 +22,9 @@ const config: Config = {
         "<rootDir>/tests/e2e/",
         "<rootDir>/tests/integration/",
     ],
-    collectCoverageFrom: ["src/**/*.{ts,tsx}", "!src/**/*.d.ts", "!src/generated/**"],
+    // `npm test` mostra a tabela de cobertura dos unitários (mesmo escopo da meta R16).
+    collectCoverageFrom: coverageScope,
+    coverageDirectory: "<rootDir>/coverage/unit",
 };
 
 // Exportado assim para que o next/jest consiga carregar a config do Next (assíncrona).
