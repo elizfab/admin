@@ -2233,7 +2233,8 @@ painel-admin-admin/
 │   │
 │   └── decisions/
 │       ├── ADR-001-modular-monolith.md   (a criar)
-│       └── ADR-006-autenticacao-better-auth.md
+│       ├── ADR-006-autenticacao-better-auth.md
+│       └── ADR-013-portal-dev-protegido.md
 │
 ├── prisma/
 │   ├── migrations/
@@ -2614,6 +2615,7 @@ integração futura.
 | ADR-010 | Jest + Playwright                             | Testes unitários, componentes e E2E                                 | Adotada                        |
 | ADR-011 | Vercel Hobby                                  | Deploy pessoal inicial                                              | Proposta a validar             |
 | ADR-012 | Arquitetura híbrida                           | Módulos integrados ou independentes conforme necessidade            | Adotada                        |
+| ADR-013 | Portal Dev protegido, servido pelo Admin      | Documentação privada sem segundo login; detalhes em `docs/decisions/` | **Aceita**                   |
 
 ---
 

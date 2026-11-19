@@ -1,0 +1,26 @@
+# Graphify: o que NÃO entra no grafo (sintaxe do .gitignore)
+# Gerados e dependências
+node_modules/
+.next/
+src/generated/
+coverage/
+playwright-report/
+test-results/
+playwright/.auth/
+.portal/
+graphify-out/
+package-lock.json
+tsconfig.tsbuildinfo
+next-env.d.ts
+
+# Estáticos
+public/
+src/app/*.png
+
+# Docs grandes de passo a passo (custariam token e quase não ajudam a navegar no código)
+docs/setup/
+docs/**/*.drawio
+docs/Personal-Platform-Guia-Arquitetura-Setup.md
+
+# Tarefas antigas dos agentes
+.agents/tasks/archive/

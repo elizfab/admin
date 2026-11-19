@@ -51,3 +51,12 @@ next-env.d.ts
 /playwright/.cache/
 /playwright/.auth/
 
+# local todo list
+/todo-list.json
+todo.md
+
+# Graphify (grafo local; regenerável)
+graphify-out/
+
+# Configuração pessoal do Claude Code (hooks do graphify com caminho absoluto da máquina)
+.claude/settings.local.json
