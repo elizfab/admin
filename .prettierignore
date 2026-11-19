@@ -1,0 +1,19 @@
+# Prettier: o que NÃO é formatado (sintaxe do .gitignore)
+# Gerados e dependências
+node_modules/
+.next/
+src/generated/
+coverage/
+playwright-report/
+test-results/
+playwright/.auth/
+graphify-out/
+package-lock.json
+next-env.d.ts
+public/
+
+# Migrations já aplicadas nunca mudam
+prisma/migrations/
+
+# Documentação em Markdown é escrita à mão (tabelas, listas): fora do Prettier
+*.md
