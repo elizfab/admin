@@ -83,7 +83,8 @@ docs/
 ├── architecture/
 │   └── ARCHITECTURE.md            ← arquitetura e decisões (revisão 1.4)
 ├── decisions/
-│   └── ADR-006-autenticacao-better-auth.md
+│   ├── ADR-006-autenticacao-better-auth.md
+│   └── ADR-013-portal-dev-protegido.md
 └── setup/
     ├── MODELO-DE-PASSO.md         ← modelo para novos guias
     ├── 00-setup-ambiente/
@@ -133,6 +134,7 @@ guia, compare primeiro com esta tabela.
 | Decisão | Registro |
 |---|---|
 | Autenticação com Better Auth (substitui Auth.js) | [ADR-006](decisions/ADR-006-autenticacao-better-auth.md) |
+| Portal Dev protegido, servido pelo Admin | [ADR-013](decisions/ADR-013-portal-dev-protegido.md) |
 | PostgreSQL local (Docker) para desenvolvimento; Supabase para Preview/Produção | ARCHITECTURE.md, seção 12.7 |
 | Data API do Supabase desativada | ARCHITECTURE.md, seção 12.6 |
 
