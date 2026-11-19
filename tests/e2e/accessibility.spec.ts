@@ -44,6 +44,20 @@ for (const path of privatePages) {
     });
 }
 
+test('modal "Novo card" do Dashboard não tem violações (claro e escuro)', async ({ page }) => {
+    await page.goto("/dashboard");
+    await page.getByRole("button", { name: "Novo card" }).click();
+    await expect(page.getByRole("dialog", { name: "Novo card" })).toBeVisible();
+    await expectNoViolations(page);
+
+    await page.emulateMedia({ colorScheme: "dark" });
+    await page.reload();
+    await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+    await page.getByRole("button", { name: "Novo card" }).click();
+    await expect(page.getByRole("dialog", { name: "Novo card" })).toBeVisible();
+    await expectNoViolations(page);
+});
+
 test.describe("páginas públicas", () => {
     test.use({ storageState: { cookies: [], origins: [] } });
 

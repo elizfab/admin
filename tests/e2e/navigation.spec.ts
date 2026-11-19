@@ -15,8 +15,8 @@ test("raiz leva ao dashboard com os cards de módulo", async ({ page }) => {
 
     await expect(page).toHaveURL(/\/dashboard$/);
     await expect(page.getByRole("heading", { level: 1, name: "Dashboard" })).toBeVisible();
-    // Dois cards no dashboard: Documentação e Financeiro (modules.mock.ts).
-    await expect(page.locator("main a[href^='/']")).toHaveCount(2);
+    // Cards iniciais vindos do banco (seed / migration, T-0007).
+    await expect(page.getByRole("link", { name: /Portal Financeiro/ })).toBeVisible();
 });
 
 test("navega por todos os módulos pela sidebar", async ({ page }) => {

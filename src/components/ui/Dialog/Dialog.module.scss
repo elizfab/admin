@@ -1,0 +1,62 @@
+@use "@/styles/abstracts" as *;
+
+// Fundo esmaecido com a cor de fundo do tema atual (funciona nos dois temas, R10).
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: color-mix(in srgb, var(--background) 75%, transparent);
+  backdrop-filter: blur(2px);
+}
+
+.content {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 51;
+  width: calc(100% - #{$space-6});
+  max-width: 560px;
+  max-height: calc(100vh - #{$space-6});
+  overflow-y: auto;
+  padding: $space-5;
+  background: var(--card-background);
+  border: 1px solid var(--border);
+  border-radius: $radius-lg;
+  box-shadow: 0 16px 48px color-mix(in srgb, var(--text-color) 18%, transparent);
+  transform: translate(-50%, -50%);
+}
+
+.title {
+  margin: 0 0 $space-2;
+  padding-right: $space-6;
+  font-size: $font-size-lg;
+}
+
+.description {
+  margin: 0 0 $space-4;
+  color: var(--text-color-secondary);
+}
+
+.close {
+  position: absolute;
+  top: $space-3;
+  right: $space-3;
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  color: var(--text-color-secondary);
+  background: transparent;
+  border: none;
+  border-radius: $radius-sm;
+  cursor: pointer;
+
+  &:hover {
+    color: var(--text-color);
+    background: var(--selection-color);
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
