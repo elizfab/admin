@@ -15,8 +15,8 @@ test("raiz leva ao dashboard com os cards de módulo", async ({ page }) => {
 
     await expect(page).toHaveURL(/\/dashboard$/);
     await expect(page.getByRole("heading", { level: 1, name: "Dashboard" })).toBeVisible();
-    // Dois cards no dashboard: Documentação e Financeiro (modules.mock.ts).
-    await expect(page.locator("main a[href^='/']")).toHaveCount(2);
+    // Cards iniciais vindos do banco (seed / migration, T-0007).
+    await expect(page.getByRole("link", { name: /Portal Financeiro/ })).toBeVisible();
 });
 
 test("navega por todos os módulos pela sidebar", async ({ page }) => {
@@ -43,6 +43,17 @@ test("card do dashboard abre a página de documentação", async ({ page }) => {
     await expect(page).toHaveURL(/\/documentation$/);
     await expect(page.getByRole("heading", { level: 1, name: "Documentação" })).toBeVisible();
 });
+
+// PLAT-R16 (T-0009): páginas de módulo têm "Voltar ao início".
+for (const path of ["/finance", "/finance/construction", "/projects", "/studies"]) {
+    test(`${path} tem "Voltar ao início" para o Dashboard`, async ({ page }) => {
+        await page.goto(path);
+
+        await page.getByRole("link", { name: "Voltar ao início" }).click();
+
+        await expect(page).toHaveURL(/\/dashboard$/);
+    });
+}
 
 test("mostra a página 404 em português", async ({ page }) => {
     await page.goto("/rota-que-nao-existe");

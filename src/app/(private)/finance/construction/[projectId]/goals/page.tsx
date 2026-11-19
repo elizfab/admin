@@ -56,7 +56,11 @@ export default async function ConstructionGoalsPage({
                                 {goal.doneAt ? (
                                     `Feita em ${formatDay(goal.doneAt)}`
                                 ) : (
-                                    <GoalToggle goalId={goal.id} projectId={project.id} done={false} />
+                                    <GoalToggle
+                                        goalId={goal.id}
+                                        projectId={project.id}
+                                        done={false}
+                                    />
                                 )}
                             </td>
                             <td className={styles.actions}>

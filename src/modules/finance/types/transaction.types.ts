@@ -1,8 +1,4 @@
-import type {
-    Transaction,
-    TransactionCategory,
-    TransactionType,
-} from "@/generated/prisma/client";
+import type { Transaction, TransactionCategory, TransactionType } from "@/generated/prisma/client";
 
 // O módulo expõe seus próprios tipos; quem usa não importa do Prisma diretamente.
 export type { Transaction, TransactionCategory, TransactionType };

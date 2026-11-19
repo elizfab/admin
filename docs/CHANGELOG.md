@@ -15,13 +15,34 @@ tarefa (`T-NNNN`) quando houver. No deploy, a seção `[Não publicado]` vira a 
   **PR automático** para a `develop` a cada push em `feature/*`
   (`.github/workflows/auto-pr.yml`); regra de branches única em `scripts/branch-rules.ts`.
 - T-0005: `docs/CHANGELOG.md` (este arquivo) com o histórico das fases.
+- T-0007: cards do Dashboard no banco (tabela `dashboard_module`), com botão "Novo card"
+  e modal para cadastrar, editar e excluir; API `/api/v1/dashboard/modules`; os 3 cards
+  atuais viram dados iniciais (migration para contas existentes, seed para contas novas).
+- T-0008: Financeiro em abas **Transações | Obra** (FIN-R11).
+- T-0009: "Voltar ao início" em `/finance`, `/finance/construction`, `/projects` e `/studies` (PLAT-R16).
+- T-0010: cobertura de testes na CI: unitários + integração somados, ≥ 95% em todo arquivo
+  novo/alterado e total sem queda (`npm run test:coverage`, `coverage:check`; PLAT-R17).
+- T-0011: Prettier com formatação no pre-commit e conferência na CI (PLAT-R18).
+- T-0016: **PR de release automático**: cada merge na `develop` abre (ou atualiza) o PR
+  `develop → main` com a lista do que entra e o checklist de deploy (`release-pr.yml`).
+- T-0018: `npm test` mostra a tabela de cobertura dos unitários (escopo em `jest.coverage-scope.mjs`).
 
 ### Alterado
 
+- T-0007: os rótulos de status do card ("Disponível", "Aplicação externa", "Em breve") saem
+  do `ModuleCard` e vão para `dashboardModuleStatusLabel` (tipos do módulo).
+- T-0008: "Obra" e "Nova transação" saem do cabeçalho do Financeiro.
+- T-0017: `ALTERACOES-2026-11-15.md` sai da raiz para
+  `docs/setup/06-setup-deploy/registros/2026-11-15-identidade-visual-e-vercel.md`.
+- T-0011: código inteiro formatado uma vez com o Prettier (commit `5ba40ff`, ignorado no blame).
 - T-0006: fluxo de branches passa a aceitar **só** `feature/<slug>` → `develop` → `main`
   (`.agents/project-context.md`, seção 9). A CI ganhou o gatilho `workflow_call`.
 - T-0005: a decisão do Portal Dev passa a ser a **ADR-013** (era "ADR-007", número já
   usado por "PostgreSQL + Prisma" no `ARCHITECTURE.md`).
+
+### Removido
+
+- T-0007: `src/modules/dashboard/data/modules.mock.ts` (os cards agora vêm do banco).
 
 ### Corrigido
 

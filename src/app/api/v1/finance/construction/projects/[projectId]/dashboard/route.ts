@@ -22,7 +22,12 @@ export async function GET(request: Request, ctx: Context) {
 
         const month = readMonthParam(request);
         const todayDate = new Date(`${today()}T00:00:00.000Z`);
-        const dashboard = await getConstructionDashboard(session.user.id, id.data, todayDate, month);
+        const dashboard = await getConstructionDashboard(
+            session.user.id,
+            id.data,
+            todayDate,
+            month,
+        );
 
         return ok(dashboard);
     } catch (error) {

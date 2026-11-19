@@ -14,7 +14,10 @@ export const ownedProject = (ownerId: string, projectId: string) => ({
 
 export const constructionRepository = {
     listProjects(ownerId: string) {
-        return prisma.constructionProject.findMany({ where: { ownerId }, orderBy: { createdAt: "asc" } });
+        return prisma.constructionProject.findMany({
+            where: { ownerId },
+            orderBy: { createdAt: "asc" },
+        });
     },
 
     findProject(ownerId: string, projectId: string) {

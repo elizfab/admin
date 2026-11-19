@@ -69,14 +69,13 @@ export function percent(part: number, total: number): number {
 const DAY_MS = 24 * 60 * 60 * 1000;
 
 /** Cronograma: dias decorridos, restantes e % do prazo. null sem as duas datas. */
-export function scheduleProgress(
-    startDate: Date | null,
-    plannedEndDate: Date | null,
-    today: Date,
-) {
+export function scheduleProgress(startDate: Date | null, plannedEndDate: Date | null, today: Date) {
     if (!startDate || !plannedEndDate) return null;
 
-    const totalDays = Math.max(1, Math.round((plannedEndDate.getTime() - startDate.getTime()) / DAY_MS));
+    const totalDays = Math.max(
+        1,
+        Math.round((plannedEndDate.getTime() - startDate.getTime()) / DAY_MS),
+    );
     const elapsedDays = Math.max(0, Math.round((today.getTime() - startDate.getTime()) / DAY_MS));
 
     return {

@@ -17,9 +17,16 @@
   }
 }
 
-.actions {
+.tabContent {
   display: flex;
-  gap: $space-3;
+  flex-direction: column;
+  gap: $space-5;
+}
+
+// "Nova transação" à esquerda, acima do mês.
+.toolbar {
+  display: flex;
+  justify-content: flex-start;
 }
 
 .empty {

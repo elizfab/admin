@@ -51,4 +51,3 @@ export async function requireApiSession() {
 
     return session;
 }
-

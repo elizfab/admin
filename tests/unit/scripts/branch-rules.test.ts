@@ -1,7 +1,4 @@
-import {
-    checkPullRequest,
-    checkPushBranch,
-} from "../../../scripts/branch-rules";
+import { checkPullRequest, checkPushBranch } from "../../../scripts/branch-rules";
 
 describe("checkPushBranch (push que abre o PR automático)", () => {
     it.each([

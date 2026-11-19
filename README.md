@@ -87,7 +87,7 @@ segredos por ambiente, proteção de previews).
 - [Mapa de implementação](docs/README.md): ordem das fases, status e guias passo a passo
 - [Arquitetura](docs/architecture/ARCHITECTURE.md): decisões técnicas e padrões
 - [Guia de arquitetura e setup](docs/Personal-Platform-Guia-Arquitetura-Setup.md)
-- [Alterações de 2026-11-15](ALTERACOES-2026-11-15.md): identidade visual e deploy Vercel
+- [Alterações de 2026-11-15](docs/setup/06-setup-deploy/registros/2026-11-15-identidade-visual-e-vercel.md): identidade visual e deploy Vercel
 
 ## Estrutura
 

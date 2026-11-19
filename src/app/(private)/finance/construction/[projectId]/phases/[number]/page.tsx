@@ -37,7 +37,10 @@ export default async function ConstructionPhasePage({
         listPayments(session.user.id, project.id),
     ]);
 
-    const paymentsByService = new Map<string, { id: string; paidOn: Date; amountCents: number }[]>();
+    const paymentsByService = new Map<
+        string,
+        { id: string; paidOn: Date; amountCents: number }[]
+    >();
     for (const payment of payments) {
         const list = paymentsByService.get(payment.serviceId) ?? [];
         list.push({ id: payment.id, paidOn: payment.paidOn, amountCents: payment.amountCents });
@@ -52,7 +55,11 @@ export default async function ConstructionPhasePage({
     return (
         <>
             <PageHeader title={`${project.name} — Evolução da obra`} />
-            <ConstructionTabs projectId={project.id} firstPhaseNumber={firstPhase} active="phases" />
+            <ConstructionTabs
+                projectId={project.id}
+                firstPhaseNumber={firstPhase}
+                active="phases"
+            />
 
             <PhaseNavigator
                 projectId={project.id}

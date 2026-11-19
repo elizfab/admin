@@ -4,7 +4,7 @@
 |---|---|
 | Decisão | PASS · CONCERNS · FAIL · WAIVED |
 | Data | AAAA-MM-DD |
-| Pipeline | typecheck ✅ lint ✅ unit ✅ e2e ✅ integration ✅ |
+| Pipeline | typecheck ✅ format ✅ lint ✅ unit ✅ e2e ✅ cobertura ✅ (≥ 95% no código novo; total não caiu) |
 
 ## Rastreabilidade
 

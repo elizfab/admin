@@ -12,3 +12,4 @@
 | FIN-R08 | Categoria "Obra" (`CONSTRUCTION`) **não** é aceita pelo formulário/API comuns; só a Obra cria esses lançamentos | Lançamento de obra sempre ligado à origem | `transaction.schema.ts` (sem teste dedicado: **dívida T-0002**) |
 | FIN-R09 | Lançamento gerado pela Obra não é alterado nem excluído pelo Financeiro (409) | Financeiro e Obra nunca divergem | `tests/integration/construction.service.test.ts` |
 | FIN-R10 | Valor com cor **e** sinal (+/−) **e** texto oculto "Receita/Despesa" | Cor não é a única pista (WCAG 1.4.1) | `tests/e2e/accessibility.spec.ts` |
+| FIN-R11 | Financeiro em abas **Transações** (`/finance`) e **Obra** (`/finance/construction`), com a aba atual em `aria-current="page"`; "Nova transação" fica dentro da aba Transações, à esquerda (adicionada em T-0008) | Seções claras e acessíveis | `tests/unit/modules/finance/FinanceTabs.test.tsx`, `tests/e2e/finance.spec.ts › navega pelas abas…` |

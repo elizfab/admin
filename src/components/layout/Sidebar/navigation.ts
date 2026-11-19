@@ -3,7 +3,7 @@ import {
     FolderKanban,
     LayoutDashboard,
     NotebookPen,
-    type LucideIcon
+    type LucideIcon,
 } from "lucide-react";
 
 export type NavigationItem = {

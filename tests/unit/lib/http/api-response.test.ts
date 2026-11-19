@@ -29,7 +29,7 @@ describe("api-response", () => {
     });
 
     it("nunca expõe a mensagem de um erro inesperado", async () => {
-        jest.spyOn(console, "error").mockImplementation(() => { });
+        jest.spyOn(console, "error").mockImplementation(() => {});
         const response = apiError(new Error("senha do banco: 123"));
         const body = JSON.stringify(await response.json());
 

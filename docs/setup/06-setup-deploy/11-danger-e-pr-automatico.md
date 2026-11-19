@@ -6,6 +6,8 @@
 
 ## Objetivo
 
+> Atualizado em 2026-11-19 (T-0016): o merge na `develop` também abre o PR de release para a `main`.
+
 Ao dar `git push` numa branch `feature/*`, o GitHub valida o nome da branch,
 **abre sozinho o PR para a `develop`** e roda o Danger e a CI nele. Branch de
 outro tipo é recusada com uma mensagem clara.
@@ -61,6 +63,7 @@ Definition of Done.
 | Workflow | Dispara em | Faz |
 |---|---|---|
 | `.github/workflows/auto-pr.yml` | `push` em qualquer branch, exceto `main`/`develop` | Valida a branch → abre o PR para a `develop` (se não existe) → roda Danger e CI no PR novo |
+| `.github/workflows/release-pr.yml` | `push` na `develop` (merge de uma feature) | Abre o PR `develop → main` ("Release: develop → main (data)") se não existe; se existe, atualiza a lista do que entra. No PR novo, roda Danger e CI. **O merge na `main` continua manual** (é a decisão de publicar) |
 | `.github/workflows/danger.yml` | `pull_request` (aberto, novo push, reaberto, editado) | Danger |
 | `.github/workflows/ci.yml` | `push` na `main`, `pull_request` e `workflow_call` | Pipeline completo (agora também chamável pelo PR automático) |
 
@@ -87,6 +90,8 @@ Definition of Done.
 | 4 | `git push -u origin feature/<slug>` (com commits novos) | Em **Actions → PR automático**: 4 jobs verdes; PR aberto para a `develop` com comentário do Danger |
 | 5 | Novo `git push` na mesma branch | "PR #N já está aberto"; workflows `Danger` e `CI` rodam no PR |
 | 6 | `git push` de uma branch `fix/teste` | Job "Validar tipo de branch" ❌ com o motivo; nenhum PR aberto |
+| 7 | Merge de um PR de feature na `develop` | Em **Actions → PR de release**: PR `develop → main` aberto (ou com a lista atualizada), com Danger e CI |
+| 8 | Outro merge na `develop` com o PR de release aberto | O mesmo PR recebe os commits; a seção "O que entra na produção" ganha a linha nova |
 
 ## ⚠️ Problemas comuns
 

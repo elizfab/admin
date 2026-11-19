@@ -1,7 +1,10 @@
 import { formatCents } from "@/lib/money/money";
 import { cn } from "@/lib/utils/cn";
 
-import { transactionCategoryLabel, type MonthlySummary as Summary } from "../../types/transaction.types";
+import {
+    transactionCategoryLabel,
+    type MonthlySummary as Summary,
+} from "../../types/transaction.types";
 import styles from "./MonthlySummary.module.scss";
 
 type MonthlySummaryProps = {
@@ -13,7 +16,11 @@ export function MonthlySummary({ summary }: MonthlySummaryProps) {
     const cards = [
         { label: "Receitas", value: incomeCents, tone: styles.income },
         { label: "Despesas", value: expenseCents, tone: styles.expense },
-        { label: "Saldo", value: balanceCents, tone: balanceCents < 0 ? styles.expense : undefined },
+        {
+            label: "Saldo",
+            value: balanceCents,
+            tone: balanceCents < 0 ? styles.expense : undefined,
+        },
     ];
 
     return (

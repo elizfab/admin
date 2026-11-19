@@ -11,9 +11,18 @@ import { NotFoundError } from "@/lib/errors/app-error";
 import { ConstructionTabs } from "@/modules/construction/components/ConstructionTabs/ConstructionTabs";
 import { DataTable } from "@/modules/construction/components/DataTable/DataTable";
 import { DeleteButton } from "@/modules/construction/components/DeleteButton/DeleteButton";
-import { PayInstallmentForm, UnpayInstallmentButton } from "@/modules/construction/components/ConstructionForms/SettingsForms";
-import { deletePurchaseAction, payInstallmentAction } from "@/modules/construction/actions/purchase.actions";
-import { paymentMethodLabel, purchaseStatusLabel } from "@/modules/construction/types/construction.types";
+import {
+    PayInstallmentForm,
+    UnpayInstallmentButton,
+} from "@/modules/construction/components/ConstructionForms/SettingsForms";
+import {
+    deletePurchaseAction,
+    payInstallmentAction,
+} from "@/modules/construction/actions/purchase.actions";
+import {
+    paymentMethodLabel,
+    purchaseStatusLabel,
+} from "@/modules/construction/types/construction.types";
 import { getProject, listPurchases } from "@/modules/construction/server";
 import styles from "./page.module.scss";
 
@@ -49,13 +58,21 @@ export default async function ConstructionPurchasesPage({
                     </Link>
                 }
             />
-            <ConstructionTabs projectId={project.id} firstPhaseNumber={firstPhase} active="purchases" />
+            <ConstructionTabs
+                projectId={project.id}
+                firstPhaseNumber={firstPhase}
+                active="purchases"
+            />
 
             {purchases.length === 0 ? (
                 <p className={styles.empty}>Nenhuma compra registrada ainda.</p>
             ) : (
                 purchases.map((purchase) => (
-                    <section key={purchase.id} className={styles.purchase} aria-label={purchase.item}>
+                    <section
+                        key={purchase.id}
+                        className={styles.purchase}
+                        aria-label={purchase.item}
+                    >
                         <header className={styles.purchaseHeader}>
                             <div>
                                 <h2 className={styles.purchaseTitle}>{purchase.item}</h2>
@@ -86,8 +103,12 @@ export default async function ConstructionPurchasesPage({
                                         {installment.number}/{purchase.installments.length}
                                     </td>
                                     <td>{formatDay(installment.dueOn)}</td>
-                                    <td className={styles.money}>{formatCents(installment.amountCents)}</td>
-                                    <td>{installment.paidOn ? formatDay(installment.paidOn) : "—"}</td>
+                                    <td className={styles.money}>
+                                        {formatCents(installment.amountCents)}
+                                    </td>
+                                    <td>
+                                        {installment.paidOn ? formatDay(installment.paidOn) : "—"}
+                                    </td>
                                     <td className={styles.actions}>
                                         {installment.paidOn ? (
                                             <UnpayInstallmentButton
@@ -110,7 +131,8 @@ export default async function ConstructionPurchasesPage({
                         </DataTable>
 
                         <p className={styles.totals}>
-                            Total {formatCents(purchase.totalCents)} · Pago {formatCents(purchase.paidCents)} · Falta{" "}
+                            Total {formatCents(purchase.totalCents)} · Pago{" "}
+                            {formatCents(purchase.paidCents)} · Falta{" "}
                             {formatCents(purchase.unpaidCents)}
                         </p>
                     </section>

@@ -52,7 +52,9 @@ describe("addMonths", () => {
 describe("purchaseStatus", () => {
     it("todas pagas = PAID; parcelada com pendência = INSTALLMENTS; 1x pendente = PENDING", () => {
         expect(purchaseStatus([{ paidOn: day("2025-10-08") }])).toBe("PAID");
-        expect(purchaseStatus([{ paidOn: day("2025-11-01") }, { paidOn: null }])).toBe("INSTALLMENTS");
+        expect(purchaseStatus([{ paidOn: day("2025-11-01") }, { paidOn: null }])).toBe(
+            "INSTALLMENTS",
+        );
         expect(purchaseStatus([{ paidOn: null }])).toBe("PENDING");
     });
 });

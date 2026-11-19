@@ -3,7 +3,6 @@ import { ConflictError, NotFoundError } from "@/lib/errors/app-error";
 import { CreateTransactionInput, MonthlySummary, UpdateTransactionInput } from "..";
 import { transactionRepository } from "../repositories/transaction.repository";
 
-
 /**
  * Regras de negócio do Financeiro.
  * Recebe dados JÁ validados (Zod) e o ownerId vindo da SESSÃO — nunca do cliente.

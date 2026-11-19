@@ -24,7 +24,11 @@ export async function POST(request: Request, ctx: Context) {
             throw new ValidationError(toFieldErrors(parsed.error));
         }
 
-        const installment = await payInstallment(session.user.id, parsedId.data, parsed.data.paidOn);
+        const installment = await payInstallment(
+            session.user.id,
+            parsedId.data,
+            parsed.data.paidOn,
+        );
 
         return ok(installment);
     } catch (error) {

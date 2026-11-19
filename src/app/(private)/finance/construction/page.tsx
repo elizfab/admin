@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
+import { BackLink } from "@/components/shared/BackLink/BackLink";
 import { PageHeader } from "@/components/shared/PageHeader/PageHeader";
 import { buttonClassName } from "@/components/ui/Button/Button";
 import { requireSession } from "@/lib/auth/session";
 import { formatDay } from "@/lib/dates/month";
 import { listProjects } from "@/modules/construction/server";
+import { FinanceTabs } from "@/modules/finance/components/FinanceTabs/FinanceTabs";
 import { ProjectSettingsForm } from "@/modules/construction/components/ConstructionForms/SettingsForms";
 import { createProjectAction } from "@/modules/construction/actions/project.actions";
 import styles from "./page.module.scss";
@@ -20,50 +22,59 @@ export default async function ConstructionPage() {
 
     return (
         <>
-            <PageHeader title="Obras" />
+            <BackLink />
+            <PageHeader title="Financeiro" description="Receitas, despesas, saldo e obra." />
 
-            {projects.length === 0 && (
-                <p className={styles.empty}>
-                    Nenhuma obra ainda. Crie a primeira abaixo — ela já nasce com o ambiente
-                    &quot;Geral&quot; e a &quot;Fase 01&quot;.
-                </p>
-            )}
+            <FinanceTabs current="construction">
+                <h2 className={styles.sectionTitle}>Obras</h2>
 
-            {projects.length > 0 && (
-                <ul className={styles.list}>
-                    {projects.map((project) => (
-                        <li key={project.id} className={styles.item}>
-                            <div>
-                                <Link href={`/finance/construction/${project.id}`} className={styles.name}>
-                                    {project.name}
+                {projects.length === 0 && (
+                    <p className={styles.empty}>
+                        Nenhuma obra ainda. Crie a primeira abaixo — ela já nasce com o ambiente
+                        &quot;Geral&quot; e a &quot;Fase 01&quot;.
+                    </p>
+                )}
+
+                {projects.length > 0 && (
+                    <ul className={styles.list}>
+                        {projects.map((project) => (
+                            <li key={project.id} className={styles.item}>
+                                <div>
+                                    <Link
+                                        href={`/finance/construction/${project.id}`}
+                                        className={styles.name}
+                                    >
+                                        {project.name}
+                                    </Link>
+                                    <span className={styles.dates}>
+                                        {project.startDate
+                                            ? `Início ${formatDay(project.startDate)}`
+                                            : "Sem data de início"}
+                                        {project.plannedEndDate &&
+                                            ` · Fim previsto ${formatDay(project.plannedEndDate)}`}
+                                    </span>
+                                </div>
+                                <Link
+                                    href={`/finance/construction/${project.id}/settings`}
+                                    className={buttonClassName("secondary")}
+                                >
+                                    Configurar
                                 </Link>
-                                <span className={styles.dates}>
-                                    {project.startDate
-                                        ? `Início ${formatDay(project.startDate)}`
-                                        : "Sem data de início"}
-                                    {project.plannedEndDate && ` · Fim previsto ${formatDay(project.plannedEndDate)}`}
-                                </span>
-                            </div>
-                            <Link
-                                href={`/finance/construction/${project.id}/settings`}
-                                className={buttonClassName("secondary")}
-                            >
-                                Configurar
-                            </Link>
-                        </li>
-                    ))}
-                </ul>
-            )}
+                            </li>
+                        ))}
+                    </ul>
+                )}
 
-            <section className={styles.newSection} aria-labelledby="new-project">
-                <h2 id="new-project" className={styles.sectionTitle}>
-                    Nova obra
-                </h2>
-                <ProjectSettingsForm
-                    action={createProjectAction}
-                    project={{ name: "", startDate: null, plannedEndDate: null }}
-                />
-            </section>
+                <section className={styles.newSection} aria-labelledby="new-project">
+                    <h2 id="new-project" className={styles.sectionTitle}>
+                        Nova obra
+                    </h2>
+                    <ProjectSettingsForm
+                        action={createProjectAction}
+                        project={{ name: "", startDate: null, plannedEndDate: null }}
+                    />
+                </section>
+            </FinanceTabs>
         </>
     );
 }

@@ -35,6 +35,7 @@ model User {
   projects             Project[]
   transactions         Transaction[]
   constructionProjects ConstructionProject[]
+  dashboardModules     DashboardModule[]
 
   @@map("user")
 }
@@ -95,6 +96,36 @@ model RateLimit {
 
   @@unique([key])
   @@map("rateLimit")
+}
+
+// ─── Dashboard ───────────────────────────────────────────────
+// Cards (atalhos) do dashboard, cadastrados pela tela (T-0007).
+
+enum DashboardModuleStatus {
+  AVAILABLE
+  EXTERNAL
+  SOON
+}
+
+model DashboardModule {
+  id          String                @id @default(cuid())
+  slug        String                @db.VarChar(40)
+  title       String                @db.VarChar(60)
+  description String                @db.VarChar(160)
+  href        String                @db.VarChar(300)
+  // Nome do ícone (ex.: "BookOpen"); o componente vem de src/modules/dashboard/icons.ts.
+  icon        String                @db.VarChar(40)
+  status      DashboardModuleStatus @default(AVAILABLE)
+  ownerId     String
+  createdAt   DateTime              @default(now())
+  updatedAt   DateTime              @updatedAt
+
+  // Cascade: cards são só atalhos; apagar a conta apaga os cards dela.
+  owner User @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
+  // Identificador único por dona (o índice também acelera as buscas por ownerId).
+  @@unique([ownerId, slug])
+  @@map("dashboard_module")
 }
 
 // ─── Projetos ────────────────────────────────────────────────

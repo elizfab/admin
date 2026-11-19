@@ -47,7 +47,11 @@ export default async function ConstructionPaymentsPage({
                     </Link>
                 }
             />
-            <ConstructionTabs projectId={project.id} firstPhaseNumber={firstPhase} active="payments" />
+            <ConstructionTabs
+                projectId={project.id}
+                firstPhaseNumber={firstPhase}
+                active="payments"
+            />
 
             {payments.length === 0 ? (
                 <p className={styles.empty}>Nenhum pagamento registrado ainda.</p>
@@ -63,7 +67,9 @@ export default async function ConstructionPaymentsPage({
                             <td>
                                 {payment.service.description}
                                 {payment.service.professionalName && (
-                                    <span className={styles.sub}>{payment.service.professionalName}</span>
+                                    <span className={styles.sub}>
+                                        {payment.service.professionalName}
+                                    </span>
                                 )}
                             </td>
                             <td>Fase {String(payment.service.phase.number).padStart(2, "0")}</td>

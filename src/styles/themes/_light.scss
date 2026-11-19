@@ -43,7 +43,8 @@
   --accent-on-selection: #553fab;
 
   // Fundo do painel visual da tela de login (pode ser cor ou gradiente completo).
-  --brand-surface: radial-gradient(
+  --brand-surface:
+    radial-gradient(
       120% 90% at 15% 0%,
       color-mix(in srgb, var(--background) 35%, transparent),
       transparent 60%

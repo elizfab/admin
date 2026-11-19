@@ -9,10 +9,10 @@
     "lint": "eslint",
     "lint:fix": "eslint --fix",
     "typecheck": "SKIP_ENV_VALIDATION=1 next typegen && tsc --noEmit",
-    "test": "jest",
+    "test": "jest --coverage --coverageReporters=text --coverageReporters=text-summary",
     "test:integration": "jest -c jest.integration.config.ts",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage",
+    "test:coverage": "jest -c jest.coverage.config.ts",
     "postinstall": "prisma generate",
     "db:up": "docker compose up -d",
     "db:down": "docker compose down",
@@ -24,7 +24,12 @@
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:report": "playwright show-report",
-    "vercel-build": "prisma migrate deploy && next build"
+    "vercel-build": "prisma migrate deploy && next build",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "prepare": "simple-git-hooks",
+    "coverage:check": "tsx scripts/coverage-check.ts",
+    "coverage:baseline": "tsx scripts/coverage-check.ts --update-baseline"
   },
   "engines": {
     "node": ">=20.19"
@@ -59,10 +64,20 @@
     "eslint-config-next": "16.4.6",
     "jest": "^30.5.2",
     "jest-environment-jsdom": "^30.5.2",
+    "lint-staged": "^17.6.1",
+    "prettier": "^3.10.1",
     "prisma": "^7.10.1",
     "sass": "^1.108.2",
+    "simple-git-hooks": "^2.14.0",
     "ts-node": "^10.9.2",
     "tsx": "^4.23.15",
     "typescript": "^5"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "npx lint-staged",
+    "preserveUnused": true
+  },
+  "lint-staged": {
+    "*": "prettier --write --ignore-unknown"
   }
 }

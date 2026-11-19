@@ -45,7 +45,11 @@ export default async function ConstructionServicesPage({
                     </Link>
                 }
             />
-            <ConstructionTabs projectId={project.id} firstPhaseNumber={firstPhase} active="services" />
+            <ConstructionTabs
+                projectId={project.id}
+                firstPhaseNumber={firstPhase}
+                active="services"
+            />
 
             {services.length === 0 ? (
                 <p className={styles.empty}>Nenhum serviço contratado ainda.</p>

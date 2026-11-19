@@ -12,12 +12,7 @@ import {
     createProjectSchema,
     updateProjectSchema,
 } from "@/modules/construction";
-import {
-    addArea,
-    addPhase,
-    createProject,
-    updateProject,
-} from "@/modules/construction/server";
+import { addArea, addPhase, createProject, updateProject } from "@/modules/construction/server";
 
 /**
  * Server Actions da obra: mesmo contrato das do Financeiro

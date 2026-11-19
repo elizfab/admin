@@ -39,7 +39,10 @@ export async function getConstructionDashboard(
     }
 
     // ── Mão de obra ──
-    const byTrade = new Map<ConstructionTrade, { contractedCents: number; remainingCents: number }>();
+    const byTrade = new Map<
+        ConstructionTrade,
+        { contractedCents: number; remainingCents: number }
+    >();
 
     for (const service of services) {
         const row = byTrade.get(service.trade) ?? { contractedCents: 0, remainingCents: 0 };
@@ -107,7 +110,9 @@ export async function getConstructionDashboard(
             laborSharePercent: percent(laborContracted, investment),
             materialsSharePercent: percent(materialsTotal, investment),
             averagePaidPerDayCents:
-                schedule && schedule.elapsedDays > 0 ? Math.round(paid / schedule.elapsedDays) : null,
+                schedule && schedule.elapsedDays > 0
+                    ? Math.round(paid / schedule.elapsedDays)
+                    : null,
         },
         schedule,
     };

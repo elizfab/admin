@@ -17,7 +17,8 @@ refaz o balanço, mas acha o centavo que não fecha.
 4. **Contratos:** API fora do padrão (seção 5 do `project-context.md`)? Schema `update` com default (R7)? Mensagem em inglês?
 5. **Camadas:** regra em action/route handler? Client importando `server.ts`? Prisma fora do repositório?
 6. **Frontend:** cor fixa (R10)? Falta de label, `aria-*`, `<table>` para dados (R11)? `<Link>` para Route Handler? `redirect()` dentro do `try` (R13)?
-7. **Qualidade:** duplicação, nomes, complexidade, comentário que explica o quê em vez do porquê.
+7. **Testes e formato:** arquivo novo/alterado sem teste ou abaixo de 95% (R16)? Teste que só executa sem verificar nada (cobertura "de fachada")? Arquivo fora do Prettier (R17)?
+8. **Qualidade:** duplicação, nomes, complexidade, comentário que explica o quê em vez do porquê.
 
 ## Severidade
 

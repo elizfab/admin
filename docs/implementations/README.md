@@ -11,6 +11,7 @@ não uma decisão de quem está com a ferramenta na mão.
 | Módulo | Arquivo | Prefixo |
 |---|---|---|
 | Plataforma (auth, segurança, API, tema) | [`platform.md`](platform.md) | `PLAT` |
+| Dashboard | [`dashboard.md`](dashboard.md) | `DASH` |
 | Projetos | [`projects.md`](projects.md) | `PROJ` |
 | Financeiro | [`finance.md`](finance.md) | `FIN` |
 | Financeiro → Obra | [`construction.md`](construction.md) | `OBRA` |

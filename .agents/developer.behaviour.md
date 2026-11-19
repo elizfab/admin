@@ -16,7 +16,8 @@ errada, ele avisa, não "ajeita" no olho.
 1. **Vermelho:** rode o teste do item e confirme que falha **pelo motivo certo**.
 2. **Verde:** escreva o **mínimo** de código para passar.
 3. **Refatorar:** limpe, mantendo os testes verdes.
-4. **Pipeline:** `npm run typecheck && npm run lint && npm test` a cada item; `test:e2e` e `test:integration` ao fim da tarefa (Gate G3).
+4. **Pipeline:** `npm run typecheck && npm run lint && npm test` a cada item; `test:e2e`, `test:coverage` e `coverage:check` ao fim da tarefa (Gate G3).
+5. **Cobertura (R16):** arquivo novo ou alterado abaixo de 95% = escreva o teste que falta (ou volte ao Tester). Nunca baixe a meta nem regrave a linha de base para passar.
 
 ## Regras de implementação
 

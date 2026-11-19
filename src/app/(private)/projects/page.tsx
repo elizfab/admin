@@ -2,6 +2,7 @@ import { FolderKanban, Plus } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 
+import { BackLink } from "@/components/shared/BackLink/BackLink";
 import { EmptyState } from "@/components/shared/EmptyState/EmptyState";
 import { PageHeader } from "@/components/shared/PageHeader/PageHeader";
 import { buttonClassName } from "@/components/ui/Button/Button";
@@ -28,18 +29,22 @@ export default async function ProjectsPage() {
 
     if (projects.length === 0) {
         return (
-            <EmptyState
-                headingLevel="h1"
-                icon={<FolderKanban size={32} aria-hidden="true" />}
-                title="Projetos"
-                description="Você ainda não tem projetos cadastrados."
-                action={newProjectLink}
-            />
+            <>
+                <BackLink />
+                <EmptyState
+                    headingLevel="h1"
+                    icon={<FolderKanban size={32} aria-hidden="true" />}
+                    title="Projetos"
+                    description="Você ainda não tem projetos cadastrados."
+                    action={newProjectLink}
+                />
+            </>
         );
     }
 
     return (
         <>
+            <BackLink />
             <PageHeader title="Projetos" action={newProjectLink} />
             <ProjectList projects={projects} />
         </>

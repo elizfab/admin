@@ -43,11 +43,17 @@ export default async function ConstructionDashboardPage({
                 description={
                     project.startDate
                         ? `Início ${formatDay(project.startDate)}` +
-                          (project.plannedEndDate ? ` · Fim previsto ${formatDay(project.plannedEndDate)}` : "")
+                          (project.plannedEndDate
+                              ? ` · Fim previsto ${formatDay(project.plannedEndDate)}`
+                              : "")
                         : undefined
                 }
             />
-            <ConstructionTabs projectId={project.id} firstPhaseNumber={firstPhase} active="dashboard" />
+            <ConstructionTabs
+                projectId={project.id}
+                firstPhaseNumber={firstPhase}
+                active="dashboard"
+            />
 
             <section aria-label="Resumo do investimento" className={styles.stats}>
                 <StatCard
@@ -78,7 +84,8 @@ export default async function ConstructionDashboardPage({
             {dashboard.schedule && (
                 <p className={styles.schedule}>
                     Cronograma: {dashboard.schedule.elapsedDays} dias decorridos ·{" "}
-                    {dashboard.schedule.remainingDays} dias restantes · {dashboard.schedule.percent}% do prazo
+                    {dashboard.schedule.remainingDays} dias restantes · {dashboard.schedule.percent}
+                    % do prazo
                 </p>
             )}
 
@@ -92,16 +99,23 @@ export default async function ConstructionDashboardPage({
                         {pendingGoals.slice(0, 5).map((goal) => (
                             <li key={goal.id}>
                                 {goal.title}
-                                {goal.area && <span className={styles.muted}> · {goal.area.name}</span>}
+                                {goal.area && (
+                                    <span className={styles.muted}> · {goal.area.name}</span>
+                                )}
                             </li>
                         ))}
                     </ul>
                 ) : (
                     <p className={styles.muted}>
-                        {dashboard.goals.total === 0 ? "Nenhuma meta cadastrada." : "Todas as metas concluídas!"}
+                        {dashboard.goals.total === 0
+                            ? "Nenhuma meta cadastrada."
+                            : "Todas as metas concluídas!"}
                     </p>
                 )}
-                <Link href={`/finance/construction/${project.id}/goals`} className={styles.moreLink}>
+                <Link
+                    href={`/finance/construction/${project.id}/goals`}
+                    className={styles.moreLink}
+                >
                     Ver todas as metas
                 </Link>
             </section>
@@ -115,7 +129,8 @@ export default async function ConstructionDashboardPage({
                         <li key={row.trade}>
                             <span>{tradeLabel[row.trade]}</span>
                             <span className={styles.muted}>
-                                {formatCents(row.remainingCents)} a pagar de {formatCents(row.contractedCents)}
+                                {formatCents(row.remainingCents)} a pagar de{" "}
+                                {formatCents(row.contractedCents)}
                             </span>
                         </li>
                     ))}
@@ -149,7 +164,10 @@ export default async function ConstructionDashboardPage({
                         <dd>{formatCents(dashboard.materials.unpaidCents)}</dd>
                     </div>
                     <div>
-                        <dt>Parcelas vencendo em {currentMonth().slice(5, 7)}/{currentMonth().slice(0, 4)}</dt>
+                        <dt>
+                            Parcelas vencendo em {currentMonth().slice(5, 7)}/
+                            {currentMonth().slice(0, 4)}
+                        </dt>
                         <dd>{formatCents(dashboard.materials.dueThisMonthCents)}</dd>
                     </div>
                 </dl>

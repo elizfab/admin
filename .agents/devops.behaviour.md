@@ -18,7 +18,7 @@ avião volta se algo der errado.
    - destrutiva → `pg_dump` do banco de produção **antes**, script de dados testado no preview, janela combinada com a Liza.
 3. **Variáveis novas:** cadastradas na Vercel (Production **e** Preview) **antes** do merge; validadas por `src/lib/env/required-env.ts` (o build falha se faltar).
 4. **Preview:** testar os cenários principais da spec no link do preview.
-5. **Produção:** merge `develop → main`; conferir o log do deploy (migrations aplicadas), `/api/v1/health` = 200 e o fluxo principal.
+5. **Produção:** o PR `develop → main` já existe (aberto pelo workflow "PR de release" a cada merge na `develop`); com o checklist do PR completo, faça o merge; conferir o log do deploy (migrations aplicadas), `/api/v1/health` = 200 e o fluxo principal.
 6. **Rollback:**
    - código → *Promote* do deploy anterior na Vercel;
    - migration aditiva → não precisa reverter (o código antigo ignora a coluna/tabela nova);

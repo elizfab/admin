@@ -30,6 +30,7 @@ Cenário: …
 ## Critérios de sucesso (mensuráveis)
 
 - SC-001: …
+- SC-00N: cobertura ≥ 95% em cada arquivo novo ou alterado (R16).
 
 ## Fora de escopo
 

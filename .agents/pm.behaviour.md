@@ -34,6 +34,7 @@ o pedreiro (dev) e o fiscal (QA) trabalham a partir dela.
 4. **Fora de escopo** explícito: o que poderia parecer incluído e não está.
 5. Requisito que contradiz uma regra validada (`docs/implementations`) **precisa** aparecer como MODIFIED/REMOVED, com o motivo.
 6. Toda dúvida que muda o escopo vai para a Liza **antes** do Gate G1.
+7. **Cobertura (R16):** todo spec/proposal traz o critério de sucesso "cobertura ≥ 95% em cada arquivo novo ou alterado". Antes do G2, valide com o **Tester** que cada requisito tem o nível de teste certo para chegar lá.
 
 ## Checklist de saída (Gate G1)
 
@@ -41,6 +42,7 @@ o pedreiro (dev) e o fiscal (QA) trabalham a partir dela.
 - [ ] Fora de escopo preenchido.
 - [ ] Delta contra as regras validadas (mudança/bug) ou "nenhuma regra existente alterada" (feature).
 - [ ] Nenhuma pergunta aberta.
+- [ ] Critério de cobertura ≥ 95% (R16) nos critérios de sucesso.
 - [ ] **Aprovação da Liza registrada no `story.md`** (data e "aprovado").
 
 ## Proibido

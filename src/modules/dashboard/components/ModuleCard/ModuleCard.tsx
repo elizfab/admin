@@ -1,33 +1,54 @@
 import Link from "next/link";
+import { createElement, type ReactNode } from "react";
 
 import { cn } from "@/lib/utils/cn";
 
-import type { DashboardModule, ModuleStatus } from "../../types/dashboard.types";
+import { getDashboardIcon } from "../../icons";
+import { isExternalHref } from "../../schemas/dashboard-module.schema";
+import { dashboardModuleStatusLabel, type DashboardModule } from "../../types/dashboard.types";
 import styles from "./ModuleCard.module.scss";
 
-const statusLabel: Record<ModuleStatus, string> = {
-    available: "Disponível",
-    external: "Aplicação externa",
-    soon: "Em breve",
-};
-
 type ModuleCardProps = {
-    module: DashboardModule;
+    module: Pick<DashboardModule, "title" | "description" | "href" | "icon" | "status">;
+    /** Botões de editar/excluir: ficam FORA do link (botão dentro de link é HTML inválido). */
+    actions?: ReactNode;
 };
 
-export function ModuleCard({ module }: ModuleCardProps) {
-    const { title, description, href, icon: Icon, status } = module;
+export function ModuleCard({ module, actions }: ModuleCardProps) {
+    const { title, description, href, icon, status } = module;
+    const external = isExternalHref(href);
 
-    return (
-        <Link href={href} className={styles.card}>
+    const content = (
+        <>
             <span className={styles.icon} aria-hidden="true">
-                <Icon size={22} strokeWidth={1.75} />
+                <DashboardIcon name={icon} />
             </span>
             <h2 className={styles.title}>{title}</h2>
             <p className={styles.description}>{description}</p>
             <span className={cn(styles.status, styles[`status_${status}`])}>
-                {statusLabel[status]}
+                {dashboardModuleStatusLabel[status]}
             </span>
-        </Link>
+            {external && <span className={styles.srOnly}> (abre em nova aba)</span>}
+        </>
     );
+
+    return (
+        <article className={styles.card}>
+            {external ? (
+                <a href={href} target="_blank" rel="noopener noreferrer" className={styles.link}>
+                    {content}
+                </a>
+            ) : (
+                <Link href={href} className={styles.link}>
+                    {content}
+                </Link>
+            )}
+            {actions && <div className={styles.actions}>{actions}</div>}
+        </article>
+    );
+}
+
+/** Ícone pelo nome guardado no banco (o componente vem do mapa de ícones permitidos). */
+function DashboardIcon({ name }: { name: string }) {
+    return createElement(getDashboardIcon(name), { size: 22, strokeWidth: 1.75 });
 }

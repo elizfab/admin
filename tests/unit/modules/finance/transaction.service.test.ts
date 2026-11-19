@@ -80,7 +80,9 @@ describe("getMonthlySummary", () => {
         const empty = await getMonthlySummary(OWNER, "2026-11");
         expect(empty).toMatchObject({ incomeCents: 0, expenseCents: 0, balanceCents: 0 });
 
-        repo.sumByType.mockResolvedValue([{ type: "EXPENSE", _sum: { amountCents: 100 } }] as never);
+        repo.sumByType.mockResolvedValue([
+            { type: "EXPENSE", _sum: { amountCents: 100 } },
+        ] as never);
         expect((await getMonthlySummary(OWNER, "2026-11")).balanceCents).toBe(-100);
     });
 });
