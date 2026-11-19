@@ -19,6 +19,8 @@ const privatePages = [
     "/documentation",
     "/finance",
     "/finance/transactions/new",
+    "/finance/construction",
+    "/studies",
 ];
 
 async function expectNoViolations(page: import("@playwright/test").Page) {

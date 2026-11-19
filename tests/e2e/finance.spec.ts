@@ -157,3 +157,29 @@ test("API: mês inválido é 400 e valor fracionado é recusado", async ({ reque
     });
     expect(response.status()).toBe(400);
 });
+
+// FIN-R11 (T-0008): abas Transações | Obra, com a aba atual marcada.
+test("navega pelas abas Transações e Obra", async ({ page }) => {
+    await page.goto("/finance");
+    const tabs = page.getByRole("navigation", { name: "Seções do Financeiro" });
+
+    await expect(tabs.getByRole("link", { name: "Transações" })).toHaveAttribute(
+        "aria-current",
+        "page",
+    );
+    // "Nova transação" fica dentro do conteúdo da aba, não no cabeçalho.
+    await expect(
+        page
+            .getByRole("region", { name: "Transações" })
+            .getByRole("link", { name: "Nova transação" }),
+    ).toBeVisible();
+
+    await tabs.getByRole("link", { name: "Obra" }).click();
+
+    await expect(page).toHaveURL(/\/finance\/construction$/);
+    await expect(
+        page
+            .getByRole("navigation", { name: "Seções do Financeiro" })
+            .getByRole("link", { name: "Obra" }),
+    ).toHaveAttribute("aria-current", "page");
+});
