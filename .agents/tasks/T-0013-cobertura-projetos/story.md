@@ -17,3 +17,9 @@ Levar `src/modules/projects/**` (actions, repositório, componentes) a ≥ 95% (
 ## Como começar
 
 `npm run test:coverage` e abra `coverage/lcov-report/index.html` para ver as linhas sem teste.
+
+## Encontrado no QA da T-0007 (2026-11-19)
+
+- `tests/e2e/projects.spec.ts` (`cria projeto…` e `impede renomear…`) falha com
+  `--repeat-each=3`: usa nomes fixos e não limpa os projetos. Corrigir junto (nome único
+  por execução + limpeza), como foi feito no bloco de Projetos do `isolation.spec.ts`.

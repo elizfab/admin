@@ -6,7 +6,7 @@
 | Módulos | plataforma (componente compartilhado), finance, construction, projects, studies |
 | Tamanho | P |
 | Tier | @coding-1 |
-| Estado (Kanban) | Em desenvolvimento |
+| Estado (Kanban) | Code Review (aguardando o PR) |
 | Criada em | 2026-11-19 |
 | Branch / PR | `feature/t-0007-dashboard-financeiro-cobertura` · PR automático no push |
 
@@ -27,11 +27,11 @@
 | Gate | Estado | Evidência |
 |---|---|---|
 | G1 Spec | ✅ | Acima |
-| G2 Testes vermelhos | ⬜ | |
-| G3 Pipeline verde | ⬜ | |
-| G4 Review | ⬜ | `review.md` |
-| G5 QA | ⬜ | `qa-gate.md` |
-| G6 Registro | ⬜ | CHANGELOG, implementations |
+| G2 Testes vermelhos | ✅ | Testes escritos antes do código, falharam por "módulo não existe" |
+| G3 Pipeline verde | ✅ | typecheck, format, lint, 200 unit, 55 E2E, 226 Jest com cobertura, coverage:check (2026-11-19) |
+| G4 Review | ✅ (agente) · ⬜ (PR) | `review.md` |
+| G5 QA | ✅ PASS | `qa-gate.md` |
+| G6 Registro | ✅ | `docs/CHANGELOG.md`, `docs/implementations/` |
 
 ## Handoffs
 
@@ -39,3 +39,8 @@
 - Feito: classificação, análise do código atual, spec/proposal, plano e tarefas desta pasta.
 - Decidido: ver G1 acima.
 - Próximo passo: Tester (testes vermelhos) → @coding.
+
+### Handoff: @coding → Code Review → QA → Documentation (2026-11-19)
+- Feito: implementação com TDD; pipeline completo verde; review.md e qa-gate.md nesta pasta; regras novas registradas em `docs/implementations/`.
+- Pendente / riscos: ver "Riscos residuais" no `qa-gate.md`; revisão humana no PR.
+- Próximo passo: `git push` (o PR para a develop abre sozinho) → DevOps.

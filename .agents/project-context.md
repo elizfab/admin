@@ -13,7 +13,7 @@ contas extras só para testes de isolamento). Módulos atuais:
 | Módulo | Rotas de tela | API | Estado |
 |---|---|---|---|
 | Autenticação | `/login` | `/api/auth/*` (Better Auth), `/api/v1/me` | Produção |
-| Dashboard | `/dashboard` | — | Produção (cards de módulos em `modules.mock.ts`) |
+| Dashboard | `/dashboard` | `/api/v1/dashboard/modules` | Produção (cards no banco, cadastrados pelo modal: T-0007) |
 | Projetos | `/projects`, `/projects/new`, `/projects/[id]/edit` | `/api/v1/projects` | Produção |
 | Financeiro | `/finance`, `/finance/transactions/*` | `/api/v1/finance/transactions`, `/summary` | Produção |
 | Financeiro → Obra | `/finance/construction/[projectId]/*` | `/api/v1/finance/construction/*` | Produção |

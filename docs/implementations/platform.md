@@ -19,3 +19,6 @@
 | PLAT-R13 | Datas sem hora gravadas à meia-noite UTC e formatadas em UTC; "hoje"/"mês" no fuso de São Paulo | Data não "volta um dia" | `tests/unit/lib/dates/month.test.ts` |
 | PLAT-R14 | Dinheiro em centavos inteiros; texto "1.234,56" convertido sem `parseFloat` | Sem erro de ponto flutuante | `tests/unit/lib/money/money.test.ts` |
 | PLAT-R15 | `vercel-build` aplica migrations (`prisma migrate deploy`) antes do `next build` | Produção nunca roda com banco desatualizado | `package.json` (CI) |
+| PLAT-R16 | `/finance`, `/finance/construction`, `/projects` e `/studies` têm "Voltar ao início" para o Dashboard (adicionada em T-0009) | Volta sem depender da sidebar (escondida no celular) | `tests/unit/components/shared/BackLink.test.tsx`, `tests/e2e/navigation.spec.ts` |
+| PLAT-R17 | Arquivo novo ou alterado de `src/lib`, `src/modules`, `src/components` tem ≥ 95% de linhas, comandos, ramos e funções; o total não cai abaixo de `coverage-baseline.json`; commits só de formatação não contam (adicionada em T-0010) | Mudança sempre testada | `tests/unit/scripts/coverage-rules.test.ts`; etapa "Conferir cobertura" da CI |
+| PLAT-R18 | Código no formato do Prettier; o pre-commit formata os arquivos do commit e a CI recusa arquivo fora do formato (adicionada em T-0011) | PR sem diff de indentação | Etapa "Formatação" da CI (`npm run format:check`) |
