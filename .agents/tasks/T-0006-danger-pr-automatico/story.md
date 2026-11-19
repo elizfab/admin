@@ -6,7 +6,7 @@
 | Módulos | plataforma (CI) |
 | Tamanho | M |
 | Tier | @coding-3 (CI) |
-| Estado (Kanban) | Code Review |
+| Estado (Kanban) | Concluído (PR #9, 2026-11-19) |
 | Criada em | 2026-11-19 |
 | Branch / PR | `feature/bmad-agents` · PR automático no push |
 

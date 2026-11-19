@@ -4,7 +4,7 @@
 > ao mudar o estado da sua tarefa). Regras do quadro: `.agents/workflow.md`, seção 4.
 > **Limites:** Em desenvolvimento ≤ 2 · Code Review ≤ 3 · QA ≤ 2.
 
-**Último ID:** T-0006 · **Atualizado em:** 2026-11-19
+**Último ID:** T-0015 · **Atualizado em:** 2026-11-19
 
 ## 🔴 Bloqueado
 
@@ -15,13 +15,13 @@
 
 | ID | Tarefa | Tier | Dono | Desde |
 |---|---|---|---|---|
+| T-0007 | Cards do dashboard no banco (cadastrar, editar, excluir) | @coding-2 | Claude | 2026-11-19 |
+| T-0011 | Prettier + formatação automática | @coding-3 | Claude | 2026-11-19 |
 
 ## 🔵 Code Review (≤ 3)
 
 | ID | Tarefa | PR | Revisor |
 |---|---|---|---|
-| T-0005 | Correções nas docs (ADR-006/013, CHANGELOG, URL, exemplos) | Automático no push de `feature/bmad-agents` | Liza |
-| T-0006 | Danger + PR automático para a develop (só `feature/*`) | Automático no push de `feature/bmad-agents` | Liza |
 
 ## 🟡 QA (≤ 2)
 
@@ -56,11 +56,20 @@
 | T-0002 | chore | Testes dedicados para FIN-R08, OBRA-R03, OBRA-R07 e OBRA-R08 | `docs/implementations/` |
 | T-0003 | feature | Módulo PDI | `docs/todo.md` |
 | T-0004 | feature | Módulo Release Control | `docs/todo.md` |
+| T-0008 | change | Financeiro em abas (Transações \| Obra) — puxar quando houver vaga (WIP ≤ 2) | Liza, 2026-11-19 |
+| T-0009 | change | Botão "Voltar ao início" nas páginas de módulo | Liza, 2026-11-19 |
+| T-0010 | infra | Cobertura na CI (≥ 95% no código novo; total não cai) | Liza, 2026-11-19 |
+| T-0012 | chore | Cobertura ≥ 95%: Plataforma | T-0010 |
+| T-0013 | chore | Cobertura ≥ 95%: Projetos | T-0010 |
+| T-0014 | chore | Cobertura ≥ 95%: Financeiro | T-0010 |
+| T-0015 | chore | Cobertura ≥ 95%: Obra | T-0010 |
 
 ## ✅ Concluído (últimas 10)
 
 | ID | Tarefa | Concluída em | Registro |
 |---|---|---|---|
+| T-0006 | Danger + PR automático (PR #9) | 2026-11-19 | `docs/CHANGELOG.md` |
+| T-0005 | Correções nas docs (PR #9) | 2026-11-19 | `docs/CHANGELOG.md` |
 | — | Financeiro → Obra | 2026-11-18 | `docs/CHANGELOG.md` |
 | — | Financeiro | 2026-11-17 | `docs/CHANGELOG.md` |
 
