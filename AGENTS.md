@@ -1,3 +1,9 @@
+# AGENTS.md: Admin (Personal Platform)
+
+> Instruções para **qualquer** agente de IA (Claude Code, GitHub Copilot, Devin…).
+> Mantenha este arquivo **abaixo de 16 KB** (o Devin só lê os primeiros 16 KB):
+> detalhes ficam em `.agents/`.
+
 <!-- BEGIN:nextjs-agent-rules -->
 
 ## This is NOT the Next.js you know
@@ -7,6 +13,62 @@ This version has breaking changes — APIs, conventions, and file structure may 
 This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
 
 <!-- END:nextjs-agent-rules -->
+
+## Projeto em uma frase
+
+Portal administrativo pessoal (Next.js 16 + React 19 + TypeScript strict, Prisma 7 +
+PostgreSQL, Better Auth, Zod 4, SCSS com tokens, Jest + Playwright) com os módulos
+Projetos, Financeiro e Financeiro → Obra. Produção: <https://admin-elizabetefabri.vercel.app/>.
+
+## Leia antes de trabalhar
+
+1. **[`.agents/project-context.md`](.agents/project-context.md):** stack, camadas, **regras invioláveis R1–R15**, API, comandos.
+2. **[`.agents/workflow.md`](.agents/workflow.md):** ciclo BMAD, Spec Kit × OpenSpec, TDD/BDD, Kanban, gates e tiers.
+3. **O seu papel:** `.agents/<agente>.behaviour.md` (lista em [`.agents/README.md`](.agents/README.md)).
+4. **Regras já validadas do módulo que você vai tocar:** `docs/implementations/<modulo>.md`. **Não altere** uma regra dali sem `proposal.md` aprovado.
+
+## Regras que não podem ser quebradas (resumo)
+
+- **R1/R2** Toda consulta filtra pela dona da **sessão**; recurso alheio = 404; `ownerId` nunca vem do cliente.
+- **R3/R4** Dinheiro em centavos inteiros; datas sem hora em `@db.Date` (UTC); "hoje" no fuso de São Paulo.
+- **R5** Totais, saldos e status são calculados, nunca gravados.
+- **R6/R7** Zod antes do serviço; `update` parcial **sem** default.
+- **R8/R9** Sessão validada no servidor; rota privada no `matcher` do `src/proxy.ts`.
+- **R10/R11** Sem cor fixa (tokens nos dois temas); acessibilidade WCAG AA.
+- **R12** Lançamento gerado pela Obra só muda pela Obra.
+- **R13** `redirect()` fora do `try/catch` nas Server Actions.
+- **R14/R15** Nenhum segredo no repositório; migration destrutiva só com ADR e aprovação.
+
+## Fluxo de toda mudança
+
+```text
+Orchestrator → Analyst → PM (spec/proposal, aprovação da Liza) → Architect (plan + tier)
+→ Scrum Master (tasks, WIP.md) → Tester (testes vermelhos) → @coding-1|2|3 (verde)
+→ Code Review → QA (gate) → DevOps (deploy) → Documentation (CHANGELOG, implementations)
+```
+
+- Estado das tarefas: [`WIP.md`](WIP.md) · pasta de cada tarefa: `.agents/tasks/T-NNNN-<slug>/`.
+- **Tier de implementação:** `@coding-1` (≤ 3 arquivos, sem regra crítica) · `@coding-2` (um módulo) · `@coding-3` (transversal, dinheiro + atomicidade, auth, migration destrutiva, CI). Encontrou algo acima do seu tier: **pare e escale**.
+
+## Antes de dizer "pronto"
+
+```bash
+npm run typecheck && npm run lint && npm test && npm run test:e2e && npm run test:integration
+```
+
+E atualize `WIP.md`, `docs/CHANGELOG.md` e, se mudou uma regra, `docs/implementations/<modulo>.md`.
+
+## Economia de tokens
+
+- Se `graphify-out/GRAPH_REPORT.md` existir, **leia-o antes de buscar arquivos** e use
+  `graphify query|path|explain` para localizar código. Guia: [`docs/agents/graphify.md`](docs/agents/graphify.md).
+- Nunca leia `node_modules/`, `.next/`, `src/generated/`, `package-lock.json`, relatórios de teste.
+- Mais regras: [`.agents/token-economy.md`](.agents/token-economy.md).
+
+## Idioma
+
+Código, nomes de arquivos, rotas e commits em inglês técnico (`feat(finance): …` com descrição em
+português). Textos de tela, mensagens de erro, comentários e documentação em **português**.
 
 ## REGRA: Design tokens e temas (⚠️ obrigatório)
 
