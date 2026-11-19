@@ -4,13 +4,7 @@ import { useEffect } from "react";
 
 import { EmptyState } from "@/components/shared/EmptyState/EmptyState";
 
-export default function PrivateError({
-    error,
-    retry,
-}: {
-    error: unknown;
-    retry: () => void;
-}) {
+export default function PrivateError({ error, retry }: { error: unknown; retry: () => void }) {
     useEffect(() => {
         // Futuramente: enviar para um serviço de observabilidade.
         console.error(error);

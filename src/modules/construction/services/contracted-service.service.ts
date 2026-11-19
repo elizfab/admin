@@ -52,14 +52,21 @@ export async function getService(ownerId: string, serviceId: string) {
 }
 
 /** Fase e ambiente precisam ser DA MESMA obra (senão um id de outra obra entraria). */
-async function assertBelongsToProject(projectId: string, input: { phaseId?: string; areaId?: string }) {
+async function assertBelongsToProject(
+    projectId: string,
+    input: { phaseId?: string; areaId?: string },
+) {
     if (input.phaseId) {
-        const phase = await prisma.constructionPhase.findFirst({ where: { id: input.phaseId, projectId } });
+        const phase = await prisma.constructionPhase.findFirst({
+            where: { id: input.phaseId, projectId },
+        });
         if (!phase) throw new ValidationError({ phaseId: ["Fase inválida para esta obra."] });
     }
 
     if (input.areaId) {
-        const area = await prisma.constructionArea.findFirst({ where: { id: input.areaId, projectId } });
+        const area = await prisma.constructionArea.findFirst({
+            where: { id: input.areaId, projectId },
+        });
         if (!area) throw new ValidationError({ areaId: ["Ambiente inválido para esta obra."] });
     }
 }

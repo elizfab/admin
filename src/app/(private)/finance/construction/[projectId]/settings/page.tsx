@@ -21,12 +21,7 @@ import {
 import { deleteGoalAction } from "@/modules/construction/actions/goal.actions";
 import { deleteServiceAction } from "@/modules/construction/actions/service.actions";
 import { deletePurchaseAction } from "@/modules/construction/actions/purchase.actions";
-import {
-    getProject,
-    listGoals,
-    listPurchases,
-    listServices,
-} from "@/modules/construction/server";
+import { getProject, listGoals, listPurchases, listServices } from "@/modules/construction/server";
 import { formatCents } from "@/lib/money/money";
 import { serviceStatusLabel } from "@/modules/construction/types/construction.types";
 import { dayToInput } from "@/lib/dates/month";
@@ -61,7 +56,11 @@ export default async function ConstructionSettingsPage({
     return (
         <>
             <PageHeader title={`${project.name} — Configuração`} />
-            <ConstructionTabs projectId={project.id} firstPhaseNumber={firstPhase} active="settings" />
+            <ConstructionTabs
+                projectId={project.id}
+                firstPhaseNumber={firstPhase}
+                active="settings"
+            />
 
             <section className={styles.section} aria-labelledby="project-data">
                 <h2 id="project-data" className={styles.sectionTitle}>
@@ -72,7 +71,9 @@ export default async function ConstructionSettingsPage({
                     project={{
                         name: project.name,
                         startDate: project.startDate ? dayToInput(project.startDate) : null,
-                        plannedEndDate: project.plannedEndDate ? dayToInput(project.plannedEndDate) : null,
+                        plannedEndDate: project.plannedEndDate
+                            ? dayToInput(project.plannedEndDate)
+                            : null,
                     }}
                 />
             </section>
@@ -115,11 +116,17 @@ export default async function ConstructionSettingsPage({
                 </p>
 
                 {services.length > 0 && (
-                    <DataTable caption="Serviços contratados" regionLabel="Serviços contratados" headers={["Serviço", "Valor", "Status", ""]}>
+                    <DataTable
+                        caption="Serviços contratados"
+                        regionLabel="Serviços contratados"
+                        headers={["Serviço", "Valor", "Status", ""]}
+                    >
                         {services.map((service) => (
                             <tr key={service.id}>
                                 <td>{service.label}</td>
-                                <td className={styles.money}>{formatCents(service.contractedCents)}</td>
+                                <td className={styles.money}>
+                                    {formatCents(service.contractedCents)}
+                                </td>
                                 <td>{serviceStatusLabel[service.status]}</td>
                                 <td className={styles.actions}>
                                     <DeleteButton
@@ -135,7 +142,11 @@ export default async function ConstructionSettingsPage({
                 )}
 
                 {purchases.length > 0 && (
-                    <DataTable caption="Compras de material" regionLabel="Compras de material" headers={["Item", "Total", "Pago", ""]}>
+                    <DataTable
+                        caption="Compras de material"
+                        regionLabel="Compras de material"
+                        headers={["Item", "Total", "Pago", ""]}
+                    >
                         {purchases.map((purchase) => (
                             <tr key={purchase.id}>
                                 <td>{purchase.item}</td>
@@ -146,7 +157,11 @@ export default async function ConstructionSettingsPage({
                                         label={`Excluir a compra ${purchase.item}`}
                                         title="Excluir compra?"
                                         description="A compra, as parcelas e os lançamentos saem do Financeiro também."
-                                        action={deletePurchaseAction.bind(null, purchase.id, project.id)}
+                                        action={deletePurchaseAction.bind(
+                                            null,
+                                            purchase.id,
+                                            project.id,
+                                        )}
                                     />
                                 </td>
                             </tr>
@@ -155,12 +170,20 @@ export default async function ConstructionSettingsPage({
                 )}
 
                 {goals.length > 0 && (
-                    <DataTable caption="Metas" regionLabel="Metas" headers={["Meta", "Ambiente", "Status", ""]}>
+                    <DataTable
+                        caption="Metas"
+                        regionLabel="Metas"
+                        headers={["Meta", "Ambiente", "Status", ""]}
+                    >
                         {goals.map((goal) => (
                             <tr key={goal.id}>
                                 <td>{goal.title}</td>
                                 <td>{goal.area?.name ?? "—"}</td>
-                                <td>{goal.doneAt ? `Feita em ${formatDay(goal.doneAt)}` : "Pendente"}</td>
+                                <td>
+                                    {goal.doneAt
+                                        ? `Feita em ${formatDay(goal.doneAt)}`
+                                        : "Pendente"}
+                                </td>
                                 <td className={styles.actions}>
                                     <DeleteButton
                                         label={`Excluir a meta ${goal.title}`}

@@ -5,13 +5,7 @@ import { cn } from "@/lib/utils/cn";
 import styles from "./ConstructionTabs.module.scss";
 
 export type ConstructionSection =
-    | "dashboard"
-    | "phases"
-    | "services"
-    | "payments"
-    | "purchases"
-    | "goals"
-    | "settings";
+    "dashboard" | "phases" | "services" | "payments" | "purchases" | "goals" | "settings";
 
 type ConstructionTabsProps = {
     projectId: string;
@@ -20,18 +14,38 @@ type ConstructionTabsProps = {
     active: ConstructionSection;
 };
 
-const sections: { key: ConstructionSection; label: string; href: (p: ConstructionTabsProps) => string }[] = [
+const sections: {
+    key: ConstructionSection;
+    label: string;
+    href: (p: ConstructionTabsProps) => string;
+}[] = [
     { key: "dashboard", label: "Dashboard", href: (p) => `/finance/construction/${p.projectId}` },
     {
         key: "phases",
         label: "Fases",
         href: (p) => `/finance/construction/${p.projectId}/phases/${p.firstPhaseNumber}`,
     },
-    { key: "services", label: "Serviços", href: (p) => `/finance/construction/${p.projectId}/services` },
-    { key: "payments", label: "Pagamentos", href: (p) => `/finance/construction/${p.projectId}/payments` },
-    { key: "purchases", label: "Compras", href: (p) => `/finance/construction/${p.projectId}/purchases` },
+    {
+        key: "services",
+        label: "Serviços",
+        href: (p) => `/finance/construction/${p.projectId}/services`,
+    },
+    {
+        key: "payments",
+        label: "Pagamentos",
+        href: (p) => `/finance/construction/${p.projectId}/payments`,
+    },
+    {
+        key: "purchases",
+        label: "Compras",
+        href: (p) => `/finance/construction/${p.projectId}/purchases`,
+    },
     { key: "goals", label: "Metas", href: (p) => `/finance/construction/${p.projectId}/goals` },
-    { key: "settings", label: "Configuração", href: (p) => `/finance/construction/${p.projectId}/settings` },
+    {
+        key: "settings",
+        label: "Configuração",
+        href: (p) => `/finance/construction/${p.projectId}/settings`,
+    },
 ];
 
 /** Abas internas da obra (Server Component): links com aria-current="page". */

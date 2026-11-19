@@ -31,7 +31,11 @@ export default async function NewPurchasePage({
     return (
         <>
             <PageHeader title={`${project.name} — Nova compra`} />
-            <ConstructionTabs projectId={project.id} firstPhaseNumber={firstPhase} active="purchases" />
+            <ConstructionTabs
+                projectId={project.id}
+                firstPhaseNumber={firstPhase}
+                active="purchases"
+            />
             <PurchaseForm
                 action={action}
                 areas={project.areas}

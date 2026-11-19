@@ -107,7 +107,10 @@ export async function unpayInstallmentAction(
     return null;
 }
 
-export async function deletePurchaseAction(purchaseId: string, projectId: string): Promise<FormState> {
+export async function deletePurchaseAction(
+    purchaseId: string,
+    projectId: string,
+): Promise<FormState> {
     try {
         const session = await requireApiSession();
         await deletePurchase(session.user.id, idSchema.parse(purchaseId));

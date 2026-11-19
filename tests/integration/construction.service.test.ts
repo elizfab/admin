@@ -14,7 +14,11 @@ import {
     deleteServicePayment,
     registerServicePayment,
 } from "@/modules/construction/services/payment.service";
-import { addArea, createProject, getProject } from "@/modules/construction/services/project.service";
+import {
+    addArea,
+    createProject,
+    getProject,
+} from "@/modules/construction/services/project.service";
 import {
     createPurchase,
     deletePurchase,
@@ -85,7 +89,9 @@ describe("serviços e pagamentos", () => {
 
         expect(project.areas.map((a) => a.name)).toEqual(["Geral"]);
         expect(project.phases.map((p) => p.number)).toEqual([1]);
-        await expect(addArea(owner, projectId, { name: "Geral" })).rejects.toBeInstanceOf(ConflictError);
+        await expect(addArea(owner, projectId, { name: "Geral" })).rejects.toBeInstanceOf(
+            ConflictError,
+        );
     });
 
     it("3 pagamentos quitam o eitão e geram 3 lançamentos 'Obra' no Financeiro", async () => {
@@ -110,7 +116,9 @@ describe("serviços e pagamentos", () => {
             where: { ownerId: owner, category: "CONSTRUCTION" },
         });
 
-        await expect(deleteTransaction(owner, transaction.id)).rejects.toBeInstanceOf(ConflictError);
+        await expect(deleteTransaction(owner, transaction.id)).rejects.toBeInstanceOf(
+            ConflictError,
+        );
     });
 
     it("excluir um pagamento apaga o lançamento junto", async () => {
@@ -118,7 +126,9 @@ describe("serviços e pagamentos", () => {
 
         await deleteServicePayment(owner, payment.id);
 
-        expect(await prisma.transaction.findUnique({ where: { id: payment.transactionId } })).toBeNull();
+        expect(
+            await prisma.transaction.findUnique({ where: { id: payment.transactionId } }),
+        ).toBeNull();
         await pay(eitaoId, payment.amountCents, payment.paidOn.toISOString().slice(0, 10));
     });
 
@@ -160,7 +170,10 @@ describe("compras de material", () => {
 
         const [card, pix] = await listPurchases(owner, projectId);
 
-        const plan = card.installments.map((i) => [i.dueOn.toISOString().slice(0, 10), i.amountCents]);
+        const plan = card.installments.map((i) => [
+            i.dueOn.toISOString().slice(0, 10),
+            i.amountCents,
+        ]);
 
         expect(plan).toEqual([
             ["2025-10-29", 38652],
@@ -215,7 +228,11 @@ describe("dashboard", () => {
             contractedCents: 1460500,
             remainingCents: 1100500,
         });
-        expect(dash.labor).toMatchObject({ contractedCents: 1980500, paidCents: 360000, paidPercent: 18 });
+        expect(dash.labor).toMatchObject({
+            contractedCents: 1980500,
+            paidCents: 360000,
+            paidPercent: 18,
+        });
         expect(dash.materials).toMatchObject({
             totalCents: 815956,
             paidCents: 738652,
@@ -224,9 +241,9 @@ describe("dashboard", () => {
             dueThisMonthCents: 38652,
         });
         expect(dash.goals).toMatchObject({ total: 2, done: 1, percent: 50 });
-        expect((await prisma.constructionGoal.findUniqueOrThrow({ where: { id: goal.id } })).doneAt).toEqual(
-            day("2025-11-15"),
-        );
+        expect(
+            (await prisma.constructionGoal.findUniqueOrThrow({ where: { id: goal.id } })).doneAt,
+        ).toEqual(day("2025-11-15"));
         expect(dash.schedule).toEqual({ elapsedDays: 45, remainingDays: 45, percent: 50 });
         expect(dash.overall.investmentCents).toBe(1980500 + 815956);
     });

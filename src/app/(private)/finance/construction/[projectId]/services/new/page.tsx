@@ -30,7 +30,11 @@ export default async function NewServicePage({
     return (
         <>
             <PageHeader title={`${project.name} — Novo serviço`} />
-            <ConstructionTabs projectId={project.id} firstPhaseNumber={firstPhase} active="services" />
+            <ConstructionTabs
+                projectId={project.id}
+                firstPhaseNumber={firstPhase}
+                active="services"
+            />
             <ServiceForm
                 action={action}
                 projectId={project.id}

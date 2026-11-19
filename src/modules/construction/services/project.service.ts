@@ -25,7 +25,9 @@ export async function getProject(ownerId: string, projectId: string) {
 /** Cria a obra já com o ambiente "Geral" e a "Fase 01" (o mínimo para lançar serviços). */
 export async function createProject(ownerId: string, input: CreateProjectInput) {
     if (input.startDate && input.plannedEndDate && input.plannedEndDate < input.startDate) {
-        throw new ValidationError({ plannedEndDate: ["O fim previsto precisa ser depois do início."] });
+        throw new ValidationError({
+            plannedEndDate: ["O fim previsto precisa ser depois do início."],
+        });
     }
 
     try {
@@ -52,7 +54,9 @@ export async function updateProject(ownerId: string, projectId: string, input: U
     const plannedEndDate = input.plannedEndDate ?? project.plannedEndDate;
 
     if (startDate && plannedEndDate && plannedEndDate < startDate) {
-        throw new ValidationError({ plannedEndDate: ["O fim previsto precisa ser depois do início."] });
+        throw new ValidationError({
+            plannedEndDate: ["O fim previsto precisa ser depois do início."],
+        });
     }
 
     try {

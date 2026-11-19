@@ -104,4 +104,3 @@ test.describe("Financeiro: a OUTRA usuária não acessa transações da dona", (
         await expect(page.getByRole("heading", { name: "Página não encontrada" })).toBeVisible();
     });
 });
-

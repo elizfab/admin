@@ -8,10 +8,7 @@ import { centsToInput } from "@/lib/money/money";
 import { dayToInput } from "@/lib/dates/month";
 
 import type { FormState } from "../../actions/project.actions";
-import {
-    constructionTradeValues,
-    paymentMethodValues,
-} from "../../schemas/construction.schema";
+import { constructionTradeValues, paymentMethodValues } from "../../schemas/construction.schema";
 import {
     paymentMethodLabel,
     tradeLabel,
@@ -69,7 +66,9 @@ export function ServiceForm({
         trade: service?.trade ?? defaults?.trade ?? "MASON",
         professionalName: service?.professionalName ?? defaults?.professionalName ?? "",
         description: service?.description ?? defaults?.description ?? "",
-        contractedCents: service ? centsToInput(service.contractedCents) : (defaults?.contractedCents ?? ""),
+        contractedCents: service
+            ? centsToInput(service.contractedCents)
+            : (defaults?.contractedCents ?? ""),
         notes: service?.notes ?? defaults?.notes ?? "",
     };
 
@@ -179,7 +178,13 @@ export function ServiceForm({
 
             <div className={styles.field}>
                 <label htmlFor="notes">Observações</label>
-                <textarea id="notes" name="notes" rows={3} maxLength={500} defaultValue={values.notes} />
+                <textarea
+                    id="notes"
+                    name="notes"
+                    rows={3}
+                    maxLength={500}
+                    defaultValue={values.notes}
+                />
             </div>
 
             <div className={styles.actions}>
@@ -324,7 +329,13 @@ export function PurchaseForm({ action, areas, defaultDate, cancelHref }: Purchas
 
             <div className={styles.field}>
                 <label htmlFor="item">Item / material *</label>
-                <input id="item" name="item" required maxLength={120} aria-invalid={Boolean(errors?.item)} />
+                <input
+                    id="item"
+                    name="item"
+                    required
+                    maxLength={120}
+                    aria-invalid={Boolean(errors?.item)}
+                />
                 {errors?.item && <p className={styles.fieldError}>{errors.item[0]}</p>}
             </div>
 
@@ -357,7 +368,9 @@ export function PurchaseForm({ action, areas, defaultDate, cancelHref }: Purchas
                         required
                         aria-invalid={Boolean(errors?.purchasedOn)}
                     />
-                    {errors?.purchasedOn && <p className={styles.fieldError}>{errors.purchasedOn[0]}</p>}
+                    {errors?.purchasedOn && (
+                        <p className={styles.fieldError}>{errors.purchasedOn[0]}</p>
+                    )}
                 </div>
                 <div className={styles.field}>
                     <label htmlFor="totalCents">Valor total (R$) *</label>
@@ -369,7 +382,9 @@ export function PurchaseForm({ action, areas, defaultDate, cancelHref }: Purchas
                         required
                         aria-invalid={Boolean(errors?.totalCents)}
                     />
-                    {errors?.totalCents && <p className={styles.fieldError}>{errors.totalCents[0]}</p>}
+                    {errors?.totalCents && (
+                        <p className={styles.fieldError}>{errors.totalCents[0]}</p>
+                    )}
                 </div>
             </div>
 

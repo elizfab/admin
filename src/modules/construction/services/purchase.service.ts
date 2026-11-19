@@ -41,7 +41,11 @@ function installmentDescription(projectName: string, item: string, number: numbe
     return `${projectName} · Material: ${item}${suffix}`.slice(0, 120);
 }
 
-export async function createPurchase(ownerId: string, projectId: string, input: CreatePurchaseInput) {
+export async function createPurchase(
+    ownerId: string,
+    projectId: string,
+    input: CreatePurchaseInput,
+) {
     const project = await constructionRepository.findProject(ownerId, projectId);
 
     if (!project) throw new NotFoundError("Obra não encontrada.");

@@ -2,4 +2,3 @@
 // (schemas e tipos). Serviços ficam em "./server".
 export * from "./schemas/transaction.schema";
 export * from "./types/transaction.types";
-

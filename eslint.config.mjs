@@ -3,22 +3,21 @@ import nextTs from "eslint-config-next/typescript";
 import { defineConfig, globalIgnores } from "eslint/config";
 
 const eslintConfig = defineConfig([
-  ...nextVitals,
-  ...nextTs,
-  // Override default ignores of eslint-config-next.
-  globalIgnores([
-    // Default ignores of eslint-config-next:
-    ".next/**",
-    "out/**",
-    "build/**",
-    "next-env.d.ts",
-    // Relatórios e artefatos gerados pelo Playwright:
-    "playwright-report/**",
-    "test-results/**",
-    "blob-report/**",
-    "playwright/.cache/**",
-
-  ]),
+    ...nextVitals,
+    ...nextTs,
+    // Override default ignores of eslint-config-next.
+    globalIgnores([
+        // Default ignores of eslint-config-next:
+        ".next/**",
+        "out/**",
+        "build/**",
+        "next-env.d.ts",
+        // Relatórios e artefatos gerados pelo Playwright:
+        "playwright-report/**",
+        "test-results/**",
+        "blob-report/**",
+        "playwright/.cache/**",
+    ]),
 ]);
 
 export default eslintConfig;

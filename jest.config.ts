@@ -20,11 +20,7 @@ const config: Config = {
         "<rootDir>/tests/e2e/",
         "<rootDir>/tests/integration/",
     ],
-    collectCoverageFrom: [
-        "src/**/*.{ts,tsx}",
-        "!src/**/*.d.ts",
-        "!src/generated/**",
-    ],
+    collectCoverageFrom: ["src/**/*.{ts,tsx}", "!src/**/*.d.ts", "!src/generated/**"],
 };
 
 // Exportado assim para que o next/jest consiga carregar a config do Next (assíncrona).

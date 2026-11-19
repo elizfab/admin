@@ -16,7 +16,6 @@ describe("Sidebar", () => {
         expect(nav).toBeInTheDocument();
 
         for (const label of ["Dashboard", "Projetos", "Estudos", "Financeiro"]) {
-
             expect(screen.getByRole("link", { name: label })).toBeInTheDocument();
         }
     });
@@ -28,8 +27,6 @@ describe("Sidebar", () => {
             "aria-current",
             "page",
         );
-        expect(screen.getByRole("link", { name: "Dashboard" })).not.toHaveAttribute(
-            "aria-current",
-        );
+        expect(screen.getByRole("link", { name: "Dashboard" })).not.toHaveAttribute("aria-current");
     });
 });

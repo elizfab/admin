@@ -1,9 +1,6 @@
 import { prisma } from "@/lib/db/prisma";
 
-import type {
-    CreateTransactionInput,
-    UpdateTransactionInput,
-} from "../schemas/transaction.schema";
+import type { CreateTransactionInput, UpdateTransactionInput } from "../schemas/transaction.schema";
 
 type DateRange = { start: Date; end: Date };
 

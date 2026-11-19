@@ -75,7 +75,7 @@ const METHOD_BY_LABEL: Record<string, string> = {
     débito: "DEBIT_CARD",
     "cartão de crédito": "CREDIT_CARD",
     crédito: "CREDIT_CARD",
-    "cartão": "CREDIT_CARD",
+    cartão: "CREDIT_CARD",
     transferência: "BANK_TRANSFER",
     boleto: "BOLETO",
 };
@@ -212,7 +212,11 @@ async function main() {
         const paid = label === "pago" || label === "quitado";
         const match = /(\d+)\s*x/.exec(label);
         const installmentsCount = paid ? 1 : match ? Number(match[1]) : 1;
-        const method = paid ? "PIX" : /cart|cr[eé]dito/.test(label) ? "CREDIT_CARD" : methodOf(row[c.forma]);
+        const method = paid
+            ? "PIX"
+            : /cart|cr[eé]dito/.test(label)
+              ? "CREDIT_CARD"
+              : methodOf(row[c.forma]);
 
         await services.createPurchase(ownerId, project.id, {
             item: row[c.item],
@@ -235,7 +239,12 @@ async function main() {
         });
     }
 
-    const dashboard = await services.getConstructionDashboard(ownerId, project.id, new Date(), "2026-01");
+    const dashboard = await services.getConstructionDashboard(
+        ownerId,
+        project.id,
+        new Date(),
+        "2026-01",
+    );
     console.log("Importação concluída:", project.name);
     console.log(`  Mão de obra: ${dashboard.labor.servicesCount} serviços`);
     console.log(`  Investimento total: R$ ${(dashboard.overall.investmentCents / 100).toFixed(2)}`);

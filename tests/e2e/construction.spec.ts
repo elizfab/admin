@@ -133,7 +133,11 @@ test.describe("Obra", () => {
             },
         );
         expect(purchase.status()).toBe(201);
-        const list = await api(request, "GET", `/api/v1/finance/construction/projects/${project.id}/purchases`);
+        const list = await api(
+            request,
+            "GET",
+            `/api/v1/finance/construction/projects/${project.id}/purchases`,
+        );
         const { data: purchases } = (await list.json()) as {
             data: { installments: { id: string; paidOn: string | null }[] }[];
         };
@@ -152,10 +156,7 @@ test.describe("Obra", () => {
         await expect(page.getByRole("button", { name: "Desfazer" })).toHaveCount(0);
     });
 
-    test("Nova transação → Obra registra pagamento e volta ao mês", async ({
-        page,
-        request,
-    }) => {
+    test("Nova transação → Obra registra pagamento e volta ao mês", async ({ page, request }) => {
         const project = await createProject(request, `Obra E2E ${randomUUID().slice(0, 8)}`);
         const full = await getProject(request, project.id);
         const service = await createService(request, project.id, full.phases[0].id, 800_000);
@@ -164,7 +165,9 @@ test.describe("Obra", () => {
         await page.getByLabel("Categoria").selectOption({ label: "Obra" });
 
         // Selects encadeados: obra → serviço.
-        await page.getByLabel("Obra · Ambiente *").selectOption({ label: `${project.name} (todos os ambientes)` });
+        await page
+            .getByLabel("Obra · Ambiente *")
+            .selectOption({ label: `${project.name} (todos os ambientes)` });
         await page.getByLabel("Serviço *").selectOption(service.id);
         await expect(page.getByText("Falta pagar")).toBeVisible();
 

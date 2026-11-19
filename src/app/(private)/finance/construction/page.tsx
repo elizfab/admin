@@ -34,14 +34,18 @@ export default async function ConstructionPage() {
                     {projects.map((project) => (
                         <li key={project.id} className={styles.item}>
                             <div>
-                                <Link href={`/finance/construction/${project.id}`} className={styles.name}>
+                                <Link
+                                    href={`/finance/construction/${project.id}`}
+                                    className={styles.name}
+                                >
                                     {project.name}
                                 </Link>
                                 <span className={styles.dates}>
                                     {project.startDate
                                         ? `Início ${formatDay(project.startDate)}`
                                         : "Sem data de início"}
-                                    {project.plannedEndDate && ` · Fim previsto ${formatDay(project.plannedEndDate)}`}
+                                    {project.plannedEndDate &&
+                                        ` · Fim previsto ${formatDay(project.plannedEndDate)}`}
                                 </span>
                             </div>
                             <Link

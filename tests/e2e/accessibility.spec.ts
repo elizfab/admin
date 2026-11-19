@@ -68,7 +68,9 @@ test.describe("telas da obra (Fase 09)", () => {
         expect(created.status()).toBe(201);
         const { data: createdProject } = (await created.json()) as { data: { id: string } };
         // O POST devolve a obra sem os includes; busca com ambientes/fases.
-        const detail = await request.get(`/api/v1/finance/construction/projects/${createdProject.id}`);
+        const detail = await request.get(
+            `/api/v1/finance/construction/projects/${createdProject.id}`,
+        );
         const { data: project } = (await detail.json()) as {
             data: { id: string; phases: { number: number }[] };
         };

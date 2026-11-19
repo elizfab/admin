@@ -38,8 +38,8 @@ const transactionFields = {
     ),
     category: z.enum(transactionCategoryValues, { error: "Categoria inválida." }),
     // "2026-11-17" → Date à meia-noite UTC (coluna @db.Date).
-    occurredOn: z
-        .iso.date({ error: "Informe uma data válida." })
+    occurredOn: z.iso
+        .date({ error: "Informe uma data válida." })
         .transform((value) => new Date(`${value}T00:00:00.000Z`)),
 };
 

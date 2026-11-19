@@ -29,7 +29,12 @@ export function DataTable({
     className,
 }: DataTableProps) {
     return (
-        <div className={styles.scroll} role="region" tabIndex={0} aria-label={regionLabel ?? caption}>
+        <div
+            className={styles.scroll}
+            role="region"
+            tabIndex={0}
+            aria-label={regionLabel ?? caption}
+        >
             <table className={cn(styles.table, className)}>
                 <caption className={hideCaption ? "visually-hidden" : undefined}>{caption}</caption>
                 <thead>

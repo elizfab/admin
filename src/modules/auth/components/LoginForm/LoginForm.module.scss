@@ -46,9 +46,7 @@
 
 .brandIcon {
   color: var(--accent-color);
-  filter: drop-shadow(
-    0 4px 12px color-mix(in srgb, var(--text-color) 30%, transparent)
-  );
+  filter: drop-shadow(0 4px 12px color-mix(in srgb, var(--text-color) 30%, transparent));
 }
 
 // Formulário.
@@ -119,8 +117,7 @@
   &:focus-visible {
     outline: none;
     border-color: var(--accent-color);
-    box-shadow: 0 0 0 3px
-      color-mix(in srgb, var(--accent-color) 25%, transparent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-color) 25%, transparent);
   }
 }
 
@@ -168,8 +165,7 @@
   border: none;
   border-radius: $radius-md;
   cursor: pointer;
-  box-shadow: 0 8px 20px
-    color-mix(in srgb, var(--accent-color) 35%, transparent);
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--accent-color) 35%, transparent);
   transition:
     filter 0.15s ease,
     transform 0.1s ease,
@@ -177,8 +173,7 @@
 
   &:hover:not(:disabled) {
     filter: brightness(1.1);
-    box-shadow: 0 10px 26px
-      color-mix(in srgb, var(--accent-color) 45%, transparent);
+    box-shadow: 0 10px 26px color-mix(in srgb, var(--accent-color) 45%, transparent);
   }
 
   &:active:not(:disabled) {

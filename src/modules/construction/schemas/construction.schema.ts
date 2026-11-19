@@ -48,7 +48,11 @@ const isoDay = z.iso
 const optionalText = (max: number) =>
     z.preprocess(
         (value) => (typeof value === "string" && value.trim() === "" ? undefined : value),
-        z.string().trim().max(max, { error: `Máximo de ${max} caracteres.` }).optional(),
+        z
+            .string()
+            .trim()
+            .max(max, { error: `Máximo de ${max} caracteres.` })
+            .optional(),
     );
 
 /** Id opcional vindo de um <select> ("" = nenhum). */

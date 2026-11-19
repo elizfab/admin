@@ -37,14 +37,18 @@ describe("createTransactionSchema", () => {
     });
 
     it("recusa centavos fracionados vindos da API", () => {
-        expect(createTransactionSchema.safeParse({ ...valid, amountCents: 10.5 }).success).toBe(false);
+        expect(createTransactionSchema.safeParse({ ...valid, amountCents: 10.5 }).success).toBe(
+            false,
+        );
     });
 
     it("recusa data inválida e tipo inválido", () => {
-        expect(createTransactionSchema.safeParse({ ...valid, occurredOn: "2026-02-30" }).success).toBe(
+        expect(
+            createTransactionSchema.safeParse({ ...valid, occurredOn: "2026-02-30" }).success,
+        ).toBe(false);
+        expect(createTransactionSchema.safeParse({ ...valid, type: "TRANSFER" }).success).toBe(
             false,
         );
-        expect(createTransactionSchema.safeParse({ ...valid, type: "TRANSFER" }).success).toBe(false);
     });
 });
 

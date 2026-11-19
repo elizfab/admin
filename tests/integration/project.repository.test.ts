@@ -30,9 +30,11 @@ describe("projectRepository (banco real)", () => {
     it("findByIdForOwner não encontra projeto de outra dona", async () => {
         const project = await projectRepository.create(ownerA, { name: "Do A", status: "PLANNED" });
 
-        await expect(projectRepository.findByIdForOwner(project.id, ownerA)).resolves.toMatchObject({
-            id: project.id,
-        });
+        await expect(projectRepository.findByIdForOwner(project.id, ownerA)).resolves.toMatchObject(
+            {
+                id: project.id,
+            },
+        );
         await expect(projectRepository.findByIdForOwner(project.id, ownerB)).resolves.toBeNull();
     });
 

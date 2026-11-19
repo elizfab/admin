@@ -50,7 +50,11 @@ export async function createGoalAction(
 }
 
 /** Estado DESEJADO (não "inverta"): cliques repetidos não se anulam. */
-export async function setGoalDoneAction(goalId: string, done: boolean, projectId: string): Promise<FormState> {
+export async function setGoalDoneAction(
+    goalId: string,
+    done: boolean,
+    projectId: string,
+): Promise<FormState> {
     try {
         const session = await requireApiSession();
         setGoalDoneSchema.parse({ done });

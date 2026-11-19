@@ -5,7 +5,10 @@ import { PageHeader } from "@/components/shared/PageHeader/PageHeader";
 import { requireSession } from "@/lib/auth/session";
 import { NotFoundError } from "@/lib/errors/app-error";
 import { ConstructionTabs } from "@/modules/construction/components/ConstructionTabs/ConstructionTabs";
-import { PaymentForm, type PaymentServiceOption } from "@/modules/construction/components/ConstructionForms/ConstructionForms";
+import {
+    PaymentForm,
+    type PaymentServiceOption,
+} from "@/modules/construction/components/ConstructionForms/ConstructionForms";
 import { createServicePaymentAction } from "@/modules/construction/actions/payment.actions";
 import { getProject, listServices } from "@/modules/construction/server";
 
@@ -45,7 +48,11 @@ export default async function NewPaymentPage({
     return (
         <>
             <PageHeader title={`${project.name} — Registrar pagamento`} />
-            <ConstructionTabs projectId={project.id} firstPhaseNumber={firstPhase} active="payments" />
+            <ConstructionTabs
+                projectId={project.id}
+                firstPhaseNumber={firstPhase}
+                active="payments"
+            />
 
             {options.length === 0 ? (
                 <p>

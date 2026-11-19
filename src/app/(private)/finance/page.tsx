@@ -41,7 +41,10 @@ export default async function FinancePage({ searchParams }: PageProps<"/finance"
                         <Link href="/finance/construction" className={buttonClassName("secondary")}>
                             Obra
                         </Link>
-                        <Link href="/finance/transactions/new" className={buttonClassName("primary")}>
+                        <Link
+                            href="/finance/transactions/new"
+                            className={buttonClassName("primary")}
+                        >
                             <Plus size={16} aria-hidden="true" />
                             Nova transação
                         </Link>

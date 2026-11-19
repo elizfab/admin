@@ -45,7 +45,12 @@ export function ProjectSettingsForm({
             <div className={styles.row}>
                 <div className={styles.field}>
                     <label htmlFor="startDate">Início</label>
-                    <input id="startDate" name="startDate" type="date" defaultValue={project.startDate ?? ""} />
+                    <input
+                        id="startDate"
+                        name="startDate"
+                        type="date"
+                        defaultValue={project.startDate ?? ""}
+                    />
                 </div>
                 <div className={styles.field}>
                     <label htmlFor="plannedEndDate">Fim previsto</label>
@@ -228,7 +233,13 @@ export function PayInstallmentForm({
                     {state.message}
                 </p>
             )}
-            <input type="date" name="paidOn" defaultValue={defaultDate} required aria-label="Data do pagamento" />
+            <input
+                type="date"
+                name="paidOn"
+                defaultValue={defaultDate}
+                required
+                aria-label="Data do pagamento"
+            />
             <Button type="submit" disabled={pending}>
                 {pending ? "…" : "Confirmar"}
             </Button>

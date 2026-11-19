@@ -36,7 +36,11 @@ export default async function EditServicePage({
     return (
         <>
             <PageHeader title={`${project.name} — Editar serviço`} />
-            <ConstructionTabs projectId={project.id} firstPhaseNumber={firstPhase} active="services" />
+            <ConstructionTabs
+                projectId={project.id}
+                firstPhaseNumber={firstPhase}
+                active="services"
+            />
             <ServiceForm
                 action={action}
                 projectId={project.id}

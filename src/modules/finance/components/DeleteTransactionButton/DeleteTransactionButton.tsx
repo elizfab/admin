@@ -21,7 +21,10 @@ type DeleteTransactionButtonProps = {
     description: string;
 };
 
-export function DeleteTransactionButton({ transactionId, description }: DeleteTransactionButtonProps) {
+export function DeleteTransactionButton({
+    transactionId,
+    description,
+}: DeleteTransactionButtonProps) {
     const [open, setOpen] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [pending, startTransition] = useTransition();
@@ -50,8 +53,8 @@ export function DeleteTransactionButton({ transactionId, description }: DeleteTr
             <AlertDialogContent>
                 <AlertDialogTitle>Excluir transação?</AlertDialogTitle>
                 <AlertDialogDescription>
-                    A transação “{description}” será excluída permanentemente. Esta ação não pode ser
-                    desfeita.
+                    A transação “{description}” será excluída permanentemente. Esta ação não pode
+                    ser desfeita.
                 </AlertDialogDescription>
 
                 {error && <p role="alert">{error}</p>}

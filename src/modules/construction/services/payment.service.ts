@@ -24,7 +24,9 @@ export async function registerServicePayment(ownerId: string, input: CreateServi
 
     if (input.amountCents > summary.remainingCents) {
         throw new ValidationError({
-            amountCents: [`O valor passa do que falta pagar (${formatCents(summary.remainingCents)}).`],
+            amountCents: [
+                `O valor passa do que falta pagar (${formatCents(summary.remainingCents)}).`,
+            ],
         });
     }
 

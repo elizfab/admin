@@ -5,10 +5,7 @@ import { useMemo, useState } from "react";
 import { dayToInput } from "@/lib/dates/month";
 import { formatCents } from "@/lib/money/money";
 
-import {
-    paymentMethodValues,
-    constructionTradeValues,
-} from "../../schemas/construction.schema";
+import { paymentMethodValues, constructionTradeValues } from "../../schemas/construction.schema";
 import {
     paymentMethodLabel,
     tradeLabel,
@@ -45,7 +42,9 @@ export function ConstructionPaymentFields({ projects, errors, message }: Props) 
     const [trade, setTrade] = useState("");
     const [serviceId, setServiceId] = useState("");
 
-    const project = projects.find((p) => scope === p.projectId || scope.startsWith(`${p.projectId}|`));
+    const project = projects.find(
+        (p) => scope === p.projectId || scope.startsWith(`${p.projectId}|`),
+    );
     const areaId = scope.includes("|") ? scope.split("|")[1] : null;
 
     const scopedServices = useMemo(
@@ -63,7 +62,9 @@ export function ConstructionPaymentFields({ projects, errors, message }: Props) 
         return (project?.phases ?? []).filter((phase) => ids.has(phase.id));
     }, [project, scopedServices]);
 
-    const phaseServices = phaseId ? scopedServices.filter((s) => s.phaseId === phaseId) : scopedServices;
+    const phaseServices = phaseId
+        ? scopedServices.filter((s) => s.phaseId === phaseId)
+        : scopedServices;
 
     const trades = useMemo(() => {
         const set = new Set(phaseServices.map((s) => s.trade));
@@ -100,7 +101,9 @@ export function ConstructionPaymentFields({ projects, errors, message }: Props) 
                         <option value="">Escolha…</option>
                         {projects.map((p) => (
                             <optgroup key={p.projectId} label={p.projectName}>
-                                <option value={p.projectId}>{p.projectName} (todos os ambientes)</option>
+                                <option value={p.projectId}>
+                                    {p.projectName} (todos os ambientes)
+                                </option>
                                 {p.areas.map((area) => (
                                     <option key={area.id} value={`${p.projectId}|${area.id}`}>
                                         {p.projectName} · {area.name}
@@ -173,7 +176,9 @@ export function ConstructionPaymentFields({ projects, errors, message }: Props) 
                             </option>
                         ))}
                     </select>
-                    {errors?.serviceId && <p className={styles.fieldError}>{errors.serviceId[0]}</p>}
+                    {errors?.serviceId && (
+                        <p className={styles.fieldError}>{errors.serviceId[0]}</p>
+                    )}
                     {project && tradeServices.length === 0 && (
                         <p className={styles.hint}>
                             Nenhum serviço a pagar nesta seleção.{" "}
@@ -228,7 +233,9 @@ export function ConstructionPaymentFields({ projects, errors, message }: Props) 
                         placeholder="0,00"
                         required
                         aria-invalid={Boolean(errors?.amountCents)}
-                        aria-describedby={errors?.amountCents ? "obra-amountCents-error" : undefined}
+                        aria-describedby={
+                            errors?.amountCents ? "obra-amountCents-error" : undefined
+                        }
                     />
                     {errors?.amountCents && (
                         <p id="obra-amountCents-error" className={styles.fieldError}>
