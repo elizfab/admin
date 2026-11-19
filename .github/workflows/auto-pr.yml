@@ -1,0 +1,149 @@
+# PR automático: a cada push em uma branch de trabalho,
+#   1. valida o tipo da branch (só feature/* é aceita);
+#   2. abre o PR para a develop, se ainda não existir;
+#   3. no PR recém-aberto, roda o Danger e a CI.
+# Por que o passo 3 fica aqui: PR criado com o GITHUB_TOKEN não dispara outros
+# workflows (regra do GitHub contra loops). Nos pushes seguintes, o PR já existe
+# e os workflows "Danger" e "CI" rodam pelo evento pull_request.
+name: PR automático
+
+on:
+  push:
+    branches-ignore: [main, develop]
+
+concurrency:
+  group: auto-pr-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  validar-branch:
+    name: Validar tipo de branch
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Baixar o código
+        uses: actions/checkout@v4
+
+      - name: Instalar Node.js (versão do .nvmrc)
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Instalar dependências
+        run: npm ci --ignore-scripts
+
+      - name: Conferir se a branch é feature/*
+        run: npx tsx scripts/check-branch.ts "$BRANCH"
+        env:
+          BRANCH: ${{ github.ref_name }}
+
+  abrir-pr:
+    name: Abrir PR para a develop
+    needs: validar-branch
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      pull-requests: write
+    outputs:
+      created: ${{ steps.pr.outputs.created }}
+      number: ${{ steps.pr.outputs.number }}
+    steps:
+      - name: Baixar o código (com histórico, para listar os commits)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Criar o PR (se ainda não existe)
+        id: pr
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          existing=$(gh pr list --head "$BRANCH" --base develop --state open --json number --jq '.[0].number // empty')
+          if [ -n "$existing" ]; then
+            echo "PR #$existing já está aberto; nada a fazer." | tee -a "$GITHUB_STEP_SUMMARY"
+            echo "created=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          git fetch --no-tags origin develop
+          count=$(git rev-list --count origin/develop..HEAD)
+          if [ "$count" -eq 0 ]; then
+            echo "A branch não tem commits novos em relação à develop; PR não aberto." | tee -a "$GITHUB_STEP_SUMMARY"
+            echo "created=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # Título: o commit (se for um só) ou o nome da branch.
+          if [ "$count" -eq 1 ]; then
+            title=$(git log -1 --format=%s)
+          else
+            title="Feature: $(echo "${BRANCH#feature/}" | tr '-' ' ')"
+          fi
+
+          {
+            echo "## O que muda"
+            echo
+            echo "Commits desta branch ($count):"
+            echo
+            git log --reverse --format='- %s' origin/develop..HEAD
+            echo
+            echo "## Checklist (Definition of Done)"
+            echo
+            echo "- [ ] Pipeline verde: typecheck, lint, testes, E2E e integração"
+            echo "- [ ] \`WIP.md\` atualizado"
+            echo "- [ ] \`docs/CHANGELOG.md\` atualizado"
+            echo "- [ ] \`docs/implementations/<módulo>.md\` atualizado (se mudou regra)"
+            echo
+            echo "> PR aberto automaticamente pelo workflow **PR automático** (push em \`feature/*\`)."
+          } > "$RUNNER_TEMP/pr-body.md"
+
+          url=$(gh pr create --base develop --head "$BRANCH" --title "$title" --body-file "$RUNNER_TEMP/pr-body.md")
+          echo "PR aberto: $url" | tee -a "$GITHUB_STEP_SUMMARY"
+          echo "created=true" >> "$GITHUB_OUTPUT"
+          echo "number=${url##*/}" >> "$GITHUB_OUTPUT"
+
+  danger:
+    name: Danger no PR novo
+    needs: abrir-pr
+    if: needs.abrir-pr.outputs.created == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      pull-requests: write
+      statuses: write
+    steps:
+      - name: Baixar o código
+        uses: actions/checkout@v4
+
+      - name: Instalar Node.js (versão do .nvmrc)
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Instalar dependências
+        run: npm ci --ignore-scripts
+
+      # O Danger lê o PR do arquivo de evento; montamos um evento pull_request
+      # com os dados do PR recém-criado.
+      - name: Rodar o Danger
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ needs.abrir-pr.outputs.number }}
+        run: |
+          gh api "repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER" --jq '{pull_request: .}' > "$RUNNER_TEMP/pr-event.json"
+          GITHUB_EVENT_NAME=pull_request GITHUB_EVENT_PATH="$RUNNER_TEMP/pr-event.json" npx danger ci --failOnErrors
+
+  ci:
+    name: CI no PR novo
+    needs: abrir-pr
+    if: needs.abrir-pr.outputs.created == 'true'
+    uses: ./.github/workflows/ci.yml

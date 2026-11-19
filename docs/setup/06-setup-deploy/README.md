@@ -57,6 +57,7 @@ concessionária (produção).
 | 08  | [Primeiro deploy e verificação](08-primeiro-deploy.md)              | Preview e produção no ar, administradora criada           | ⬜     |
 | 09  | [Backup, restauração e keep-alive](09-backup-e-keepalive.md)        | Backup criptografado e restauração testada                | ⬜     |
 | 10  | [Operação e checklist de go-live](10-operacao-e-go-live.md)         | Roteiro de incidentes + checklist final                   | ⬜     |
+| 11  | [Danger e PR automático](11-danger-e-pr-automatico.md)              | Só `feature/*`; PR para a develop aberto sozinho          | ✅     |
 
 ## ✅ Critério de conclusão da fase
 

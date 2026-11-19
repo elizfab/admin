@@ -1,4 +1,5 @@
-# Integração contínua: roda a cada push na main e em todo pull request.
+# Integração contínua: roda a cada push na main, em todo pull request e
+# quando o "PR automático" acaba de abrir um PR (workflow_call).
 # Se qualquer etapa falhar, o commit/PR fica marcado com ❌ no GitHub.
 name: CI
 
@@ -6,6 +7,8 @@ on:
   push:
     branches: [main]
   pull_request:
+  # Chamado pelo "PR automático" logo depois de abrir o PR (veja auto-pr.yml).
+  workflow_call:
 
 # Cancela execuções antigas do mesmo branch quando chega um push novo.
 concurrency:
