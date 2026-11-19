@@ -58,6 +58,7 @@ concessionária (produção).
 | 09  | [Backup, restauração e keep-alive](09-backup-e-keepalive.md)        | Backup criptografado e restauração testada                | ⬜     |
 | 10  | [Operação e checklist de go-live](10-operacao-e-go-live.md)         | Roteiro de incidentes + checklist final                   | ⬜     |
 | 11  | [Danger e PR automático](11-danger-e-pr-automatico.md)              | Só `feature/*`; PR para a develop aberto sozinho          | ✅     |
+| 12  | [Prettier e formatação automática](12-prettier-e-formatacao.md)    | Formato único; hook no commit; CI confere                 | ✅     |
 
 ## ✅ Critério de conclusão da fase
 

@@ -56,6 +56,10 @@ jobs:
       - name: Verificar tipos
         run: npm run typecheck
 
+      # Prettier: recusa arquivo fora do formato (evita diff de indentação nos PRs).
+      - name: Formatação
+        run: npm run format:check
+
       - name: Lint
         run: npm run lint
 
