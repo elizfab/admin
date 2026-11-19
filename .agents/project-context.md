@@ -93,6 +93,8 @@ src/modules/<m>/
 | R13 | `redirect()` **fora** do `try/catch` nas Server Actions; action devolve `values` no erro (React 19 limpa o form) | Actions |
 | R14 | Segredos só em variáveis de ambiente; nada de segredo em código, docs, logs ou testes (exceto os fictícios de teste) | `required-env.ts`; Code Review |
 | R15 | Migration **aditiva** por padrão; destrutiva exige ADR, plano de dados e aprovação humana | Architect + DevOps |
+| R16 | **Cobertura ≥ 95%** (linhas, comandos, ramos e funções) em todo arquivo **novo ou alterado** de `src/lib`, `src/modules` e `src/components`; o **total não cai** abaixo de `coverage-baseline.json`. `src/app/**` é provado pelo E2E | `npm run coverage:check` (CI); QA no G5 |
+| R17 | Código no formato do **Prettier** (`.prettierrc.json`); commits só de formatação vão para `.git-blame-ignore-revs` | pre-commit (lint-staged); `format:check` (CI) |
 
 ## 5. Contrato da API (`/api/v1`)
 
@@ -120,8 +122,10 @@ src/modules/<m>/
 | Banco local | `npm run db:up` |
 | Dev | `npm run dev` (porta 3000) |
 | Migration nova | `npx prisma migrate dev --name <nome>` **+** `npm run db:generate` (Prisma 7 não gera sozinho) |
-| Pipeline (ordem do CI) | `npm run typecheck && npm run lint && npm test && npm run test:e2e && npm run test:integration` |
-| Um teste | `npx jest <caminho>` · `npx playwright test <arquivo> --retries=0` |
+| Pipeline (ordem do CI) | `npm run typecheck && npm run format:check && npm run lint && npm test && npm run test:e2e && npm run test:coverage && npm run coverage:check` |
+| Cobertura | `npm run test:coverage` (unitários + integração; relatório em `coverage/lcov-report/index.html`) → `npm run coverage:check`. Subiu de propósito: `npm run coverage:baseline` |
+| Formatar | `npm run format` (o pre-commit já formata os arquivos do commit) |
+| Um teste | `npx jest <caminho>` (com cobertura do arquivo: `npx jest <caminho> --coverage --collectCoverageFrom=<arquivo de src>`) · `npx playwright test <arquivo> --retries=0` |
 | Banco de teste atualizado (integração) | `DATABASE_URL=…/admin_test DIRECT_URL=…/admin_test npx prisma migrate deploy` |
 
 ## 8. Testes (o que cada nível prova)
@@ -135,6 +139,8 @@ src/modules/<m>/
 
 Regras: teste E2E não depende de outro (cada um cria/limpa os próprios dados); `workers: 1`;
 retries do CI não podem mudar o resultado (`--repeat-each=3` passa).
+**Cobertura (R16):** a meta vale para o que o Jest mede (unitários + integração). Página e route handler
+(`src/app/**`) ficam fora da porcentagem, mas todo cenário deles precisa de E2E (rastreabilidade no QA).
 
 ## 9. Git e entrega
 

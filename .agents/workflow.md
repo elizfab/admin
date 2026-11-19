@@ -88,10 +88,10 @@ em desenvolvimento, nada fica pela metade e esquecido.
 | Gate | Quem libera | Critério |
 |---|---|---|
 | G1 Spec aprovada | **Liza** (humano) | Escopo, critérios BDD e fora-de-escopo claros; nenhuma pergunta aberta |
-| G2 Testes vermelhos | Tester | Cada critério de aceite tem um teste que **falha** pelo motivo certo |
-| G3 Pipeline verde | @coding | `typecheck`, `lint`, `test`, `test:e2e`, `test:integration` passam localmente |
+| G2 Testes vermelhos | Tester (validado com o PM) | Cada critério de aceite tem um teste que **falha** pelo motivo certo; o plano de testes cobre ≥ 95% dos arquivos novos/alterados (R16) |
+| G3 Pipeline verde | @coding | `typecheck`, `format:check`, `lint`, `test`, `test:e2e`, `test:coverage` e `coverage:check` passam localmente |
 | G4 Review | Code Review | Nenhum achado **bloqueante**; R1–R15 respeitadas |
-| G5 QA | QA/TEA | Rastreabilidade critério → teste completa; risco residual aceito |
+| G5 QA | QA/TEA | Rastreabilidade critério → teste completa; `coverage:check` verde (≥ 95% no código novo, total não caiu); risco residual aceito |
 | G6 Registro | Documentation | `CHANGELOG`, `implementations`, `WIP.md` e docs afetadas atualizados |
 
 Gate pulado = registrar em `story.md` **quem** decidiu e **por quê** (ex.: hotfix).

@@ -28,6 +28,7 @@ passar nela, e não o contrário.
 - Seletores por papel e nome acessível (`getByRole`, `getByLabel`), nunca por classe CSS.
 - Bug: primeiro o teste que **reproduz** o bug (vermelho), depois a correção.
 - Teste de regressão para cada regra validada que a mudança toca (`docs/implementations`).
+- **Cobertura (R16):** planeje os testes para que cada arquivo novo ou alterado de `src/lib`, `src/modules` e `src/components` chegue a ≥ 95% (linhas, comandos, ramos, funções). Revise o plano com o PM. Confira com `npx jest <teste> --coverage --collectCoverageFrom=<arquivo>`; o relatório completo sai de `npm run test:coverage`.
 
 ## Saída
 

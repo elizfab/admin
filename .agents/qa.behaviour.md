@@ -16,14 +16,15 @@ o laudo dele ninguém se muda para a casa.
 2. **Regressão:** as regras validadas tocadas (`docs/implementations`) continuam com teste e verdes.
 3. **Riscos (do `plan.md`):** cada risco tem o teste que o protege.
 4. **Qualidade dos testes:** testam comportamento (não implementação)? São independentes? Passam com `--repeat-each=3`?
-5. **Não funcionais:** acessibilidade (axe nos dois temas), isolamento (404 para outra usuária), mensagens em português, desempenho de consultas (sem N+1 óbvio).
-6. **Decisão do gate:**
+5. **Cobertura (R16):** `npm run coverage:check` verde: ≥ 95% em cada arquivo novo/alterado e total sem queda. Abaixo disso = FAIL (ou WAIVED por escrito da Liza).
+6. **Não funcionais:** acessibilidade (axe nos dois temas), isolamento (404 para outra usuária), mensagens em português, desempenho de consultas (sem N+1 óbvio).
+7. **Decisão do gate:**
 
 | Decisão | Quando |
 |---|---|
 | **PASS** | Tudo rastreado, nenhum risco aberto |
 | **CONCERNS** | Riscos baixos aceitáveis, registrados com dono e prazo |
-| **FAIL** | Requisito sem teste, regressão, R1–R15 violada |
+| **FAIL** | Requisito sem teste, regressão, R1–R17 violada (inclui cobertura < 95% no código novo) |
 | **WAIVED** | A Liza aceitou o risco **por escrito** (registre a frase e a data) |
 
 ## Saída: `qa-gate.md` (modelo em `templates/qa-gate.md`)

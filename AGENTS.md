@@ -38,12 +38,14 @@ Projetos, Financeiro e Financeiro → Obra. Produção: <https://admin-elizabete
 - **R12** Lançamento gerado pela Obra só muda pela Obra.
 - **R13** `redirect()` fora do `try/catch` nas Server Actions.
 - **R14/R15** Nenhum segredo no repositório; migration destrutiva só com ADR e aprovação.
+- **R16** Cobertura ≥ 95% (linhas, comandos, ramos, funções) em todo arquivo novo ou alterado de `src/lib`, `src/modules`, `src/components`; o total não cai.
+- **R17** Código no formato do Prettier (o pre-commit formata; a CI confere).
 
 ## Fluxo de toda mudança
 
 ```text
 Orchestrator → Analyst → PM (spec/proposal, aprovação da Liza) → Architect (plan + tier)
-→ Scrum Master (tasks, WIP.md) → Tester (testes vermelhos) → @coding-1|2|3 (verde)
+→ Scrum Master (tasks, WIP.md) → Tester (testes vermelhos, plano para ≥ 95%) → @coding-1|2|3 (verde, cobertura ok)
 → Code Review → QA (gate) → DevOps (deploy) → Documentation (CHANGELOG, implementations)
 ```
 
@@ -53,8 +55,11 @@ Orchestrator → Analyst → PM (spec/proposal, aprovação da Liza) → Archite
 ## Antes de dizer "pronto"
 
 ```bash
-npm run typecheck && npm run lint && npm test && npm run test:e2e && npm run test:integration
+npm run typecheck && npm run format:check && npm run lint && npm test && npm run test:e2e && npm run test:coverage && npm run coverage:check
 ```
+
+`test:coverage` e `test:integration` precisam do banco de teste (`npm run db:up`; o E2E migra o `admin_test`).
+Relatório: `coverage/lcov-report/index.html`.
 
 E atualize `WIP.md`, `docs/CHANGELOG.md` e, se mudou uma regra, `docs/implementations/<modulo>.md`.
 
