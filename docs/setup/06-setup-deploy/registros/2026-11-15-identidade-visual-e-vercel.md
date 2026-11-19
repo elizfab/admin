@@ -1,5 +1,9 @@
 # Alterações — 2026-11-15
 
+> Registro de operação da Fase 06 (deploy na Vercel). Ficava na raiz como
+> `ALTERACOES-2026-11-15.md`; movido para cá em 2026-11-19 (T-0017).
+> O resumo destas mudanças também está em [`docs/CHANGELOG.md`](../../../CHANGELOG.md) (2026-11-15).
+
 ## O que foi alterado e por quê
 
 ### 1. Ícone da tela de login
@@ -65,6 +69,6 @@ Para validar alterações durante o desenvolvimento, use `npm run dev`
 ## Sugestão de commit
 
 ```bash
-git add src/modules/auth/components/LoginForm/LoginForm.tsx VERCEL-ENV.md .env.example ALTERACOES-2026-11-15.md
+git add src/modules/auth/components/LoginForm/LoginForm.tsx VERCEL-ENV.md .env.example docs/setup/06-setup-deploy/registros/2026-11-15-identidade-visual-e-vercel.md
 git commit -m "feat(auth): usa logo admin.png no login e documenta envs da Vercel"
 ```

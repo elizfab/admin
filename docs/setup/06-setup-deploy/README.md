@@ -61,6 +61,15 @@ concessionária (produção).
 | 12  | [Prettier e formatação automática](12-prettier-e-formatacao.md)    | Formato único; hook no commit; CI confere                 | ✅     |
 | 13  | [Cobertura de testes](13-cobertura-de-testes.md)                    | ≥ 95% no código novo; total não cai                       | ✅     |
 
+## Registros de operação
+
+Relatos datados do que foi feito no ambiente real (Vercel, Supabase), em `registros/AAAA-MM-DD-<assunto>.md`.
+O passo a passo reproduzível fica nos passos acima; o resumo de cada mudança, no [`docs/CHANGELOG.md`](../../CHANGELOG.md).
+
+| Data | Registro |
+|---|---|
+| 15/11/2026 | [Identidade visual no login e variáveis da Vercel](registros/2026-11-15-identidade-visual-e-vercel.md) |
+
 ## ✅ Critério de conclusão da fase
 
 - Um _pull request_ gera CI verde e um preview funcional, com login.

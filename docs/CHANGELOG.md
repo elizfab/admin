@@ -23,12 +23,17 @@ tarefa (`T-NNNN`) quando houver. No deploy, a seção `[Não publicado]` vira a 
 - T-0010: cobertura de testes na CI: unitários + integração somados, ≥ 95% em todo arquivo
   novo/alterado e total sem queda (`npm run test:coverage`, `coverage:check`; PLAT-R17).
 - T-0011: Prettier com formatação no pre-commit e conferência na CI (PLAT-R18).
+- T-0016: **PR de release automático**: cada merge na `develop` abre (ou atualiza) o PR
+  `develop → main` com a lista do que entra e o checklist de deploy (`release-pr.yml`).
+- T-0018: `npm test` mostra a tabela de cobertura dos unitários (escopo em `jest.coverage-scope.mjs`).
 
 ### Alterado
 
 - T-0007: os rótulos de status do card ("Disponível", "Aplicação externa", "Em breve") saem
   do `ModuleCard` e vão para `dashboardModuleStatusLabel` (tipos do módulo).
 - T-0008: "Obra" e "Nova transação" saem do cabeçalho do Financeiro.
+- T-0017: `ALTERACOES-2026-11-15.md` sai da raiz para
+  `docs/setup/06-setup-deploy/registros/2026-11-15-identidade-visual-e-vercel.md`.
 - T-0011: código inteiro formatado uma vez com o Prettier (commit `5ba40ff`, ignorado no blame).
 - T-0006: fluxo de branches passa a aceitar **só** `feature/<slug>` → `develop` → `main`
   (`.agents/project-context.md`, seção 9). A CI ganhou o gatilho `workflow_call`.

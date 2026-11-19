@@ -125,6 +125,7 @@ src/modules/<m>/
 | Pipeline (ordem do CI) | `npm run typecheck && npm run format:check && npm run lint && npm test && npm run test:e2e && npm run test:coverage && npm run coverage:check` |
 | Cobertura | `npm run test:coverage` (unitários + integração; relatório em `coverage/lcov-report/index.html`) → `npm run coverage:check`. Subiu de propósito: `npm run coverage:baseline` |
 | Formatar | `npm run format` (o pre-commit já formata os arquivos do commit) |
+| Unitários com a tabela de cobertura | `npm test` (tabela arquivo a arquivo só dos unitários; a meta R16 usa `test:coverage`, que soma a integração) |
 | Um teste | `npx jest <caminho>` (com cobertura do arquivo: `npx jest <caminho> --coverage --collectCoverageFrom=<arquivo de src>`) · `npx playwright test <arquivo> --retries=0` |
 | Banco de teste atualizado (integração) | `DATABASE_URL=…/admin_test DIRECT_URL=…/admin_test npx prisma migrate deploy` |
 
@@ -149,6 +150,7 @@ retries do CI não podem mudar o resultado (`--repeat-each=3` passa).
 - PR automático: o `git push` de uma `feature/*` abre sozinho o PR para a `develop` (`.github/workflows/auto-pr.yml`); não abra à mão.
 - Commits: Conventional Commits em português (`feat(finance): …`, `fix(obra): …`).
 - PR para `develop` com CI e Danger verdes; `develop → main` para produção (Danger recusa outra origem na `main`).
+- PR de release automático: cada merge na `develop` abre (ou atualiza) o PR `develop → main` (`.github/workflows/release-pr.yml`). O **merge na `main` é manual** (DevOps + Liza). Nesse PR a cobertura confere só o total (os arquivos já passaram nos PRs das features).
 - Toda entrega atualiza: `WIP.md`, `docs/CHANGELOG.md`, `docs/implementations/<modulo>.md` (se mudou regra) e, se mudou decisão, um ADR.
 
 ## 10. Documentação do projeto
