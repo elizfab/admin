@@ -104,3 +104,73 @@ test.describe("Financeiro: a OUTRA usuária não acessa transações da dona", (
         await expect(page.getByRole("heading", { name: "Página não encontrada" })).toBeVisible();
     });
 });
+
+test.describe("Dashboard: a OUTRA usuária não acessa os cards da dona (T-0007)", () => {
+    let cardId: string;
+
+    test.beforeAll(async ({ playwright }) => {
+        const owner = await playwright.request.newContext({
+            baseURL: E2E_BASE_URL,
+            storageState: testUsers.owner.storageState,
+        });
+
+        const response = await owner.post("/api/v1/dashboard/modules", {
+            data: {
+                slug: `e2e-confidencial-${Date.now()}`,
+                title: "Card confidencial da dona",
+                description: "Só a dona vê.",
+                href: "/projects",
+                icon: "FolderKanban",
+            },
+            headers: { Origin: E2E_BASE_URL },
+        });
+        expect(response.status()).toBe(201);
+        cardId = (await response.json()).data.id;
+
+        await owner.dispose();
+    });
+
+    test.afterAll(async ({ playwright }) => {
+        const owner = await playwright.request.newContext({
+            baseURL: E2E_BASE_URL,
+            storageState: testUsers.owner.storageState,
+        });
+        await owner.delete(`/api/v1/dashboard/modules/${cardId}`, {
+            headers: { Origin: E2E_BASE_URL },
+        });
+        await owner.dispose();
+    });
+
+    test.describe("como a OUTRA usuária", () => {
+        test.use({ storageState: testUsers.other.storageState });
+
+        test("a API responde 404 para ler, alterar e excluir", async ({ request }) => {
+            const headers = { Origin: E2E_BASE_URL };
+            const url = `/api/v1/dashboard/modules/${cardId}`;
+
+            expect((await request.get(url)).status()).toBe(404);
+            expect(
+                (await request.patch(url, { data: { title: "invadido" }, headers })).status(),
+            ).toBe(404);
+            expect((await request.delete(url, { headers })).status()).toBe(404);
+        });
+
+        test("o dashboard e a lista da API não mostram o card da dona", async ({
+            page,
+            request,
+        }) => {
+            await page.goto("/dashboard");
+            await expect(page.getByText("Card confidencial da dona")).toBeHidden();
+
+            const { data } = await (await request.get("/api/v1/dashboard/modules")).json();
+            expect(data.map((m: { id: string }) => m.id)).not.toContain(cardId);
+        });
+    });
+
+    test("o card da dona continua intacto", async ({ request }) => {
+        const response = await request.get(`/api/v1/dashboard/modules/${cardId}`);
+
+        expect(response.status()).toBe(200);
+        expect((await response.json()).data.title).toBe("Card confidencial da dona");
+    });
+});
