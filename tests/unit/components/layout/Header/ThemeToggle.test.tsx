@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 
-import { ThemeToggle } from "@/components/layout/Header/ThemeToggle";
+import { ThemeToggle } from "@/components/layout/Header/ThemeToggle/ThemeToggle";
 
 describe("ThemeToggle", () => {
     beforeEach(() => {
@@ -32,5 +32,13 @@ describe("ThemeToggle", () => {
 
         expect(document.documentElement.dataset.theme).toBe("light");
         expect(localStorage.getItem("theme")).toBe("light");
+    });
+
+    it("o ícone é decorativo: o nome do botão vem só do aria-label", () => {
+        render(<ThemeToggle />);
+
+        const button = screen.getByRole("button", { name: "Ativar tema escuro" });
+        expect(button.querySelector("svg")).toHaveAttribute("aria-hidden", "true");
+        expect(button).toHaveAttribute("type", "button");
     });
 });

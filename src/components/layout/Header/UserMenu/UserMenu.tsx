@@ -1,7 +1,6 @@
 "use client";
 
 import { ChevronDown, LogOut, UserRound } from "lucide-react";
-import { useRouter } from "next/navigation";
 
 import {
     DropdownMenu,
@@ -11,23 +10,14 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/DropdownMenu/DropdownMenu";
-import { authClient } from "@/lib/auth/auth-client";
 
-import styles from "./Header.module.scss";
+import styles from "./UserMenu.module.scss";
+import type { UserMenuProps } from "./UserMenu.types";
+import { useSignOut } from "./useSignOut";
 
-type UserMenuProps = {
-    userName: string;
-};
-
+/** Menu da conta no Header: renderiza; sair fica no useSignOut. */
 export function UserMenu({ userName }: UserMenuProps) {
-    const router = useRouter();
-
-    async function handleSignOut() {
-        // Encerra a sessão no servidor (apaga do banco) e remove o cookie.
-        await authClient.signOut();
-        router.push("/login");
-        router.refresh();
-    }
+    const signOut = useSignOut();
 
     return (
         <DropdownMenu>
@@ -44,7 +34,7 @@ export function UserMenu({ userName }: UserMenuProps) {
                     Perfil (em breve)
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onSelect={handleSignOut}>
+                <DropdownMenuItem onSelect={signOut}>
                     <LogOut size={16} aria-hidden="true" />
                     Sair
                 </DropdownMenuItem>

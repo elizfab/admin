@@ -27,6 +27,7 @@ describe("isInCoverageScope", () => {
         "src/modules/dashboard/index.ts",
         "src/modules/dashboard/server.ts",
         "src/modules/dashboard/types/dashboard.types.ts",
+        "src/components/layout/Header/Header.types.ts",
         "src/generated/prisma/client.ts",
         "src/types/global.d.ts",
         "src/modules/dashboard/components/ModuleCard/ModuleCard.module.scss",

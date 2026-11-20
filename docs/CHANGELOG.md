@@ -26,12 +26,19 @@ tarefa (`T-NNNN`) quando houver. No deploy, a seção `[Não publicado]` vira a 
 - T-0016: **PR de release automático**: cada merge na `develop` abre (ou atualiza) o PR
   `develop → main` com a lista do que entra e o checklist de deploy (`release-pr.yml`).
 - T-0018: `npm test` mostra a tabela de cobertura dos unitários (escopo em `jest.coverage-scope.mjs`).
+- T-0019: testes do Header (`Header`, `ThemeToggle`, `useTheme`, `theme.utils`, `UserMenu`, `useSignOut`):
+  de 0% para 100% de cobertura em `Header.tsx` e `UserMenu.tsx`.
 
 ### Alterado
 
 - T-0007: os rótulos de status do card ("Disponível", "Aplicação externa", "Em breve") saem
   do `ModuleCard` e vão para `dashboardModuleStatusLabel` (tipos do módulo).
 - T-0008: "Obra" e "Nova transação" saem do cabeçalho do Financeiro.
+- T-0019: Header reorganizado, um componente por pasta e cada responsabilidade num arquivo:
+  `ThemeToggle/` (`theme.constants.ts`, `theme.types.ts`, `theme.utils.ts`, `useTheme.ts`,
+  `ThemeToggle.tsx`) e `UserMenu/` (`UserMenu.tsx`, `UserMenu.types.ts`, `useSignOut.ts`), cada um
+  com o seu SCSS; o `Header.module.scss` fica só com os estilos do Header. Sem mudança visual.
+- T-0019: arquivos só de tipos (`*.types.ts`) saem da meta de cobertura, como as pastas `types/`.
 - T-0017: `ALTERACOES-2026-11-15.md` sai da raiz para
   `docs/setup/06-setup-deploy/registros/2026-11-15-identidade-visual-e-vercel.md`.
 - T-0011: código inteiro formatado uma vez com o Prettier (commit `5ba40ff`, ignorado no blame).

@@ -114,6 +114,19 @@ src/modules/<m>/
 - Dinheiro no form: `<input inputMode="decimal">` (nunca `type="number"`); data: `type="date"`.
 - SCSS: `@use "@/styles/abstracts" as *;` (`$space-*`, `$font-size-*`, `$radius-*`, `up("md")`, `focus-ring`, `visually-hidden`).
 - Ícones Lucide com `aria-hidden="true"`; botão só com ícone exige `aria-label`.
+- **Um componente = uma pasta** (`<Nome>/`), cada responsabilidade num arquivo (modelo: `src/components/layout/Header/`, T-0019):
+
+  | Arquivo | Responsabilidade |
+  |---|---|
+  | `<Nome>.tsx` | Só renderizar (JSX, ícones, acessibilidade) |
+  | `<Nome>.module.scss` | Estilos **deste** componente (nunca no SCSS do pai) |
+  | `<Nome>.types.ts` | Props e tipos (fora da meta de cobertura: não tem código) |
+  | `<assunto>.constants.ts` | Constantes (chaves, rótulos, tamanhos) |
+  | `<assunto>.utils.ts` | Funções puras ou de acesso ao navegador, sem React |
+  | `use<Assunto>.ts` | Hook que liga o React à lógica/estado |
+  | Subcomponente | Pasta própria dentro do pai (ex.: `Header/ThemeToggle/`, `Header/UserMenu/`) |
+
+  Testes continuam em `tests/unit/**`, espelhando a pasta (ex.: `tests/unit/components/layout/Header/`).
 
 ## 7. Comandos
 

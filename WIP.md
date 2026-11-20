@@ -4,7 +4,7 @@
 > ao mudar o estado da sua tarefa). Regras do quadro: `.agents/workflow.md`, seção 4.
 > **Limites:** Em desenvolvimento ≤ 2 · Code Review ≤ 3 · QA ≤ 2.
 
-**Último ID:** T-0018 · **Atualizado em:** 2026-11-19
+**Último ID:** T-0019 · **Atualizado em:** 2026-11-19
 
 ## 🔴 Bloqueado
 
@@ -15,6 +15,7 @@
 
 | ID | Tarefa | Tier | Dono | Desde |
 |---|---|---|---|---|
+| T-0019 | Header em componentes (tema, menu da conta, tipos, estilos) | @coding-2 | Claude | 2026-11-19 |
 
 ## 🔵 Code Review (≤ 3)
 

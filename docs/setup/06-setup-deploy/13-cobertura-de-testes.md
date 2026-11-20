@@ -27,7 +27,7 @@ Tecnicamente:
   acima). Exigir 95% em tudo travaria a CI até escrevermos dezenas de testes. As tarefas
   T-0012 a T-0015 levam cada módulo a 95%; a cada uma, a linha de base sobe.
 - **Fora da porcentagem:** `src/app/**` (páginas e route handlers, provados pelo E2E),
-  `index.ts`/`server.ts` (só reexportam), `types/**`, `*.test.ts` e código gerado.
+  `index.ts`/`server.ts` (só reexportam), `types/**` e `*.types.ts` (só tipos, sem código), `*.test.ts` e código gerado.
 - Commits listados em `.git-blame-ignore-revs` (só formatação) **não** contam como alteração.
 
 ## Pré-requisitos

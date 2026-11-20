@@ -29,6 +29,7 @@ const EXCLUDED = [
     /\/index\.ts$/,
     /\/server\.ts$/,
     /\/types\//,
+    /\.types\.ts$/,
     /^src\/generated\//,
 ];
 
