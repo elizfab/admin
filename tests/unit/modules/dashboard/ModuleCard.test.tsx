@@ -8,7 +8,7 @@ const base = {
     title: "Portal Financeiro",
     description: "Receitas, despesas, saldo e obra.",
     href: "/finance",
-    icon: "Wallet",
+    icon: "PiggyBank",
     status: "AVAILABLE" as const,
 };
 

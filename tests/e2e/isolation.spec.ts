@@ -131,7 +131,7 @@ test.describe("Dashboard: a OUTRA usuária não acessa os cards da dona (T-0007)
                 title: "Card confidencial da dona",
                 description: "Só a dona vê.",
                 href: "/projects",
-                icon: "FolderKanban",
+                icon: "PiggyBank",
             },
             headers: { Origin: E2E_BASE_URL },
         });

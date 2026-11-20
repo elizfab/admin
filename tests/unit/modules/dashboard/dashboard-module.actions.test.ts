@@ -32,7 +32,7 @@ const values = {
     title: "Release Control",
     description: "Controle de versões e deploys.",
     href: "/release",
-    icon: "Rocket",
+    icon: "PiggyBank",
     status: "SOON",
 };
 

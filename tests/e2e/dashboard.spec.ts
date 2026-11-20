@@ -19,13 +19,12 @@ async function cleanup(request: APIRequestContext) {
 
 test.afterAll(async ({ request }) => cleanup(request));
 
-test("mostra os 3 cards iniciais com o status em português", async ({ page }) => {
+test("mostra os 2 cards iniciais com o status em português", async ({ page }) => {
     await page.goto("/dashboard");
 
     for (const [title, status] of [
-        ["Portal de Documentação Dev", "Aplicação externa"],
-        ["Portal Financeiro", "Em breve"],
-        ["Portal de Estudos", "Em breve"],
+        ["Portal de Documentação Dev", "Em breve"],
+        ["Portal Financeiro", "Aplicação externa"],
     ]) {
         await expect(page.getByRole("link", { name: new RegExp(title) })).toContainText(status);
     }
@@ -41,7 +40,7 @@ test("cadastra um card pelo modal e ele aparece no dashboard", async ({ page }) 
     await dialog.getByLabel("Título *").fill("Release Control");
     await dialog.getByLabel("Descrição *").fill("Controle de versões e deploys.");
     await dialog.getByLabel("Link *").fill("/release");
-    await dialog.getByLabel("Ícone *").selectOption({ label: "Foguete" });
+    await dialog.getByLabel("Ícone *").selectOption({ label: "Poupança" });
     await dialog.getByLabel("Status").selectOption({ label: "Em breve" });
     await dialog.getByRole("button", { name: "Salvar card" }).click();
 
@@ -73,7 +72,7 @@ test("edita o título e exclui com confirmação", async ({ page, request }) => 
             title: "Card temporário",
             description: "Para editar e excluir.",
             href: "/studies",
-            icon: "FileText",
+            icon: "PiggyBank",
         },
     });
     expect(created.status()).toBe(201);
@@ -101,7 +100,7 @@ test("API: contrato de criação, validação e conflito", async ({ request }) =
         title: "Via API",
         description: "Criado pela API.",
         href: "https://docs.example.com",
-        icon: "Code",
+        icon: "PiggyBank",
     };
 
     const created = await request.post("/api/v1/dashboard/modules", { headers, data: body });
