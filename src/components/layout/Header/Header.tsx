@@ -1,11 +1,9 @@
 import styles from "./Header.module.scss";
-import { ThemeToggle } from "./ThemeToggle";
-import { UserMenu } from "./UserMenu";
+import type { HeaderProps } from "./Header.types";
+import { ThemeToggle } from "./ThemeToggle/ThemeToggle";
+import { UserMenu } from "./UserMenu/UserMenu";
 
-type HeaderProps = {
-    userName: string;
-};
-
+/** Barra do topo da área privada: só monta o layout; cada ação é um componente. */
 export function Header({ userName }: HeaderProps) {
     return (
         <header className={styles.header}>

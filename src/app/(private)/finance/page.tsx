@@ -35,8 +35,9 @@ export default async function FinancePage({ searchParams }: PageProps<"/finance"
 
     return (
         <div className={styles.page}>
-            <BackLink />
             <PageHeader title="Financeiro" description="Receitas, despesas, saldo e obra." />
+
+            <BackLink />
 
             <FinanceTabs current="transactions">
                 <section aria-label="Transações" className={styles.tabContent}>

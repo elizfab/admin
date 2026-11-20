@@ -1,0 +1,22 @@
+@use "@/styles/abstracts" as *;
+
+.iconButton {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 2.25rem;
+  height: 2.25rem;
+  color: var(--text-color);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: $radius-sm;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--background);
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
