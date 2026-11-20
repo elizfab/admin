@@ -46,8 +46,6 @@ export default async function ConstructionPhasePage({
         list.push({ id: payment.id, paidOn: payment.paidOn, amountCents: payment.amountCents });
         paymentsByService.set(payment.serviceId, list);
     }
-
-    const firstPhase = project.phases[0]?.number ?? 1;
     const phaseServices = services.filter((s) => s.phaseId === phase.id);
     const contracted = phaseServices.reduce((sum, s) => sum + s.contractedCents, 0);
     const paid = phaseServices.reduce((sum, s) => sum + s.paidCents, 0);
@@ -55,11 +53,7 @@ export default async function ConstructionPhasePage({
     return (
         <>
             <PageHeader title={`${project.name} — Evolução da obra`} />
-            <ConstructionTabs
-                projectId={project.id}
-                firstPhaseNumber={firstPhase}
-                active="phases"
-            />
+            <ConstructionTabs projectId={project.id} active="phases" />
 
             <PhaseNavigator
                 projectId={project.id}

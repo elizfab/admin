@@ -30,13 +30,12 @@ export default async function ConstructionGoalsPage({
     });
 
     const goals = await listGoals(session.user.id, project.id);
-    const firstPhase = project.phases[0]?.number ?? 1;
     const addGoal = createGoalAction.bind(null, project.id);
 
     return (
         <>
             <PageHeader title={`${project.name} — Metas`} />
-            <ConstructionTabs projectId={project.id} firstPhaseNumber={firstPhase} active="goals" />
+            <ConstructionTabs projectId={project.id} active="goals" />
 
             <AddGoalForm action={addGoal} areas={project.areas} />
 

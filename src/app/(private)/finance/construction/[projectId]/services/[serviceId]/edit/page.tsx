@@ -30,17 +30,12 @@ export default async function EditServicePage({
     if (service.projectId !== projectId) notFound();
 
     const project = await getProject(session.user.id, service.projectId);
-    const firstPhase = project.phases[0]?.number ?? 1;
     const action = updateServiceAction.bind(null, service.id);
 
     return (
         <>
             <PageHeader title={`${project.name} — Editar serviço`} />
-            <ConstructionTabs
-                projectId={project.id}
-                firstPhaseNumber={firstPhase}
-                active="services"
-            />
+            <ConstructionTabs projectId={project.id} active="services" />
             <ServiceForm
                 action={action}
                 projectId={project.id}

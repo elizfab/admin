@@ -30,7 +30,6 @@ export default async function ConstructionServicesPage({
     });
 
     const services = await listServices(session.user.id, project.id);
-    const firstPhase = project.phases[0]?.number ?? 1;
 
     return (
         <>
@@ -45,11 +44,7 @@ export default async function ConstructionServicesPage({
                     </Link>
                 }
             />
-            <ConstructionTabs
-                projectId={project.id}
-                firstPhaseNumber={firstPhase}
-                active="services"
-            />
+            <ConstructionTabs projectId={project.id} active="services" />
 
             {services.length === 0 ? (
                 <p className={styles.empty}>Nenhum serviço contratado ainda.</p>

@@ -9,61 +9,55 @@ export type ConstructionSection =
 
 type ConstructionTabsProps = {
     projectId: string;
-    /** Número da fase para o link "Fases" (a menor fase da obra). */
-    firstPhaseNumber: number;
     active: ConstructionSection;
 };
 
-const sections: {
-    key: ConstructionSection;
-    label: string;
-    href: (p: ConstructionTabsProps) => string;
-}[] = [
-    { key: "dashboard", label: "Dashboard", href: (p) => `/finance/construction/${p.projectId}` },
-    {
-        key: "phases",
-        label: "Fases",
-        href: (p) => `/finance/construction/${p.projectId}/phases/${p.firstPhaseNumber}`,
-    },
+const sections: { key: ConstructionSection; label: string; href: (p: string) => string }[] = [
+    { key: "dashboard", label: "Dashboard", href: (p) => `/finance/construction/${p}` },
+    { key: "phases", label: "Fases", href: (p) => `/finance/construction/${p}/phases` },
     {
         key: "services",
         label: "Serviços",
-        href: (p) => `/finance/construction/${p.projectId}/services`,
+        href: (p) => `/finance/construction/${p}/services`,
     },
     {
         key: "payments",
         label: "Pagamentos",
-        href: (p) => `/finance/construction/${p.projectId}/payments`,
+        href: (p) => `/finance/construction/${p}/payments`,
     },
     {
         key: "purchases",
         label: "Compras",
-        href: (p) => `/finance/construction/${p.projectId}/purchases`,
+        href: (p) => `/finance/construction/${p}/purchases`,
     },
-    { key: "goals", label: "Metas", href: (p) => `/finance/construction/${p.projectId}/goals` },
+    { key: "goals", label: "Metas", href: (p) => `/finance/construction/${p}/goals` },
     {
         key: "settings",
-        label: "Configuração",
-        href: (p) => `/finance/construction/${p.projectId}/settings`,
+        label: "Dados da obra",
+        href: (p) => `/finance/construction/${p}/settings`,
     },
 ];
 
-/** Abas internas da obra (Server Component): links com aria-current="page". */
-export function ConstructionTabs({ projectId, firstPhaseNumber, active }: ConstructionTabsProps) {
-    const props = { projectId, firstPhaseNumber, active };
-
+/**
+ * Abas internas da obra (Server Component): links de rota com
+ * role="tab" + aria-selected (ETAPA 04: abas não usam aria-current).
+ */
+export function ConstructionTabs({ projectId, active }: ConstructionTabsProps) {
     return (
-        <nav aria-label="Seções da obra" className={styles.tabs}>
-            {sections.map((section) => (
-                <Link
-                    key={section.key}
-                    href={section.href(props)}
-                    className={cn(styles.tab, active === section.key && styles.active)}
-                    aria-current={active === section.key ? "page" : undefined}
-                >
-                    {section.label}
-                </Link>
-            ))}
+        <nav aria-label="Seções da obra">
+            <div role="tablist" className={styles.tabs}>
+                {sections.map((section) => (
+                    <Link
+                        key={section.key}
+                        href={section.href(projectId)}
+                        role="tab"
+                        aria-selected={active === section.key}
+                        className={cn(styles.tab, active === section.key && styles.active)}
+                    >
+                        {section.label}
+                    </Link>
+                ))}
+            </div>
         </nav>
     );
 }

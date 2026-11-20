@@ -15,7 +15,12 @@ import {
 import { ProjectSettingsForm } from "../ConstructionForms/SettingsForms";
 import type { NewConstructionProjectDialogProps } from "./NewConstructionProjectDialog.types";
 
-const EMPTY_PROJECT = { name: "", startDate: null, plannedEndDate: null };
+const EMPTY_PROJECT = {
+    name: "",
+    startDate: null,
+    plannedEndDate: null,
+    categoryIds: [] as string[],
+};
 
 /**
  * Botão "Nova obra" + modal com o MESMO formulário de obra da configuração
@@ -45,7 +50,7 @@ export function NewConstructionProjectDialog({ action }: NewConstructionProjectD
                 <DialogTitle>Nova obra</DialogTitle>
                 <DialogDescription>
                     A obra já nasce com o ambiente “Geral” e a “Fase 01”. Campos com * são
-                    obrigatórios.
+                    obrigatórios; categorias organizam a obra nos grupos da aba Construção.
                 </DialogDescription>
                 <ProjectSettingsForm key={formKey} action={action} project={EMPTY_PROJECT} />
             </DialogContent>

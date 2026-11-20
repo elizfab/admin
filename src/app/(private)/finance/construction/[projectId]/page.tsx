@@ -33,7 +33,6 @@ export default async function ConstructionDashboardPage({
         getConstructionDashboard(session.user.id, project.id, new Date(), currentMonth()),
         listGoals(session.user.id, project.id),
     ]);
-    const firstPhase = project.phases[0]?.number ?? 1;
     const pendingGoals = goals.filter((goal) => !goal.doneAt);
 
     return (
@@ -49,11 +48,7 @@ export default async function ConstructionDashboardPage({
                         : undefined
                 }
             />
-            <ConstructionTabs
-                projectId={project.id}
-                firstPhaseNumber={firstPhase}
-                active="dashboard"
-            />
+            <ConstructionTabs projectId={project.id} active="dashboard" />
 
             <section aria-label="Resumo do investimento" className={styles.stats}>
                 <StatCard
@@ -89,95 +84,97 @@ export default async function ConstructionDashboardPage({
                 </p>
             )}
 
-            <section aria-labelledby="goals-heading" className={styles.panel}>
-                <h2 id="goals-heading" className={styles.panelTitle}>
-                    Metas — {dashboard.goals.percent}% ({dashboard.goals.done}/
-                    {dashboard.goals.total})
-                </h2>
-                {pendingGoals.length > 0 ? (
-                    <ul className={styles.goals}>
-                        {pendingGoals.slice(0, 5).map((goal) => (
-                            <li key={goal.id}>
-                                {goal.title}
-                                {goal.area && (
-                                    <span className={styles.muted}> · {goal.area.name}</span>
-                                )}
+            <div className={styles.panels}>
+                <section aria-labelledby="goals-heading" className={styles.panel}>
+                    <h2 id="goals-heading" className={styles.panelTitle}>
+                        Metas — {dashboard.goals.percent}% ({dashboard.goals.done}/
+                        {dashboard.goals.total})
+                    </h2>
+                    {pendingGoals.length > 0 ? (
+                        <ul className={styles.goals}>
+                            {pendingGoals.slice(0, 5).map((goal) => (
+                                <li key={goal.id}>
+                                    {goal.title}
+                                    {goal.area && (
+                                        <span className={styles.muted}> · {goal.area.name}</span>
+                                    )}
+                                </li>
+                            ))}
+                        </ul>
+                    ) : (
+                        <p className={styles.muted}>
+                            {dashboard.goals.total === 0
+                                ? "Nenhuma meta cadastrada."
+                                : "Todas as metas concluídas!"}
+                        </p>
+                    )}
+                    <Link
+                        href={`/finance/construction/${project.id}/goals`}
+                        className={styles.moreLink}
+                    >
+                        Ver todas as metas
+                    </Link>
+                </section>
+
+                <section aria-labelledby="labor-heading" className={styles.panel}>
+                    <h2 id="labor-heading" className={styles.panelTitle}>
+                        Mão de obra — {dashboard.labor.paidPercent}% pago
+                    </h2>
+                    <ul className={styles.breakdown}>
+                        {dashboard.labor.byTrade.map((row) => (
+                            <li key={row.trade}>
+                                <span>{tradeLabel[row.trade]}</span>
+                                <span className={styles.muted}>
+                                    {formatCents(row.remainingCents)} a pagar de{" "}
+                                    {formatCents(row.contractedCents)}
+                                </span>
                             </li>
                         ))}
+                        {dashboard.labor.byTrade.length === 0 && (
+                            <li className={styles.muted}>Nenhum serviço contratado ainda.</li>
+                        )}
                     </ul>
-                ) : (
-                    <p className={styles.muted}>
-                        {dashboard.goals.total === 0
-                            ? "Nenhuma meta cadastrada."
-                            : "Todas as metas concluídas!"}
-                    </p>
-                )}
-                <Link
-                    href={`/finance/construction/${project.id}/goals`}
-                    className={styles.moreLink}
-                >
-                    Ver todas as metas
-                </Link>
-            </section>
+                    <Link
+                        href={`/finance/construction/${project.id}/services`}
+                        className={buttonClassName("secondary")}
+                    >
+                        Gerenciar serviços
+                    </Link>
+                </section>
 
-            <section aria-labelledby="labor-heading" className={styles.panel}>
-                <h2 id="labor-heading" className={styles.panelTitle}>
-                    Mão de obra — {dashboard.labor.paidPercent}% pago
-                </h2>
-                <ul className={styles.breakdown}>
-                    {dashboard.labor.byTrade.map((row) => (
-                        <li key={row.trade}>
-                            <span>{tradeLabel[row.trade]}</span>
-                            <span className={styles.muted}>
-                                {formatCents(row.remainingCents)} a pagar de{" "}
-                                {formatCents(row.contractedCents)}
-                            </span>
-                        </li>
-                    ))}
-                    {dashboard.labor.byTrade.length === 0 && (
-                        <li className={styles.muted}>Nenhum serviço contratado ainda.</li>
-                    )}
-                </ul>
-                <Link
-                    href={`/finance/construction/${project.id}/services`}
-                    className={buttonClassName("secondary")}
-                >
-                    Gerenciar serviços
-                </Link>
-            </section>
-
-            <section aria-labelledby="materials-heading" className={styles.panel}>
-                <h2 id="materials-heading" className={styles.panelTitle}>
-                    Materiais — {dashboard.materials.paidPercent}% pago
-                </h2>
-                <dl className={styles.materials}>
-                    <div>
-                        <dt>Total em compras</dt>
-                        <dd>{formatCents(dashboard.materials.totalCents)}</dd>
-                    </div>
-                    <div>
-                        <dt>Pago</dt>
-                        <dd>{formatCents(dashboard.materials.paidCents)}</dd>
-                    </div>
-                    <div>
-                        <dt>A pagar</dt>
-                        <dd>{formatCents(dashboard.materials.unpaidCents)}</dd>
-                    </div>
-                    <div>
-                        <dt>
-                            Parcelas vencendo em {currentMonth().slice(5, 7)}/
-                            {currentMonth().slice(0, 4)}
-                        </dt>
-                        <dd>{formatCents(dashboard.materials.dueThisMonthCents)}</dd>
-                    </div>
-                </dl>
-                <Link
-                    href={`/finance/construction/${project.id}/purchases`}
-                    className={buttonClassName("secondary")}
-                >
-                    Gerenciar compras
-                </Link>
-            </section>
+                <section aria-labelledby="materials-heading" className={styles.panel}>
+                    <h2 id="materials-heading" className={styles.panelTitle}>
+                        Materiais — {dashboard.materials.paidPercent}% pago
+                    </h2>
+                    <dl className={styles.materials}>
+                        <div>
+                            <dt>Total em compras</dt>
+                            <dd>{formatCents(dashboard.materials.totalCents)}</dd>
+                        </div>
+                        <div>
+                            <dt>Pago</dt>
+                            <dd>{formatCents(dashboard.materials.paidCents)}</dd>
+                        </div>
+                        <div>
+                            <dt>A pagar</dt>
+                            <dd>{formatCents(dashboard.materials.unpaidCents)}</dd>
+                        </div>
+                        <div>
+                            <dt>
+                                Parcelas vencendo em {currentMonth().slice(5, 7)}/
+                                {currentMonth().slice(0, 4)}
+                            </dt>
+                            <dd>{formatCents(dashboard.materials.dueThisMonthCents)}</dd>
+                        </div>
+                    </dl>
+                    <Link
+                        href={`/finance/construction/${project.id}/purchases`}
+                        className={buttonClassName("secondary")}
+                    >
+                        Gerenciar compras
+                    </Link>
+                </section>
+            </div>
         </>
     );
 }

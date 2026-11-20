@@ -13,11 +13,23 @@
   color: var(--text-color-secondary);
 }
 
+// Metas, Mão de obra e Materiais em grid de 3 colunas (1 no mobile).
+.panels {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $space-5;
+  margin-bottom: $space-5;
+
+  @include up("lg") {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
 .panel {
   display: flex;
   flex-direction: column;
   gap: $space-3;
-  margin-bottom: $space-5;
+  margin-bottom: 0;
   padding: $space-4;
   background: var(--card-background);
   border: 1px solid var(--border);
@@ -40,6 +52,13 @@
   list-style: none;
   font-size: $font-size-sm;
   color: var(--text-color);
+}
+
+.breakdown li {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: $space-3;
 }
 
 .muted {

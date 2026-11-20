@@ -46,3 +46,17 @@
 .actions {
   text-align: right;
 }
+
+.phaseLink {
+  color: var(--text-color);
+  text-decoration: none;
+
+  &:hover {
+    color: var(--accent-color);
+    text-decoration: underline;
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
