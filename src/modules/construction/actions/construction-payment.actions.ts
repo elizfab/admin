@@ -59,5 +59,5 @@ export async function createConstructionPaymentAction(
         return toFormState(error);
     }
 
-    redirect(`/finance?month=${month}`);
+    redirect(`/finance/transactions?month=${month}`);
 }

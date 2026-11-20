@@ -14,6 +14,48 @@ export async function listProjects(ownerId: string) {
     return constructionRepository.listProjects(ownerId);
 }
 
+export const PROJECT_CARDS_PAGE_SIZE = 12;
+
+/**
+ * Uma página de cards da grade (OBRA-R18): busca limite + 1 para saber se há
+ * "Ver mais". `hasMore` diz se existe próxima página.
+ */
+export async function listProjectCards(
+    ownerId: string,
+    filter: { categoryId?: string; uncategorized?: boolean },
+    offset = 0,
+) {
+    const rows = await constructionRepository.listProjectCards(ownerId, filter, {
+        offset,
+        limit: PROJECT_CARDS_PAGE_SIZE,
+    });
+    const hasMore = rows.length > PROJECT_CARDS_PAGE_SIZE;
+
+    return {
+        items: hasMore ? rows.slice(0, PROJECT_CARDS_PAGE_SIZE) : rows,
+        hasMore,
+    };
+}
+
+/** Quantas obras cada categoria/grupo tem (para os cards de categoria). */
+export async function countProjectsByCategory(ownerId: string) {
+    const rows = await constructionRepository.listProjectCategoryIds(ownerId);
+    const counts = new Map<string, number>();
+    let uncategorized = 0;
+
+    for (const row of rows) {
+        if (row.categoryIds.length === 0) {
+            uncategorized += 1;
+            continue;
+        }
+        for (const id of row.categoryIds) {
+            counts.set(id, (counts.get(id) ?? 0) + 1);
+        }
+    }
+
+    return { counts, uncategorized };
+}
+
 export async function getProject(ownerId: string, projectId: string) {
     const project = await constructionRepository.findProject(ownerId, projectId);
 
