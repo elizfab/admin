@@ -1,16 +1,13 @@
-import { Plus } from "lucide-react";
 import type { Metadata } from "next";
-import Link from "next/link";
 
-import { buttonClassName } from "@/components/ui/Button/Button";
 import { requireSession } from "@/lib/auth/session";
 import { currentMonth } from "@/lib/dates/month";
 import { monthSchema } from "@/modules/finance";
+import { categoriasDoGrupo, OBRA_GRUPOS } from "@/modules/construction/constants/categories";
 import { FinanceLayout } from "@/modules/finance/components/FinanceLayout/FinanceLayout";
 import { MonthlySummary } from "@/modules/finance/components/MonthlySummary/MonthlySummary";
 import { MonthNavigator } from "@/modules/finance/components/MonthNavigator/MonthNavigator";
-import { TransactionList } from "@/modules/finance/components/TransactionList/TransactionList";
-import { getMonthlySummary, listTransactions } from "@/modules/finance/server";
+import { getMonthlySummary } from "@/modules/finance/server";
 
 import styles from "./page.module.scss";
 
@@ -25,34 +22,38 @@ export default async function FinancePage({ searchParams }: PageProps<"/finance"
     const parsedMonth = monthSchema.safeParse((await searchParams).month);
     const month = parsedMonth.success ? parsedMonth.data : currentMonth();
 
-    // As duas consultas não dependem uma da outra: rodam em paralelo.
-    const [summary, transactions] = await Promise.all([
-        getMonthlySummary(session.user.id, month),
-        listTransactions(session.user.id, month),
-    ]);
+    const summary = await getMonthlySummary(session.user.id, month);
 
     return (
-        <FinanceLayout current="transactions">
-            <section aria-label="Transações" className={styles.tabContent}>
-                {/* "Nova transação" dentro da aba, à esquerda (FIN-R11). */}
-                <div className={styles.toolbar}>
-                    <Link href="/finance/transactions/new" className={buttonClassName("primary")}>
-                        <Plus size={16} aria-hidden="true" />
-                        Nova transação
-                    </Link>
-                </div>
-
+        <FinanceLayout current="dashboard">
+            <section aria-label="Dashboard" className={styles.tabContent}>
                 <MonthNavigator month={month} />
                 <MonthlySummary summary={summary} />
+            </section>
 
-                <section aria-labelledby="transactions-title" className={styles.transactions}>
-                    <h3 id="transactions-title">Lançamentos</h3>
-                    {transactions.length > 0 ? (
-                        <TransactionList transactions={transactions} />
-                    ) : (
-                        <p className={styles.empty}>Nenhuma transação neste mês.</p>
-                    )}
-                </section>
+            {/* Dashboard de Construção: seção com divisor e as categorias
+                (somente textos, sem métricas — Especificação §2). */}
+            <section aria-labelledby="construction-overview" className={styles.construction}>
+                <h2 id="construction-overview" className={styles.constructionTitle}>
+                    Construção
+                </h2>
+                <div className={styles.constructionDivider} aria-hidden="true" />
+                {OBRA_GRUPOS.map((grupo) => {
+                    const categorias = categoriasDoGrupo(grupo.id);
+                    if (categorias.length === 0) return null;
+                    return (
+                        <div key={grupo.id} className={styles.constructionGroup}>
+                            <h3 className={styles.constructionGroupTitle}>{grupo.label}</h3>
+                            <ul className={styles.constructionCards}>
+                                {categorias.map((categoria) => (
+                                    <li key={categoria.id} className={styles.constructionCard}>
+                                        {categoria.shortLabel}
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    );
+                })}
             </section>
         </FinanceLayout>
     );
