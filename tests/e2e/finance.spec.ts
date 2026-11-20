@@ -46,7 +46,7 @@ test("cria despesa pela tela, mantendo o texto quando a validação falha", asyn
     request,
 }) => {
     await clearMonth(request, "2026-03");
-    await page.goto("/finance");
+    await page.goto("/finance/transactions");
     await page.getByRole("link", { name: "Nova transação" }).click();
     await expect(page).toHaveURL(/\/finance\/transactions\/new$/);
 
@@ -63,7 +63,7 @@ test("cria despesa pela tela, mantendo o texto quando a validação falha", asyn
     await page.getByRole("button", { name: "Salvar transação" }).click();
 
     // Volta para o painel NO MÊS da transação.
-    await expect(page).toHaveURL(/\/finance\?month=2026-03$/);
+    await expect(page).toHaveURL(/\/finance\/transactions\?month=2026-03$/);
     const item = page.getByRole("listitem").filter({ hasText: "Mercado do mês" });
     await expect(item).toContainText("10/03/2026 · Alimentação");
     await expect(item).toContainText("1.234,56");
@@ -158,14 +158,23 @@ test("API: mês inválido é 400 e valor fracionado é recusado", async ({ reque
     expect(response.status()).toBe(400);
 });
 
-// FIN-R11 (T-0008/T-0022): abas Transações | Construção, com a aba atual marcada.
-test("navega pelas abas Transações e Construção", async ({ page }) => {
+// FIN-R11 (ETAPA 02/04): abas Dashboard | Transações | Construção, role="tab" + aria-selected.
+test("navega pelas abas Dashboard, Transações e Construção", async ({ page }) => {
     await page.goto("/finance");
-    const tabs = page.getByRole("navigation", { name: "Seções do Financeiro" });
+    const tabs = page.getByRole("tablist");
 
-    await expect(tabs.getByRole("link", { name: "Transações" })).toHaveAttribute(
-        "aria-current",
-        "page",
+    // Dashboard é a aba inicial.
+    await expect(tabs.getByRole("tab", { name: "Dashboard" })).toHaveAttribute(
+        "aria-selected",
+        "true",
+    );
+    await expect(page.getByRole("region", { name: "Resumo do mês" })).toBeVisible();
+
+    await tabs.getByRole("tab", { name: "Transações" }).click();
+    await expect(page).toHaveURL(/\/finance\/transactions$/);
+    await expect(page.getByRole("tab", { name: "Transações" })).toHaveAttribute(
+        "aria-selected",
+        "true",
     );
     // "Nova transação" fica dentro do conteúdo da aba, não no cabeçalho.
     await expect(
@@ -174,14 +183,12 @@ test("navega pelas abas Transações e Construção", async ({ page }) => {
             .getByRole("link", { name: "Nova transação" }),
     ).toBeVisible();
 
-    await tabs.getByRole("link", { name: "Construção" }).click();
-
+    await page.getByRole("tab", { name: "Construção" }).click();
     await expect(page).toHaveURL(/\/finance\/construction$/);
-    await expect(
-        page
-            .getByRole("navigation", { name: "Seções do Financeiro" })
-            .getByRole("link", { name: "Construção" }),
-    ).toHaveAttribute("aria-current", "page");
+    await expect(page.getByRole("tab", { name: "Construção" })).toHaveAttribute(
+        "aria-selected",
+        "true",
+    );
 });
 
 // FIN-R12 (T-0021): trocar de aba não desloca o topo (título, Voltar e abas no mesmo lugar).
@@ -200,14 +207,11 @@ test("trocar de aba não desloca o título, o Voltar nem as abas", async ({ page
     };
 
     await page.goto("/finance");
-    const onTransactions = await positions();
+    const onDashboard = await positions();
 
-    await page
-        .getByRole("navigation", { name: "Seções do Financeiro" })
-        .getByRole("link", { name: "Construção" })
-        .click();
+    await page.getByRole("tab", { name: "Construção" }).click();
     await expect(page).toHaveURL(/\/finance\/construction$/);
     const onConstruction = await positions();
 
-    expect(onConstruction).toEqual(onTransactions);
+    expect(onConstruction).toEqual(onDashboard);
 });

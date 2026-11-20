@@ -18,6 +18,7 @@ import {
     addArea,
     createProject,
     getProject,
+    updateProject,
 } from "@/modules/construction/services/project.service";
 import {
     createPurchase,
@@ -254,5 +255,183 @@ describe("dashboard", () => {
         await deletePurchase(owner, card.id);
 
         expect(await constructionTransactions()).toBe(4); // 3 do eitão + 1 do Pix
+    });
+});
+
+describe("categorias e paginação dos cards (ETAPA 05)", () => {
+    it("createProject grava categoryIds e updateProject troca a lista", async () => {
+        const obra = await createProject(owner, {
+            name: "Teste categorias",
+            categoryIds: ["lavanderia", "banheiro-lavanderia"],
+        });
+
+        expect((await getProject(owner, obra.id)).categoryIds).toEqual([
+            "lavanderia",
+            "banheiro-lavanderia",
+        ]);
+
+        await updateProject(owner, obra.id, { categoryIds: [] });
+        expect((await getProject(owner, obra.id)).categoryIds).toEqual([]);
+
+        await prisma.constructionProject.delete({ where: { id: obra.id } });
+    });
+
+    it("listProjectCards filtra por categoria e isola por dona", async () => {
+        const { listProjectCards, countProjectsByCategory } =
+            await import("@/modules/construction/services/project.service");
+        const obra = await createProject(owner, {
+            name: "Obra filtrada",
+            categoryIds: ["escritorio-lavanderia"],
+        });
+
+        const escritorio = await listProjectCards(owner, {
+            categoryId: "escritorio-lavanderia",
+        });
+        expect(escritorio.items.map((p) => p.id)).toContain(obra.id);
+
+        const lavanderia = await listProjectCards(owner, { categoryId: "lavanderia" });
+        expect(lavanderia.items.map((p) => p.id)).not.toContain(obra.id);
+
+        const banheiro = await listProjectCards(owner, { categoryId: "banheiro-lavanderia" });
+        expect(banheiro.items.map((p) => p.id)).not.toContain(obra.id);
+
+        const sem = await listProjectCards(owner, { uncategorized: true });
+        // A obra do beforeAll não tem categoria; a "Obra filtrada" também não entra aqui.
+        expect(sem.items.map((p) => p.id)).toContain(projectId);
+
+        const { counts, uncategorized } = await countProjectsByCategory(owner);
+        expect(counts.get("escritorio-lavanderia")).toBe(1);
+        expect(uncategorized).toBeGreaterThanOrEqual(1);
+
+        // Outra dona não vê nada.
+        const alheio = await listProjectCards(other, { categoryId: "lavanderia" });
+        expect(alheio.items).toHaveLength(0);
+
+        await prisma.constructionProject.delete({ where: { id: obra.id } });
+    });
+
+    it("paginação: 13 obras → 12 + hasMore; ordenação do mais recente", async () => {
+        const { listProjectCards } =
+            await import("@/modules/construction/services/project.service");
+        const criadas: string[] = [];
+        for (let i = 0; i < 13; i++) {
+            const obra = await createProject(owner, {
+                name: `Paginacao ${String(i).padStart(2, "0")}`,
+                startDate: day(`2026-01-${String(i + 1).padStart(2, "0")}`),
+                categoryIds: ["lavanderia"],
+            });
+            criadas.push(obra.id);
+        }
+
+        const primeira = await listProjectCards(owner, { categoryId: "lavanderia" });
+        expect(primeira.items).toHaveLength(12);
+        expect(primeira.hasMore).toBe(true);
+        // Mais recente primeiro: 2026-01-13 é a primeira.
+        expect(primeira.items[0].startDate).toEqual(day("2026-01-13"));
+
+        const segunda = await listProjectCards(owner, { categoryId: "lavanderia" }, 12);
+        expect(segunda.items).toHaveLength(1);
+        expect(segunda.hasMore).toBe(false);
+
+        await prisma.constructionProject.deleteMany({ where: { id: { in: criadas } } });
+    });
+
+    it("rejeita fim previsto antes do início (criação e atualização)", async () => {
+        await expect(
+            createProject(owner, {
+                name: "Datas invertidas",
+                startDate: day("2026-05-10"),
+                plannedEndDate: day("2026-05-01"),
+            }),
+        ).rejects.toBeInstanceOf(ValidationError);
+
+        await expect(
+            updateProject(owner, projectId, { plannedEndDate: day("2025-01-01") }),
+        ).rejects.toBeInstanceOf(ValidationError);
+    });
+
+    it("datas iguais mantêm ordem estável por id", async () => {
+        const { listProjectCards } =
+            await import("@/modules/construction/services/project.service");
+        const criadas: string[] = [];
+        for (const nome of ["Empate A", "Empate B"]) {
+            const obra = await createProject(owner, {
+                name: nome,
+                startDate: day("2026-03-01"),
+                categoryIds: ["lavanderia"],
+            });
+            criadas.push(obra.id);
+        }
+
+        const pagina = await listProjectCards(owner, { categoryId: "lavanderia" });
+        const ids = pagina.items.map((p) => p.id);
+        const posA = ids.indexOf(criadas[0]);
+        const posB = ids.indexOf(criadas[1]);
+        expect(posA).toBeGreaterThanOrEqual(0);
+        expect(posB).toBeGreaterThanOrEqual(0);
+        // Desempate estável: id crescente.
+        expect(criadas[0] < criadas[1] ? posA < posB : posB < posA).toBe(true);
+
+        await prisma.constructionProject.deleteMany({ where: { id: { in: criadas } } });
+    });
+
+    it("listProjectCards sem filtro lista todas as obras da dona", async () => {
+        const { listProjectCards } =
+            await import("@/modules/construction/services/project.service");
+
+        const pagina = await listProjectCards(owner, {});
+
+        expect(pagina.items.map((p) => p.id)).toContain(projectId);
+        expect(pagina.items.length).toBeLessThanOrEqual(12);
+    });
+});
+
+describe("listagens e conflitos de unicidade (ETAPA 05)", () => {
+    it("listProjects devolve as obras da dona da mais recente à mais antiga", async () => {
+        const { listProjects } = await import("@/modules/construction/services/project.service");
+
+        const projects = await listProjects(owner);
+
+        expect(projects.length).toBeGreaterThanOrEqual(1);
+        expect(projects.map((p) => p.id)).toContain(projectId);
+        const starts = projects.map((p) => p.startDate?.getTime() ?? -Infinity);
+        expect(starts).toEqual([...starts].sort((a, b) => b - a));
+    });
+
+    it("listPayments devolve os pagamentos da obra (com serviço e fase)", async () => {
+        const { listPayments } = await import("@/modules/construction/services/payment.service");
+
+        const payments = await listPayments(owner, projectId);
+
+        expect(payments.length).toBeGreaterThanOrEqual(3);
+        expect(payments.every((p) => p.service.projectId === projectId)).toBe(true);
+    });
+
+    it("nome de obra repetido → ConflictError na criação e na atualização", async () => {
+        await expect(createProject(owner, { name: "Lavanderia" })).rejects.toBeInstanceOf(
+            ConflictError,
+        );
+
+        const obra = await createProject(owner, { name: "Obra conflito" });
+        await expect(updateProject(owner, obra.id, { name: "Lavanderia" })).rejects.toBeInstanceOf(
+            ConflictError,
+        );
+        await prisma.constructionProject.delete({ where: { id: obra.id } });
+    });
+
+    it("addPhase cria a fase 2 e recusa número repetido", async () => {
+        const { addPhase } = await import("@/modules/construction/services/project.service");
+
+        const fase = await addPhase(owner, projectId, { number: 2, name: "Alvenaria" });
+        expect(fase.number).toBe(2);
+
+        await expect(addPhase(owner, projectId, { number: 2 })).rejects.toBeInstanceOf(
+            ConflictError,
+        );
+        await prisma.constructionPhase.delete({ where: { id: fase.id } });
+    });
+
+    it("obra de outra dona: getProject → 404", async () => {
+        await expect(getProject(other, projectId)).rejects.toBeInstanceOf(NotFoundError);
     });
 });

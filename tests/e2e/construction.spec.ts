@@ -84,7 +84,10 @@ test.describe("Construção: listagem e Nova obra (T-0022/T-0023)", () => {
         const name = `Telhado E2E ${randomUUID().slice(0, 8)}`;
         await page.goto("/finance/construction");
 
-        await expect(page.getByRole("heading", { level: 2, name: "Construção" })).toBeVisible();
+        // Sem título/descrição antigos: entram os sub-grupos e os cards de categoria.
+        await expect(page.getByRole("tab", { name: "Lavanderia" })).toBeVisible();
+        await expect(page.getByRole("link", { name: /Banheiro da Lavanderia/ })).toBeVisible();
+
         await page.getByRole("button", { name: "Nova obra" }).click();
         const dialog = page.getByRole("dialog", { name: "Nova obra" });
 
@@ -94,18 +97,27 @@ test.describe("Construção: listagem e Nova obra (T-0022/T-0023)", () => {
 
         await dialog.getByLabel("Nome da obra *").fill(name);
         await dialog.getByLabel("Início").fill("2026-12-01");
+        // Categoria vem do catálogo único (select/checkbox, não fixo no componente).
+        await dialog.getByLabel("Lavanderia", { exact: true }).check();
         await dialog.getByRole("button", { name: "Salvar obra" }).click();
 
         await expect(page).toHaveURL(/\/finance\/construction\/[^/]+\/settings$/);
-        await page.goto("/finance/construction");
-        const card = page.getByRole("listitem").filter({ hasText: name });
+        // A obra categorizada aparece ao clicar no card da categoria (breadcrumb).
+        await page.goto("/finance/construction?categoria=lavanderia");
+        await expect(page.getByRole("link", { name: "Lavanderia" }).first()).toBeVisible();
+        const card = page
+            .getByRole("list", { name: "Obras" })
+            .getByRole("listitem")
+            .filter({ hasText: name });
         await expect(card.getByRole("link", { name, exact: true })).toBeVisible();
+        await expect(card.getByRole("link", { name: `Abrir a obra ${name}` })).toBeVisible();
         await expect(card).toContainText("Início 01/12/2026");
     });
 
     test("Fechar o modal não cria nada", async ({ page }) => {
-        await page.goto("/finance/construction");
-        const before = await page.getByRole("listitem").count();
+        await page.goto("/finance/construction?categoria=lavanderia");
+        const obras = page.getByRole("list", { name: "Obras" });
+        const before = await obras.getByRole("listitem").count();
 
         await page.getByRole("button", { name: "Nova obra" }).click();
         await page
@@ -115,7 +127,7 @@ test.describe("Construção: listagem e Nova obra (T-0022/T-0023)", () => {
         await page.getByRole("button", { name: "Fechar" }).click();
 
         await expect(page.getByRole("dialog")).toBeHidden();
-        await expect(page.getByRole("listitem")).toHaveCount(before);
+        await expect(obras.getByRole("listitem")).toHaveCount(before);
     });
 
     test("grid com até 6 obras por linha no desktop e 1 no celular", async ({ page, request }) => {
@@ -123,7 +135,8 @@ test.describe("Construção: listagem e Nova obra (T-0022/T-0023)", () => {
             await createProject(request, `Grid E2E ${randomUUID().slice(0, 8)}`);
         }
         const tops = async () => {
-            await page.goto("/finance/construction");
+            // Obras criadas pela API nascem sem categoria → grupo "Sem categoria".
+            await page.goto("/finance/construction?grupo=sem-categoria");
             const cards = page.getByRole("list", { name: "Obras" }).getByRole("listitem");
             const ys = await cards.evaluateAll((items) =>
                 items.slice(0, 7).map((li) => Math.round(li.getBoundingClientRect().top)),
@@ -133,8 +146,9 @@ test.describe("Construção: listagem e Nova obra (T-0022/T-0023)", () => {
 
         await page.setViewportSize({ width: 1440, height: 900 });
         const desktop = await tops();
-        expect(desktop.slice(0, 6).every((y) => y === desktop[0])).toBe(true);
-        expect(desktop[6]).toBeGreaterThan(desktop[0]);
+        // Desktop: 4 colunas por linha (painel de 12 cards).
+        expect(desktop.slice(0, 4).every((y) => y === desktop[0])).toBe(true);
+        expect(desktop[4]).toBeGreaterThan(desktop[0]);
 
         await page.setViewportSize({ width: 390, height: 844 });
         const mobile = await tops();
@@ -249,7 +263,7 @@ test.describe("Obra", () => {
         await page.getByLabel("Valor pago (R$) *").fill("2.000,00");
         await page.getByRole("button", { name: "Registrar pagamento" }).click();
 
-        await expect(page).toHaveURL(/\/finance\?month=2026-06/);
+        await expect(page).toHaveURL(/\/finance\/transactions\?month=2026-06/);
         await expect(
             page.getByText(`Pedreiro Seu Zé: ${description}`, { exact: false }),
         ).toBeVisible();
@@ -266,7 +280,7 @@ test.describe("Obra", () => {
         await payService(request, service.id, 100_000);
 
         // A transação gerada aparece no Financeiro com selo e "Ver na obra".
-        await page.goto("/finance?month=2026-06");
+        await page.goto("/finance/transactions?month=2026-06");
         const item = page.locator("li", { hasText: "Reboque da parede" }).first();
         await expect(item.getByText("Construção", { exact: true })).toBeVisible();
         await expect(item.getByRole("link", { name: "Ver na obra" })).toBeVisible();
