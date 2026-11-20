@@ -158,8 +158,8 @@ test("API: mês inválido é 400 e valor fracionado é recusado", async ({ reque
     expect(response.status()).toBe(400);
 });
 
-// FIN-R11 (T-0008): abas Transações | Obra, com a aba atual marcada.
-test("navega pelas abas Transações e Obra", async ({ page }) => {
+// FIN-R11 (T-0008/T-0022): abas Transações | Construção, com a aba atual marcada.
+test("navega pelas abas Transações e Construção", async ({ page }) => {
     await page.goto("/finance");
     const tabs = page.getByRole("navigation", { name: "Seções do Financeiro" });
 
@@ -174,12 +174,40 @@ test("navega pelas abas Transações e Obra", async ({ page }) => {
             .getByRole("link", { name: "Nova transação" }),
     ).toBeVisible();
 
-    await tabs.getByRole("link", { name: "Obra" }).click();
+    await tabs.getByRole("link", { name: "Construção" }).click();
 
     await expect(page).toHaveURL(/\/finance\/construction$/);
     await expect(
         page
             .getByRole("navigation", { name: "Seções do Financeiro" })
-            .getByRole("link", { name: "Obra" }),
+            .getByRole("link", { name: "Construção" }),
     ).toHaveAttribute("aria-current", "page");
+});
+
+// FIN-R12 (T-0021): trocar de aba não desloca o topo (título, Voltar e abas no mesmo lugar).
+test("trocar de aba não desloca o título, o Voltar nem as abas", async ({ page }) => {
+    const positions = async () => {
+        const box = async (name: string, locator: import("@playwright/test").Locator) => {
+            const b = await locator.boundingBox();
+            expect(b, name).not.toBeNull();
+            return { x: Math.round(b!.x), y: Math.round(b!.y), height: Math.round(b!.height) };
+        };
+        return {
+            title: await box("h1", page.getByRole("heading", { level: 1 })),
+            back: await box("voltar", page.getByRole("link", { name: /^Voltar/ })),
+            tabs: await box("abas", page.getByRole("navigation", { name: "Seções do Financeiro" })),
+        };
+    };
+
+    await page.goto("/finance");
+    const onTransactions = await positions();
+
+    await page
+        .getByRole("navigation", { name: "Seções do Financeiro" })
+        .getByRole("link", { name: "Construção" })
+        .click();
+    await expect(page).toHaveURL(/\/finance\/construction$/);
+    const onConstruction = await positions();
+
+    expect(onConstruction).toEqual(onTransactions);
 });

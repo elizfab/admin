@@ -43,6 +43,7 @@ async function createService(
     projectId: string,
     phaseId: string,
     contractedCents: number,
+    description = "Reboque da parede",
 ) {
     const response = await api(
         request,
@@ -52,7 +53,7 @@ async function createService(
             phaseId,
             trade: "MASON",
             professionalName: "Seu Zé",
-            description: "Reboque da parede",
+            description,
             contractedCents,
         },
     );
@@ -75,6 +76,71 @@ async function payService(
     });
     expect(response.status()).toBe(201);
 }
+
+test.describe("Construção: listagem e Nova obra (T-0022/T-0023)", () => {
+    test("Nova obra abre o modal, valida e cria a obra (vai para a configuração dela)", async ({
+        page,
+    }) => {
+        const name = `Telhado E2E ${randomUUID().slice(0, 8)}`;
+        await page.goto("/finance/construction");
+
+        await expect(page.getByRole("heading", { level: 2, name: "Construção" })).toBeVisible();
+        await page.getByRole("button", { name: "Nova obra" }).click();
+        const dialog = page.getByRole("dialog", { name: "Nova obra" });
+
+        await dialog.getByLabel("Nome da obra *").fill("T");
+        await dialog.getByRole("button", { name: "Salvar obra" }).click();
+        await expect(dialog.getByText("Informe o nome da obra.")).toBeVisible();
+
+        await dialog.getByLabel("Nome da obra *").fill(name);
+        await dialog.getByLabel("Início").fill("2026-12-01");
+        await dialog.getByRole("button", { name: "Salvar obra" }).click();
+
+        await expect(page).toHaveURL(/\/finance\/construction\/[^/]+\/settings$/);
+        await page.goto("/finance/construction");
+        const card = page.getByRole("listitem").filter({ hasText: name });
+        await expect(card.getByRole("link", { name, exact: true })).toBeVisible();
+        await expect(card).toContainText("Início 01/12/2026");
+    });
+
+    test("Fechar o modal não cria nada", async ({ page }) => {
+        await page.goto("/finance/construction");
+        const before = await page.getByRole("listitem").count();
+
+        await page.getByRole("button", { name: "Nova obra" }).click();
+        await page
+            .getByRole("dialog", { name: "Nova obra" })
+            .getByLabel("Nome da obra *")
+            .fill("Não salvar");
+        await page.getByRole("button", { name: "Fechar" }).click();
+
+        await expect(page.getByRole("dialog")).toBeHidden();
+        await expect(page.getByRole("listitem")).toHaveCount(before);
+    });
+
+    test("grid com até 6 obras por linha no desktop e 1 no celular", async ({ page, request }) => {
+        for (let i = 0; i < 7; i++) {
+            await createProject(request, `Grid E2E ${randomUUID().slice(0, 8)}`);
+        }
+        const tops = async () => {
+            await page.goto("/finance/construction");
+            const cards = page.getByRole("list", { name: "Obras" }).getByRole("listitem");
+            const ys = await cards.evaluateAll((items) =>
+                items.slice(0, 7).map((li) => Math.round(li.getBoundingClientRect().top)),
+            );
+            return ys;
+        };
+
+        await page.setViewportSize({ width: 1440, height: 900 });
+        const desktop = await tops();
+        expect(desktop.slice(0, 6).every((y) => y === desktop[0])).toBe(true);
+        expect(desktop[6]).toBeGreaterThan(desktop[0]);
+
+        await page.setViewportSize({ width: 390, height: 844 });
+        const mobile = await tops();
+        expect(mobile[1]).toBeGreaterThan(mobile[0]);
+    });
+});
 
 test.describe("Obra", () => {
     test("serviço pela tela + pagamento deixa o card Quitado na fase", async ({
@@ -159,10 +225,18 @@ test.describe("Obra", () => {
     test("Nova transação → Obra registra pagamento e volta ao mês", async ({ page, request }) => {
         const project = await createProject(request, `Obra E2E ${randomUUID().slice(0, 8)}`);
         const full = await getProject(request, project.id);
-        const service = await createService(request, project.id, full.phases[0].id, 800_000);
+        // Descrição única: o teste passa com --repeat-each (o mês 2026-06 acumula lançamentos).
+        const description = `Reboque ${randomUUID().slice(0, 8)}`;
+        const service = await createService(
+            request,
+            project.id,
+            full.phases[0].id,
+            800_000,
+            description,
+        );
 
         await page.goto("/finance/transactions/new");
-        await page.getByLabel("Categoria").selectOption({ label: "Obra" });
+        await page.getByLabel("Categoria").selectOption({ label: "Construção" });
 
         // Selects encadeados: obra → serviço.
         await page
@@ -176,8 +250,10 @@ test.describe("Obra", () => {
         await page.getByRole("button", { name: "Registrar pagamento" }).click();
 
         await expect(page).toHaveURL(/\/finance\?month=2026-06/);
-        await expect(page.getByText(/Pedreiro Seu Zé: Reboque da parede/)).toBeVisible();
-        await expect(page.getByText("Obra", { exact: true }).first()).toBeVisible();
+        await expect(
+            page.getByText(`Pedreiro Seu Zé: ${description}`, { exact: false }),
+        ).toBeVisible();
+        await expect(page.getByText("Construção", { exact: true }).first()).toBeVisible();
     });
 
     test("lançamento Obra não tem editar/excluir e a API responde 409", async ({
@@ -192,7 +268,7 @@ test.describe("Obra", () => {
         // A transação gerada aparece no Financeiro com selo e "Ver na obra".
         await page.goto("/finance?month=2026-06");
         const item = page.locator("li", { hasText: "Reboque da parede" }).first();
-        await expect(item.getByText("Obra", { exact: true })).toBeVisible();
+        await expect(item.getByText("Construção", { exact: true })).toBeVisible();
         await expect(item.getByRole("link", { name: "Ver na obra" })).toBeVisible();
         await expect(item.getByRole("link", { name: /Editar/ })).toHaveCount(0);
 

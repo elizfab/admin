@@ -44,14 +44,20 @@ test("card do dashboard abre a página de documentação", async ({ page }) => {
     await expect(page.getByRole("heading", { level: 1, name: "Documentação" })).toBeVisible();
 });
 
-// PLAT-R16 (T-0009): páginas de módulo têm "Voltar ao início".
-for (const path of ["/finance", "/finance/construction", "/projects", "/studies"]) {
-    test(`${path} tem "Voltar ao início" para o Dashboard`, async ({ page }) => {
+// PLAT-R16 (T-0009, alterada em T-0021): Voltar sobe um nível.
+// Módulos voltam ao início (Dashboard); a aba Construção volta ao Financeiro.
+for (const { path, label, target } of [
+    { path: "/finance", label: "Voltar ao início", target: /\/dashboard$/ },
+    { path: "/finance/construction", label: "Voltar ao Financeiro", target: /\/finance$/ },
+    { path: "/projects", label: "Voltar ao início", target: /\/dashboard$/ },
+    { path: "/studies", label: "Voltar ao início", target: /\/dashboard$/ },
+]) {
+    test(`${path}: "${label}"`, async ({ page }) => {
         await page.goto(path);
 
-        await page.getByRole("link", { name: "Voltar ao início" }).click();
+        await page.getByRole("link", { name: label }).click();
 
-        await expect(page).toHaveURL(/\/dashboard$/);
+        await expect(page).toHaveURL(target);
     });
 }
 
