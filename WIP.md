@@ -16,6 +16,7 @@
 | ID | Tarefa | Tier | Dono | Desde |
 |---|---|---|---|---|
 | T-0020 a T-0024 | Pedido do `todo.md` (Actions, abas, Voltar, Construção, Nova obra, contexto) | @coding-2/3 | Claude | 2026-11-20 |
+| ETAPAS 02–05 | Reestruturação Financeiro › Construção (grupos/categorias, abas, aria-current, backend) — `todo.md` | @coding-3 | Devin | 2026-11-20 |
 
 > Uma branch (`feature/t-0020-financeiro-construcao`) para as 5 tarefas, a pedido da Liza.
 

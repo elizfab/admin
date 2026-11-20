@@ -8,6 +8,13 @@ tarefa (`T-NNNN`) quando houver. No deploy, a seção `[Não publicado]` vira a 
 
 ### Adicionado
 
+- ETAPA 02/03 (`todo.md`): Financeiro em abas **Dashboard | Transações | Construção**;
+  Dashboard de Construção com as categorias (Lavanderia, Banheiro, Escritório);
+  aba Construção com sub-grupos (Lavanderia, Residência, Sem categoria), cards de
+  categoria com breadcrumb, grade de obras paginada de 12 com "Ver mais" e modal
+  "Nova obra" com categorias; obra ganha `categoryIds` (catálogo único
+  `OBRA_CATEGORIAS`/`OBRA_GRUPOS`); abas da obra: Dashboard · Fases · Serviços ·
+  Pagamentos · Compras · Metas · Dados da obra.
 - Time de agentes BMAD (`.agents/`, `.claude/agents/`, `AGENTS.md`, `CLAUDE.md`,
   `WIP.md`), registro de regras validadas por módulo (`docs/implementations/`) e
   economia de tokens com o Graphify (`docs/agents/`, `.graphifyignore`).
@@ -51,6 +58,10 @@ tarefa (`T-NNNN`) quando houver. No deploy, a seção `[Não publicado]` vira a 
   removido da CI.
 - T-0024: contexto dos agentes alinhado com a `develop` (regras R1–R17, área Construção,
   quadro `WIP.md`) e `.agents/tasks/` fora do grafo do Graphify.
+- ETAPA 02/03: Transações saem de `/finance` para `/finance/transactions`
+  (o `/finance` vira o Dashboard); "Configuração" da obra passa a "Dados da obra"
+  e as Fases ganham aba própria; OBRA-R18 e OBRA-R19 alteradas (ver
+  `docs/implementations/construction.md`).
 - T-0019: Header reorganizado, um componente por pasta e cada responsabilidade num arquivo:
   `ThemeToggle/` (`theme.constants.ts`, `theme.types.ts`, `theme.utils.ts`, `useTheme.ts`,
   `ThemeToggle.tsx`) e `UserMenu/` (`UserMenu.tsx`, `UserMenu.types.ts`, `useSignOut.ts`), cada um
