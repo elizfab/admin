@@ -12,6 +12,12 @@ describe("BackLink", () => {
         );
     });
 
+    it("aceita uma classe extra (ex.: alinhar numa barra de ações)", () => {
+        render(<BackLink className="extra" />);
+
+        expect(screen.getByRole("link", { name: "Voltar ao início" })).toHaveClass("extra");
+    });
+
     it("aceita outro destino e outro texto", () => {
         render(<BackLink href="/finance" label="Voltar ao Financeiro" />);
 

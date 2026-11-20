@@ -15,7 +15,7 @@ const card = {
     title: "Portal de Estudos",
     description: "Recursos e materiais para estudo.",
     href: "/studies",
-    icon: "BookOpen",
+    icon: "FilePenLine",
     status: "SOON",
 };
 
@@ -43,7 +43,7 @@ describe("ModuleFormDialog: cadastrar", () => {
             expect(screen.getByLabelText(label)).toBeInTheDocument();
         }
         expect(screen.getByLabelText("Status")).toHaveValue("AVAILABLE");
-        expect(screen.getByRole("option", { name: "Foguete" })).toBeInTheDocument();
+        expect(screen.getByRole("option", { name: "Poupança" })).toBeInTheDocument();
     });
 
     it("envia o formulário e fecha o modal quando salva", async () => {
@@ -105,7 +105,7 @@ describe("ModuleFormDialog: editar", () => {
 
         expect(screen.getByRole("dialog", { name: "Editar card" })).toBeInTheDocument();
         expect(screen.getByLabelText("Título *")).toHaveValue("Portal de Estudos");
-        expect(screen.getByLabelText("Ícone *")).toHaveValue("BookOpen");
+        expect(screen.getByLabelText("Ícone *")).toHaveValue("FilePenLine");
         expect(screen.getByLabelText("Status")).toHaveValue("SOON");
         expect(screen.getByRole("button", { name: "Salvar alterações" })).toBeInTheDocument();
     });

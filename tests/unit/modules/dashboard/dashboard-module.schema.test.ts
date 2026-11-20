@@ -5,14 +5,14 @@ import {
     isExternalHref,
     updateDashboardModuleSchema,
 } from "@/modules/dashboard";
-import { BookOpen, LayoutDashboard } from "lucide-react";
+import { LayoutDashboard, PiggyBank } from "lucide-react";
 
 const valid = {
     slug: "release-control",
     title: "Release Control",
     description: "Controle de versões e deploys.",
     href: "/release",
-    icon: "Rocket",
+    icon: "PiggyBank",
 };
 
 function errorsOf(result: {
@@ -113,7 +113,7 @@ describe("isExternalHref", () => {
 
 describe("getDashboardIcon", () => {
     it("devolve o ícone pelo nome guardado no banco", () => {
-        expect(getDashboardIcon("BookOpen")).toBe(BookOpen);
+        expect(getDashboardIcon("PiggyBank")).toBe(PiggyBank);
     });
 
     it("usa um ícone neutro para nome desconhecido (dado antigo)", () => {
@@ -122,12 +122,8 @@ describe("getDashboardIcon", () => {
 });
 
 describe("defaultDashboardModules (cards iniciais do seed)", () => {
-    it("são os 3 cards do antigo modules.mock.ts e passam na validação", () => {
-        expect(defaultDashboardModules.map((m) => m.slug)).toEqual([
-            "documentation",
-            "finance",
-            "studies",
-        ]);
+    it("são os 2 cards iniciais e passam na validação", () => {
+        expect(defaultDashboardModules.map((m) => m.slug)).toEqual(["documentation", "finance"]);
 
         for (const card of defaultDashboardModules) {
             expect(createDashboardModuleSchema.safeParse(card).success).toBe(true);

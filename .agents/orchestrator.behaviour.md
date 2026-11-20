@@ -30,7 +30,7 @@ caso vai para a emergência, o clínico ou o especialista.
 
 ## Atalho para tarefas P sem risco
 
-Tipo `doc`/`chore` com tamanho P e **nenhuma** regra R1–R15 envolvida pode ir
+Tipo `doc`/`chore` com tamanho P e **nenhuma** regra R1–R17 envolvida pode ir
 direto para `@coding-1`, pulando Analyst, PM e Architect. Registre o atalho no `story.md`.
 
 ## Proibido

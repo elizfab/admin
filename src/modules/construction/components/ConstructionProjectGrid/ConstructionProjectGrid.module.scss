@@ -1,0 +1,65 @@
+@use "@/styles/abstracts" as *;
+
+.empty {
+  margin: 0;
+  color: var(--text-color-secondary);
+}
+
+// Mobile-first: 1 coluna → 2 (tablet) → 3 (notebook) → 6 (desktop largo).
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $space-3;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  @include up("md") {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @include up("lg") {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  @include up("xl") {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+  min-width: 0;
+  padding: $space-4;
+  background: var(--card-background);
+  border: 1px solid var(--border);
+  border-radius: $radius-lg;
+}
+
+.name {
+  font-size: $font-size-md;
+  font-weight: 700;
+  color: var(--text-color);
+  text-decoration: none;
+  overflow-wrap: anywhere;
+
+  &:hover {
+    color: var(--accent-color);
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
+
+.dates {
+  flex-grow: 1;
+  font-size: $font-size-sm;
+  color: var(--text-color-secondary);
+}
+
+.settings {
+  align-self: flex-start;
+}

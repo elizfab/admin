@@ -28,14 +28,16 @@ export async function createTransaction(ownerId: string, input: CreateTransactio
 }
 
 /**
- * Lançamentos gerados pela Obra (pagamento de serviço ou parcela de material)
- * só mudam pela Obra: senão o Financeiro e a Obra mostrariam valores diferentes.
+ * Lançamentos gerados pela Construção (pagamento de serviço ou parcela de material)
+ * só mudam pela obra: senão o Financeiro e a obra mostrariam valores diferentes.
  */
 async function getEditableTransaction(ownerId: string, id: string) {
     const transaction = await getTransaction(ownerId, id);
 
     if (transaction.servicePayment || transaction.materialInstallment) {
-        throw new ConflictError("Lançamento gerado pela Obra: altere em Financeiro → Obra.");
+        throw new ConflictError(
+            "Lançamento gerado pela Construção: altere em Financeiro → Construção.",
+        );
     }
 
     return transaction;

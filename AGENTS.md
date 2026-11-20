@@ -18,11 +18,11 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 Portal administrativo pessoal (Next.js 16 + React 19 + TypeScript strict, Prisma 7 +
 PostgreSQL, Better Auth, Zod 4, SCSS com tokens, Jest + Playwright) com os módulos
-Projetos, Financeiro e Financeiro → Obra. Produção: <https://admin-elizabetefabri.vercel.app/>.
+Projetos, Dashboard (cards no banco), Financeiro e Financeiro → Construção (obras e reformas). Produção: <https://admin-elizabetefabri.vercel.app/>.
 
 ## Leia antes de trabalhar
 
-1. **[`.agents/project-context.md`](.agents/project-context.md):** stack, camadas, **regras invioláveis R1–R15**, API, comandos.
+1. **[`.agents/project-context.md`](.agents/project-context.md):** stack, camadas, **regras invioláveis R1–R17**, API, comandos.
 2. **[`.agents/workflow.md`](.agents/workflow.md):** ciclo BMAD, Spec Kit × OpenSpec, TDD/BDD, Kanban, gates e tiers.
 3. **O seu papel:** `.agents/<agente>.behaviour.md` (lista em [`.agents/README.md`](.agents/README.md)).
 4. **Regras já validadas do módulo que você vai tocar:** `docs/implementations/<modulo>.md`. **Não altere** uma regra dali sem `proposal.md` aprovado.
@@ -35,7 +35,7 @@ Projetos, Financeiro e Financeiro → Obra. Produção: <https://admin-elizabete
 - **R6/R7** Zod antes do serviço; `update` parcial **sem** default.
 - **R8/R9** Sessão validada no servidor; rota privada no `matcher` do `src/proxy.ts`.
 - **R10/R11** Sem cor fixa (tokens nos dois temas); acessibilidade WCAG AA.
-- **R12** Lançamento gerado pela Obra só muda pela Obra.
+- **R12** Lançamento gerado pela Construção (obra) só muda pela obra de origem.
 - **R13** `redirect()` fora do `try/catch` nas Server Actions.
 - **R14/R15** Nenhum segredo no repositório; migration destrutiva só com ADR e aprovação.
 - **R16** Cobertura ≥ 95% (linhas, comandos, ramos, funções) em todo arquivo novo ou alterado de `src/lib`, `src/modules`, `src/components`; o total não cai.

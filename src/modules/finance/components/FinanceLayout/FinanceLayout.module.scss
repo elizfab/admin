@@ -1,0 +1,21 @@
+@use "@/styles/abstracts" as *;
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  gap: $space-4;
+}
+
+// Altura fixa: a barra tem o mesmo tamanho com ou sem botão ao lado do Voltar
+// (em Transações só há o Voltar; em Construção, Voltar + "Nova obra").
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: $space-3;
+  min-height: 2.5rem;
+}
+
+.back {
+  margin-bottom: 0;
+}

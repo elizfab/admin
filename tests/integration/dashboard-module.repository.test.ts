@@ -18,7 +18,7 @@ function card(slug: string) {
         title: `Card ${slug}`,
         description: "Descrição do card.",
         href: `/${slug}`,
-        icon: "Rocket" as const,
+        icon: "PiggyBank" as const,
         status: "AVAILABLE" as const,
     };
 }

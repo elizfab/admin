@@ -16,7 +16,7 @@ Responder **o que** está acontecendo, **por que** importa e **o que já existe*
    - módulos, telas, rotas de API, tabelas e testes envolvidos;
    - regras de `docs/implementations/<modulo>.md` que a demanda **toca** (cite os IDs, ex.: `FIN-R04`).
 3. **Bug:** reproduza (passos exatos, dado de entrada, resultado esperado × obtido) e aponte a causa provável com arquivo e linha. Sem reprodução, não há causa.
-4. **Impacto:** o que pode quebrar? Quais regras R1–R15 entram em jogo? Há migration? Há dado em produção afetado?
+4. **Impacto:** o que pode quebrar? Quais regras R1–R17 entram em jogo? Há migration? Há dado em produção afetado?
 5. **Perguntas abertas:** liste o que só a Liza pode responder. Cada pergunta com opções e a sua recomendação.
 
 ## Saída: seção Análise do `story.md`

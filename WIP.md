@@ -4,7 +4,7 @@
 > ao mudar o estado da sua tarefa). Regras do quadro: `.agents/workflow.md`, seção 4.
 > **Limites:** Em desenvolvimento ≤ 2 · Code Review ≤ 3 · QA ≤ 2.
 
-**Último ID:** T-0019 · **Atualizado em:** 2026-11-19
+**Último ID:** T-0024 · **Atualizado em:** 2026-11-20
 
 ## 🔴 Bloqueado
 
@@ -15,22 +15,14 @@
 
 | ID | Tarefa | Tier | Dono | Desde |
 |---|---|---|---|---|
-| T-0019 | Header em componentes (tema, menu da conta, tipos, estilos) | @coding-2 | Claude | 2026-11-19 |
+| T-0020 a T-0024 | Pedido do `todo.md` (Actions, abas, Voltar, Construção, Nova obra, contexto) | @coding-2/3 | Claude | 2026-11-20 |
+
+> Uma branch (`feature/t-0020-financeiro-construcao`) para as 5 tarefas, a pedido da Liza.
 
 ## 🔵 Code Review (≤ 3)
 
 | ID | Tarefa | PR | Revisor |
 |---|---|---|---|
-| T-0007 | Cards do dashboard no banco (cadastrar, editar, excluir) | Automático no push de `feature/t-0007-dashboard-financeiro-cobertura` | Liza |
-| T-0008 | Financeiro em abas (Transações \| Obra) | mesmo PR | Liza |
-| T-0009 | "Voltar ao início" nas páginas de módulo | mesmo PR | Liza |
-| T-0010 | Cobertura na CI (≥ 95% no código novo) | mesmo PR | Liza |
-| T-0011 | Prettier + formatação automática | mesmo PR | Liza |
-| T-0016 | PR automático develop → main | mesmo PR | Liza |
-| T-0017 | Mover ALTERACOES-2026-11-15.md para docs | mesmo PR | Liza |
-| T-0018 | Tabela de cobertura no `npm test` | mesmo PR | Liza |
-
-> ⚠️ 8 tarefas em Code Review (limite 3): exceção pedida pela Liza (uma branch para várias resoluções, 2026-11-19); um PR só.
 
 ## 🟡 QA (≤ 2)
 
@@ -41,6 +33,7 @@
 
 | ID | Tarefa | PR |
 |---|---|---|
+| T-0005 a T-0011, T-0016 a T-0019 | Agentes, Danger, PR automático, cards do Dashboard, abas, Voltar, cobertura, Prettier, release automático, Header | #11 (develop → main, aberto) |
 
 ## 📐 Pronto p/ dev
 
@@ -74,9 +67,7 @@
 
 | ID | Tarefa | Concluída em | Registro |
 |---|---|---|---|
-| T-0006 | Danger + PR automático (PR #9) | 2026-11-19 | `docs/CHANGELOG.md` |
-| T-0005 | Correções nas docs (PR #9) | 2026-11-19 | `docs/CHANGELOG.md` |
-| — | Financeiro → Obra | 2026-11-18 | `docs/CHANGELOG.md` |
+| — | Financeiro → Obra (hoje Construção) | 2026-11-18 | `docs/CHANGELOG.md` |
 | — | Financeiro | 2026-11-17 | `docs/CHANGELOG.md` |
 
 ## Como mover uma tarefa

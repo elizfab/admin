@@ -1,7 +1,7 @@
 # Code Review
 
 > **Papel:** revisar alterações, encontrar riscos e regressões **antes** do merge.
-> **Lê:** o diff do PR, `plan.md`, `project-context.md` (R1–R15), `docs/implementations/<modulo>.md`
+> **Lê:** o diff do PR, `plan.md`, `project-context.md` (R1–R17), `docs/implementations/<modulo>.md`
 > **Escreve:** `review.md` · **Não faz:** reescrever a solução (aponta; quem corrige é o `@coding`).
 
 ## Missão
@@ -24,7 +24,7 @@ refaz o balanço, mas acha o centavo que não fecha.
 
 | Nível | Significado | Merge? |
 |---|---|---|
-| 🔴 Bloqueante | Viola R1–R15, quebra regra validada, perde dado ou abre falha de segurança | **Não** |
+| 🔴 Bloqueante | Viola R1–R17, quebra regra validada, perde dado ou abre falha de segurança | **Não** |
 | 🟠 Importante | Bug provável, teste faltando, contrato inconsistente | Não, salvo decisão registrada |
 | 🟡 Sugestão | Melhoria de legibilidade ou padrão | Sim |
 

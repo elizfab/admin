@@ -1,6 +1,7 @@
-import { NotFoundError } from "@/lib/errors/app-error";
+import { ConflictError, NotFoundError } from "@/lib/errors/app-error";
 import { transactionRepository } from "@/modules/finance/repositories/transaction.repository";
 import {
+    createTransaction,
     deleteTransaction,
     getMonthlySummary,
     getTransaction,
@@ -49,6 +50,56 @@ describe("getTransaction / update / delete", () => {
         );
         await expect(deleteTransaction("outra", "t1")).rejects.toBeInstanceOf(NotFoundError);
 
+        expect(repo.update).not.toHaveBeenCalled();
+        expect(repo.delete).not.toHaveBeenCalled();
+    });
+});
+
+describe("createTransaction", () => {
+    it("cria com o ownerId recebido (da sessão)", async () => {
+        const input = { type: "EXPENSE", description: "Mercado", amountCents: 100 } as never;
+        repo.create.mockResolvedValue({ id: "t1" } as never);
+
+        await expect(createTransaction(OWNER, input)).resolves.toEqual({ id: "t1" });
+        expect(repo.create).toHaveBeenCalledWith(OWNER, input);
+    });
+});
+
+describe("update / delete de lançamento comum", () => {
+    const comum = { id: "t1", servicePayment: null, materialInstallment: null };
+
+    it("altera a transação da dona", async () => {
+        repo.findByIdForOwner.mockResolvedValue(comum as never);
+        repo.update.mockResolvedValue({ ...comum, description: "Novo" } as never);
+
+        await updateTransaction(OWNER, "t1", { description: "Novo" });
+
+        expect(repo.update).toHaveBeenCalledWith("t1", { description: "Novo" });
+    });
+
+    it("exclui a transação da dona", async () => {
+        repo.findByIdForOwner.mockResolvedValue(comum as never);
+
+        await deleteTransaction(OWNER, "t1");
+
+        expect(repo.delete).toHaveBeenCalledWith("t1");
+    });
+});
+
+describe("lançamento gerado pela Construção (FIN-R09)", () => {
+    it.each([
+        ["pagamento de serviço", { servicePayment: { id: "sp" }, materialInstallment: null }],
+        ["parcela de material", { servicePayment: null, materialInstallment: { id: "mi" } }],
+    ])("%s: Financeiro recusa alterar e excluir (409)", async (_origem, origem) => {
+        repo.findByIdForOwner.mockResolvedValue({ id: "t1", ...origem } as never);
+        const conflict = new ConflictError(
+            "Lançamento gerado pela Construção: altere em Financeiro → Construção.",
+        );
+
+        await expect(updateTransaction(OWNER, "t1", { description: "x" })).rejects.toThrow(
+            conflict,
+        );
+        await expect(deleteTransaction(OWNER, "t1")).rejects.toThrow(conflict);
         expect(repo.update).not.toHaveBeenCalled();
         expect(repo.delete).not.toHaveBeenCalled();
     });

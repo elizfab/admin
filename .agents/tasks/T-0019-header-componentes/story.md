@@ -6,7 +6,7 @@
 | Módulos | plataforma (layout) |
 | Tamanho | M |
 | Tier | @coding-2 |
-| Estado (Kanban) | Em desenvolvimento (pronto, sem commit a pedido da Liza) |
+| Estado (Kanban) | Pronto p/ deploy (na develop; produção pelo PR #11) |
 | Criada em | 2026-11-19 |
 | Branch / PR | `feature/t-0019-header-componentes` · sem commit (pedido da Liza) |
 

@@ -22,7 +22,7 @@ errada, ele avisa, não "ajeita" no olho.
 ## Regras de implementação
 
 - Siga o padrão **do módulo vizinho** (`projects`, `finance`, `construction` são as referências) antes de inventar.
-- Camadas e regras R1–R15 do `project-context.md` são lei. Em especial:
+- Camadas e regras R1–R17 do `project-context.md` são lei. Em especial:
   - toda consulta com dona (R1); `ownerId` da sessão (R2);
   - dinheiro em centavos (R3); datas sem hora em UTC (R4);
   - derivados calculados (R5); Zod antes do serviço (R6);

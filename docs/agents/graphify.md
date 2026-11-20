@@ -63,7 +63,8 @@ public/
 package-lock.json
 docs/setup/
 docs/**/*.drawio
-.agents/tasks/archive/
+# pastas de tarefa: lidas pelo caminho (via WIP.md), fora do grafo
+.agents/tasks/
 graphify-out/
 ```
 

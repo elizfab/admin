@@ -5,7 +5,7 @@ Claude Code, no GitHub Copilot ou no Devin.
 
 | Arquivo | Para quê |
 |---|---|
-| [`project-context.md`](project-context.md) | Stack, arquitetura, regras invioláveis R1–R15, API, comandos. **Todo agente lê** |
+| [`project-context.md`](project-context.md) | Stack, arquitetura, regras invioláveis R1–R17, API, comandos. **Todo agente lê** |
 | [`workflow.md`](workflow.md) | Ciclo BMAD, qual método usar, Kanban, gates, tiers e handoff |
 | [`token-economy.md`](token-economy.md) | Regras para gastar menos token (inclui o Graphify) |
 | `*.behaviour.md` | Comportamento de cada agente |

@@ -16,7 +16,7 @@ contas extras só para testes de isolamento). Módulos atuais:
 | Dashboard | `/dashboard` | `/api/v1/dashboard/modules` | Produção (cards no banco, cadastrados pelo modal: T-0007) |
 | Projetos | `/projects`, `/projects/new`, `/projects/[id]/edit` | `/api/v1/projects` | Produção |
 | Financeiro | `/finance`, `/finance/transactions/*` | `/api/v1/finance/transactions`, `/summary` | Produção |
-| Financeiro → Obra | `/finance/construction/[projectId]/*` | `/api/v1/finance/construction/*` | Produção |
+| Financeiro → Construção (antes "Obra") | `/finance/construction` (lista de obras em grid + "Nova obra"), `/finance/construction/[projectId]/*` | `/api/v1/finance/construction/*` | Produção |
 | Documentação / Estudos | `/documentation`, `/studies` | — | Em espera ("Em breve") |
 | Próximos | PDI, Release Control | — | Backlog (`docs/todo.md`) |
 
@@ -89,7 +89,7 @@ src/modules/<m>/
 | R9 | Rota privada nova entra no `matcher` de `src/proxy.ts` | Checklist de registro |
 | R10 | **Tokens de tema:** nenhuma cor fixa (hex, `rgb()`, nome) em componente; cor nova = token nos **dois** temas (`_light.scss` e `_dark.scss`) | `AGENTS.md`; axe nos dois temas |
 | R11 | Acessibilidade WCAG AA: labels, `aria-invalid`/`aria-describedby`, cor nunca é a única pista, `<table>` para dados tabulares | `accessibility.spec.ts` (claro e escuro) |
-| R12 | Lançamento do Financeiro **gerado pela Obra** só muda pela Obra (Financeiro responde 409) | `transaction.service.ts` |
+| R12 | Lançamento do Financeiro **gerado pela Construção** (pagamento/parcela de uma obra) só muda pela obra (Financeiro responde 409) | `transaction.service.ts` |
 | R13 | `redirect()` **fora** do `try/catch` nas Server Actions; action devolve `values` no erro (React 19 limpa o form) | Actions |
 | R14 | Segredos só em variáveis de ambiente; nada de segredo em código, docs, logs ou testes (exceto os fictícios de teste) | `required-env.ts`; Code Review |
 | R15 | Migration **aditiva** por padrão; destrutiva exige ADR, plano de dados e aprovação humana | Architect + DevOps |

@@ -6,7 +6,7 @@
 | Módulos | plataforma (CI) |
 | Tamanho | M |
 | Tier | @coding-3 (CI) |
-| Estado (Kanban) | Concluído (PR #9, 2026-11-19) |
+| Estado (Kanban) | Pronto p/ deploy (na develop pelo PR #9; produção pelo #11) |
 | Criada em | 2026-11-19 |
 | Branch / PR | `feature/bmad-agents` · PR automático no push |
 

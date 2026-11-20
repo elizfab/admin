@@ -1,4 +1,7 @@
-# Financeiro → Obra: regras validadas
+# Financeiro → Construção: regras validadas
+
+> A área se chamava "Obra" até T-0022. Cada item da área continua sendo uma **obra**
+> (telhado, lavanderia, reformas…); o prefixo das regras segue `OBRA`.
 
 | ID | Regra | Por quê | Protegida por |
 |---|---|---|---|
@@ -19,3 +22,5 @@
 | OBRA-R15 | Excluir compra apaga parcelas e os lançamentos das parcelas pagas | Sem lançamento órfão | `construction.service.test.ts` |
 | OBRA-R16 | Meta recebe o estado **desejado** (`done`); repetir não muda a data de conclusão | Cliques repetidos não se anulam | `construction.service.test.ts` |
 | OBRA-R17 | Dashboard: mão de obra por profissão, materiais (parcelas do mês = vencimentos do mês), resumo e cronograma derivados dos registros | Mesmos números da planilha | `construction.service.test.ts` (Pedreiro R$ 14.605,00 / falta R$ 11.005,00) |
+| OBRA-R18 | A Construção lista as obras em cards: 1 por linha no celular, 2 (≥ 768 px), 3 (≥ 1024 px) e 6 (≥ 1280 px); cada card tem o nome (link para a obra), as datas e "Configurar" (adicionada em T-0022) | Várias obras e reformas visíveis de uma vez | `tests/unit/modules/construction/ConstructionProjectGrid.test.tsx`, `tests/e2e/construction.spec.ts › grid com até 6 obras…` |
+| OBRA-R19 | "Nova obra", ao lado do Voltar, abre um modal com o MESMO formulário e a mesma action da configuração da obra; erro fica no modal; salvar leva à configuração da obra nova; fechar não cria nada (adicionada em T-0023) | Cadastro sem sair da lista, sem duplicar regra | `tests/unit/modules/construction/NewConstructionProjectDialog.test.tsx`, `construction.spec.ts › Nova obra…`, `accessibility.spec.ts › modal "Nova obra"…` |

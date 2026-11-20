@@ -28,7 +28,7 @@ const input = {
     title: "Financeiro",
     description: "Receitas e despesas.",
     href: "/finance",
-    icon: "Wallet" as const,
+    icon: "PiggyBank" as const,
     status: "AVAILABLE" as const,
 };
 
