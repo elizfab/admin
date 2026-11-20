@@ -6,6 +6,7 @@ import { useActionState, useState } from "react";
 import { Button, buttonClassName } from "@/components/ui/Button/Button";
 import { dayToInput } from "@/lib/dates/month";
 import { centsToInput } from "@/lib/money/money";
+import { noopAction } from "@/lib/utils/noop-action";
 
 import type { TransactionFormState } from "../../actions/transaction.actions";
 import { transactionCategoryValues, transactionTypeValues } from "../../schemas/transaction.schema";
@@ -21,14 +22,11 @@ import {
 import type { FormState as ObraFormState } from "@/modules/construction/actions/project.actions";
 import styles from "./TransactionForm.module.scss";
 
-/** Action vazia estável para o useActionState quando a página não tem obras. */
-const noopAction = async (): Promise<ObraFormState> => null;
-
 type TransactionFormProps = {
     action: (state: TransactionFormState, formData: FormData) => Promise<TransactionFormState>;
     /**
-     * Fase 09 — atalho "Obra": presente só em "Nova transação". Quando a
-     * categoria escolhida é CONSTRUCTION ("Obra"), o formulário troca os
+     * Fase 09 — atalho "Construção": presente só em "Nova transação". Quando a
+     * categoria escolhida é CONSTRUCTION ("Construção"), o formulário troca os
      * campos pelos da obra e o submit vai para `constructionAction`.
      */
     obraProjects?: ObraPaymentProject[];
@@ -53,12 +51,13 @@ export function TransactionForm({
     submitLabel,
 }: TransactionFormProps) {
     const [state, formAction, pending] = useActionState(action, null);
-    const [obraState, obraFormAction, obraPending] = useActionState(
+    // Sem obras na página, o hook recebe uma action vazia estável (hooks não podem ser condicionais).
+    const [obraState, obraFormAction, obraPending] = useActionState<ObraFormState, FormData>(
         constructionAction ?? noopAction,
         null,
     );
     const [isObra, setIsObra] = useState(false);
-    // "Obra" é opção SÓ do formulário (não entra em transactionCategoryValues,
+    // "Construção" (pagamento de obra) é opção SÓ do formulário (não entra em transactionCategoryValues,
     // que é o contrato da API): escolher ela troca os campos e a action.
     const OBRA_VALUE = "__OBRA_PAYMENT__";
     const errors = state?.fieldErrors;
@@ -180,7 +179,9 @@ export function TransactionForm({
                             {transactionCategoryLabel[category]}
                         </option>
                     ))}
-                    {obraProjects && <option value={OBRA_VALUE}>Obra</option>}
+                    {obraProjects && (
+                        <option value={OBRA_VALUE}>{transactionCategoryLabel.CONSTRUCTION}</option>
+                    )}
                 </select>
             </div>
 

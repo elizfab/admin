@@ -23,7 +23,7 @@ export function TransactionList({ transactions }: TransactionListProps) {
         <ul className={styles.list}>
             {transactions.map((transaction) => {
                 const isIncome = transaction.type === "INCOME";
-                // Origem "Obra" (Fase 09): o lançamento só muda pela tela da obra.
+                // Origem na Construção (Fase 09): o lançamento só muda pela tela da obra.
                 const obraHref = transaction.servicePayment
                     ? `/finance/construction/${transaction.servicePayment.service.projectId}/phases/${transaction.servicePayment.service.phase.number}`
                     : transaction.materialInstallment
@@ -35,7 +35,11 @@ export function TransactionList({ transactions }: TransactionListProps) {
                         <div className={styles.info}>
                             <p className={styles.description}>
                                 {transaction.description}
-                                {obraHref && <span className={styles.obraBadge}>Obra</span>}
+                                {obraHref && (
+                                    <span className={styles.obraBadge}>
+                                        {transactionCategoryLabel.CONSTRUCTION}
+                                    </span>
+                                )}
                             </p>
                             <p className={styles.meta}>
                                 {formatDay(transaction.occurredOn)} ·{" "}

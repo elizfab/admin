@@ -4,9 +4,9 @@ import type { Transaction, TransactionCategory, TransactionType } from "@/genera
 export type { Transaction, TransactionCategory, TransactionType };
 
 /**
- * Transação com a origem "Obra" (Fase 09): lançamentos gerados por pagamento
+ * Transação com origem na Construção (Fase 09): lançamentos gerados por pagamento
  * de serviço ou parcela de material carregam o vínculo para a tela exibir
- * o selo "Obra" e o link "Ver na obra" (edição/exclusão ficam na Obra).
+ * o selo "Construção" e o link "Ver na obra" (edição/exclusão ficam na obra).
  */
 export type TransactionWithOrigin = Transaction & {
     servicePayment: {
@@ -28,7 +28,7 @@ export const transactionCategoryLabel: Record<TransactionCategory, string> = {
     HEALTH: "Saúde",
     EDUCATION: "Educação",
     LEISURE: "Lazer",
-    CONSTRUCTION: "Obra",
+    CONSTRUCTION: "Construção",
     OTHER: "Outros",
 };
 

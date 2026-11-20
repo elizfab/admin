@@ -1,32 +1,13 @@
-import {
-    BookOpen,
-    ClipboardList,
-    Code,
-    FileText,
-    FolderKanban,
-    GraduationCap,
-    Hammer,
-    LayoutDashboard,
-    Rocket,
-    Wallet,
-    type LucideIcon,
-} from "lucide-react";
+import { FilePenLine, LayoutDashboard, PiggyBank, type LucideIcon } from "lucide-react";
 
 /**
  * Ícones que um card pode usar. O banco guarda só o NOME (ex.: "BookOpen");
  * o componente vem deste mapa. Ícone novo = uma linha aqui.
  */
 export const dashboardIcons = {
-    BookOpen: { icon: BookOpen, label: "Livro" },
-    Wallet: { icon: Wallet, label: "Carteira" },
-    GraduationCap: { icon: GraduationCap, label: "Estudos" },
-    FolderKanban: { icon: FolderKanban, label: "Projetos" },
-    Rocket: { icon: Rocket, label: "Foguete" },
-    Hammer: { icon: Hammer, label: "Obra" },
-    FileText: { icon: FileText, label: "Documento" },
-    ClipboardList: { icon: ClipboardList, label: "Lista de tarefas" },
-    Code: { icon: Code, label: "Código" },
+    FilePenLine: { icon: FilePenLine, label: "Livro com caneta" },
     LayoutDashboard: { icon: LayoutDashboard, label: "Painel" },
+    PiggyBank: { icon: PiggyBank, label: "Poupança" },
 } satisfies Record<string, { icon: LucideIcon; label: string }>;
 
 export type DashboardIconName = keyof typeof dashboardIcons;

@@ -1,11 +1,5 @@
 @use "@/styles/abstracts" as *;
 
-.page {
-  display: flex;
-  flex-direction: column;
-  gap: $space-5;
-}
-
 .transactions {
   display: flex;
   flex-direction: column;

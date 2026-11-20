@@ -11,23 +11,15 @@ export const defaultDashboardModules: CreateDashboardModuleInput[] = [
         description:
             "Acesso ao portal de documentação. Para desenvolvedores e interessados em conhecer a aplicação.",
         href: "/documentation",
-        icon: "BookOpen",
-        status: "EXTERNAL",
+        icon: "FilePenLine",
+        status: "SOON",
     },
     {
         slug: "finance",
         title: "Portal Financeiro",
-        description: "Receitas, despesas, saldo e obra.",
+        description: "Receitas, despesas, saldo e construção.",
         href: "/finance",
-        icon: "Wallet",
-        status: "SOON",
-    },
-    {
-        slug: "studies",
-        title: "Portal de Estudos",
-        description: "Recursos e materiais para estudo.",
-        href: "/studies",
-        icon: "BookOpen",
-        status: "SOON",
+        icon: "PiggyBank",
+        status: "EXTERNAL",
     },
 ];

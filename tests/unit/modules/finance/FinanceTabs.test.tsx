@@ -3,7 +3,7 @@ import { render, screen, within } from "@testing-library/react";
 import { FinanceTabs } from "@/modules/finance/components/FinanceTabs/FinanceTabs";
 
 describe("FinanceTabs", () => {
-    it("mostra as abas Transações e Obra dentro da navegação do Financeiro", () => {
+    it("mostra as abas Transações e Construção dentro da navegação do Financeiro", () => {
         render(<FinanceTabs current="transactions" />);
 
         const nav = screen.getByRole("navigation", { name: "Seções do Financeiro" });
@@ -12,15 +12,15 @@ describe("FinanceTabs", () => {
             "href",
             "/finance",
         );
-        expect(within(nav).getByRole("link", { name: "Obra" })).toHaveAttribute(
+        expect(within(nav).getByRole("link", { name: "Construção" })).toHaveAttribute(
             "href",
             "/finance/construction",
         );
     });
 
     it.each([
-        ["transactions", "Transações", "Obra"],
-        ["construction", "Obra", "Transações"],
+        ["transactions", "Transações", "Construção"],
+        ["construction", "Construção", "Transações"],
     ] as const)("marca só a aba atual (%s)", (current, active, other) => {
         render(<FinanceTabs current={current} />);
 

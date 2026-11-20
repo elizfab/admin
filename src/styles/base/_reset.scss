@@ -10,6 +10,12 @@ body {
   padding: 0;
 }
 
+// Reserva o espaço da barra de rolagem sempre: páginas curtas e longas ficam com a
+// mesma largura, então trocar de página/aba não desloca o conteúdo para o lado (T-0021).
+html {
+  scrollbar-gutter: stable;
+}
+
 img,
 svg {
   display: block;

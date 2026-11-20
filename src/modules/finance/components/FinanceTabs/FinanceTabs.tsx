@@ -9,7 +9,7 @@ export type FinanceSection = "transactions" | "construction";
 
 const tabs: { id: FinanceSection; label: string; href: string }[] = [
     { id: "transactions", label: "Transações", href: "/finance" },
-    { id: "construction", label: "Obra", href: "/finance/construction" },
+    { id: "construction", label: "Construção", href: "/finance/construction" },
 ];
 
 type FinanceTabsProps = {
