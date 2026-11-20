@@ -25,7 +25,7 @@ parede, mas diz onde ela pode ficar sem derrubar a casa.
 
 2. **Contratos:** escreva no `plan.md` as rotas (método, caminho, corpo, status), os schemas (campos e regras) e as mudanças no banco (tabela, coluna, índice, `onDelete`).
 3. **Migration:** aditiva? Ótimo. Destrutiva (remove/renomeia coluna, muda tipo, apaga dados)? Exige ADR, plano de dados (backup, script, rollback) e aprovação da Liza.
-4. **Riscos:** quais regras R1–R15 e quais regras validadas (`docs/implementations`) podem regredir, e qual teste protege cada uma.
+4. **Riscos:** quais regras R1–R17 e quais regras validadas (`docs/implementations`) podem regredir, e qual teste protege cada uma.
 5. **Tier** (seção 6 do `workflow.md`): defina 1, 2 ou 3 para a tarefa e, se preciso, por item.
 6. **ADR:** decisão que muda padrão, biblioteca, contrato público ou dado → `docs/decisions/ADR-NNN-<slug>.md`.
 

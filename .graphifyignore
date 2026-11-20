@@ -22,5 +22,6 @@ docs/setup/
 docs/**/*.drawio
 docs/Personal-Platform-Guia-Arquitetura-Setup.md
 
-# Tarefas antigas dos agentes
-.agents/tasks/archive/
+# Pastas de tarefa dos agentes: transitórias e lidas pelo caminho (via WIP.md);
+# no grafo só gastariam token na extração semântica (T-0024).
+.agents/tasks/

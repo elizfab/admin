@@ -14,7 +14,7 @@ não uma decisão de quem está com a ferramenta na mão.
 | Dashboard | [`dashboard.md`](dashboard.md) | `DASH` |
 | Projetos | [`projects.md`](projects.md) | `PROJ` |
 | Financeiro | [`finance.md`](finance.md) | `FIN` |
-| Financeiro → Obra | [`construction.md`](construction.md) | `OBRA` |
+| Financeiro → Construção | [`construction.md`](construction.md) | `OBRA` |
 
 ## Formato de uma regra
 

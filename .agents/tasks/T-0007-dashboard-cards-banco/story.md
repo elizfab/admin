@@ -6,7 +6,7 @@
 | Módulos | dashboard |
 | Tamanho | M |
 | Tier | @coding-2 |
-| Estado (Kanban) | Code Review (aguardando o PR) |
+| Estado (Kanban) | Pronto p/ deploy (na develop; produção pelo PR #11) |
 | Criada em | 2026-11-19 |
 | Branch / PR | `feature/t-0007-dashboard-financeiro-cobertura` · PR automático no push |
 

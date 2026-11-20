@@ -26,6 +26,12 @@ tarefa (`T-NNNN`) quando houver. No deploy, a seção `[Não publicado]` vira a 
 - T-0016: **PR de release automático**: cada merge na `develop` abre (ou atualiza) o PR
   `develop → main` com a lista do que entra e o checklist de deploy (`release-pr.yml`).
 - T-0018: `npm test` mostra a tabela de cobertura dos unitários (escopo em `jest.coverage-scope.mjs`).
+- T-0023: **Nova obra** em modal, ao lado do Voltar, reutilizando o formulário e a action de
+  obra (OBRA-R19).
+- T-0022: obras da Construção em **grid** (1 / 2 / 3 / 6 por linha conforme a tela; OBRA-R18).
+- T-0021: `FinanceLayout`, topo único das abas do Financeiro (FIN-R12); breakpoint `xl` (1280 px).
+- T-0021/T-0022: testes de `TransactionForm` e `TransactionList` (de 0% para 100%) e dos ramos
+  que faltavam em `transaction.service.ts`; cobertura total 46,52% → 55,55%.
 - T-0019: testes do Header (`Header`, `ThemeToggle`, `useTheme`, `theme.utils`, `UserMenu`, `useSignOut`):
   de 0% para 100% de cobertura em `Header.tsx` e `UserMenu.tsx`.
 
@@ -34,6 +40,17 @@ tarefa (`T-NNNN`) quando houver. No deploy, a seção `[Não publicado]` vira a 
 - T-0007: os rótulos de status do card ("Disponível", "Aplicação externa", "Em breve") saem
   do `ModuleCard` e vão para `dashboardModuleStatusLabel` (tipos do módulo).
 - T-0008: "Obra" e "Nova transação" saem do cabeçalho do Financeiro.
+- T-0022: a área **"Obra" passa a se chamar "Construção"** (aba, título, categoria dos
+  lançamentos, selo na lista, opção em Nova transação, mensagem de 409, ícone dos cards);
+  cada item continua sendo uma **obra** ("Nova obra", "Ver na obra"). FIN-R08, FIN-R09,
+  FIN-R11 e R12 alteradas. Rotas e código (`/finance/construction`, `CONSTRUCTION`) não mudam.
+- T-0021: "Voltar" em `/finance/construction` leva ao Financeiro (`/finance`), não ao início
+  (PLAT-R16 alterada).
+- T-0020: GitHub Actions: os workflows que abrem PR não rodam mais Danger e CI (cada PR
+  era validado duas vezes); o Danger não roda em edição de título/descrição; `workflow_call`
+  removido da CI.
+- T-0024: contexto dos agentes alinhado com a `develop` (regras R1–R17, área Construção,
+  quadro `WIP.md`) e `.agents/tasks/` fora do grafo do Graphify.
 - T-0019: Header reorganizado, um componente por pasta e cada responsabilidade num arquivo:
   `ThemeToggle/` (`theme.constants.ts`, `theme.types.ts`, `theme.utils.ts`, `useTheme.ts`,
   `ThemeToggle.tsx`) e `UserMenu/` (`UserMenu.tsx`, `UserMenu.types.ts`, `useSignOut.ts`), cada um
@@ -53,6 +70,10 @@ tarefa (`T-NNNN`) quando houver. No deploy, a seção `[Não publicado]` vira a 
 
 ### Corrigido
 
+- T-0021: trocar entre as abas do Financeiro deslocava o topo em 48 px (Voltar acima do título
+  numa aba e abaixo na outra, containers diferentes); agora as duas usam o mesmo topo e a barra
+  de rolagem tem espaço reservado.
+- T-0020: validação duplicada nos PRs (3 execuções por push e 2 pedidos de aprovação).
 - T-0005: `docs/decisions/ADR-006-autenticacao-better-auth.md` volta a conter o ADR-006
   (Better Auth), sobrescrito por engano em 18/11/2026.
 - T-0005: URL de produção em `VERCEL-ENV.md` (`admin-elizabetefabri.vercel.app`).
