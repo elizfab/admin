@@ -57,6 +57,18 @@ concessionária (produção).
 | 08  | [Primeiro deploy e verificação](08-primeiro-deploy.md)              | Preview e produção no ar, administradora criada           | ⬜     |
 | 09  | [Backup, restauração e keep-alive](09-backup-e-keepalive.md)        | Backup criptografado e restauração testada                | ⬜     |
 | 10  | [Operação e checklist de go-live](10-operacao-e-go-live.md)         | Roteiro de incidentes + checklist final                   | ⬜     |
+| 11  | [Danger e PR automático](11-danger-e-pr-automatico.md)              | Só `feature/*`; PR para a develop aberto sozinho          | ✅     |
+| 12  | [Prettier e formatação automática](12-prettier-e-formatacao.md)    | Formato único; hook no commit; CI confere                 | ✅     |
+| 13  | [Cobertura de testes](13-cobertura-de-testes.md)                    | ≥ 95% no código novo; total não cai                       | ✅     |
+
+## Registros de operação
+
+Relatos datados do que foi feito no ambiente real (Vercel, Supabase), em `registros/AAAA-MM-DD-<assunto>.md`.
+O passo a passo reproduzível fica nos passos acima; o resumo de cada mudança, no [`docs/CHANGELOG.md`](../../CHANGELOG.md).
+
+| Data | Registro |
+|---|---|
+| 15/11/2026 | [Identidade visual no login e variáveis da Vercel](registros/2026-11-15-identidade-visual-e-vercel.md) |
 
 ## ✅ Critério de conclusão da fase
 

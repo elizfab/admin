@@ -15,7 +15,7 @@ describe("Sidebar", () => {
         const nav = screen.getByRole("navigation", { name: "Navegação principal" });
         expect(nav).toBeInTheDocument();
 
-        for (const label of ["Dashboard", "Estudos", "Financeiro"]) {
+        for (const label of ["Dashboard", "Portal Dev", "Financeiro"]) {
             expect(screen.getByRole("link", { name: label })).toBeInTheDocument();
         }
     });
@@ -27,8 +27,6 @@ describe("Sidebar", () => {
             "aria-current",
             "page",
         );
-        expect(screen.getByRole("link", { name: "Dashboard" })).not.toHaveAttribute(
-            "aria-current",
-        );
+        expect(screen.getByRole("link", { name: "Dashboard" })).not.toHaveAttribute("aria-current");
     });
 });

@@ -1,0 +1,23 @@
+@use "@/styles/abstracts" as *;
+
+.backLink {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  gap: $space-1;
+  margin-bottom: $space-3;
+  font-size: $font-size-sm;
+  font-weight: 600;
+  color: var(--text-color-secondary);
+  text-decoration: none;
+  border-radius: $radius-sm;
+
+  &:hover {
+    color: var(--text-color);
+    text-decoration: underline;
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}

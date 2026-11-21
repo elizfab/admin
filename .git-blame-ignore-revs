@@ -1,0 +1,5 @@
+# Commits só de formatação: o `git blame` e o GitHub pulam estes commits.
+# Local: git config blame.ignoreRevsFile .git-blame-ignore-revs
+
+# style: formata o código com o Prettier, sem mudança de comportamento (T-0011)
+5ba40ff751e370d1af8126df83738c03a783c911

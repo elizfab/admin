@@ -1,0 +1,23 @@
+@use "@/styles/abstracts" as *;
+
+.summary {
+  margin: 0 0 $space-4;
+  font-size: $font-size-sm;
+  color: var(--text-color-secondary);
+}
+
+.empty {
+  color: var(--text-color-secondary);
+
+  a {
+    color: var(--accent-color);
+    // Sublinhar: o link precisa se distinguir do texto sem depender da cor (axe).
+    text-decoration: underline;
+  }
+}
+
+.cards {
+  display: flex;
+  flex-direction: column;
+  gap: $space-4;
+}

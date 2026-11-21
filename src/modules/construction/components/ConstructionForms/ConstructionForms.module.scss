@@ -1,0 +1,188 @@
+@use "@/styles/abstracts" as *;
+
+// Base visual dos formulários da obra (mesma do TransactionForm).
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: $space-4;
+  max-width: 640px;
+  padding: $space-5;
+  background: var(--card-background);
+  border: 1px solid var(--border);
+  border-radius: $radius-lg;
+}
+
+.field {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: $space-1;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+
+  > label,
+  legend {
+    padding: 0;
+    font-size: $font-size-sm;
+    font-weight: 600;
+  }
+
+  input,
+  select,
+  textarea {
+    padding: $space-3;
+    font: inherit;
+    color: var(--text-color);
+    background: var(--card-background);
+    border: 1px solid var(--border);
+    border-radius: $radius-sm;
+
+    &:focus-visible {
+      @include focus-ring;
+    }
+
+    &[aria-invalid="true"] {
+      border-color: var(--red);
+    }
+  }
+
+  textarea {
+    resize: vertical;
+  }
+}
+
+.row {
+  display: flex;
+  flex-direction: column;
+  gap: $space-4;
+
+  @include up("md") {
+    flex-direction: row;
+  }
+}
+
+.hint {
+  margin: 0;
+  font-size: $font-size-xs;
+  color: var(--text-color-secondary);
+}
+
+.fieldError,
+.formError {
+  margin: 0;
+  font-size: $font-size-sm;
+  color: var(--red);
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: $space-3;
+}
+
+.inlineForm {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: $space-3;
+
+  .field {
+    flex: 1;
+    min-width: 160px;
+  }
+}
+
+.payForm {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-2;
+}
+
+.serviceCard {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-4;
+  margin: $space-3 0;
+  padding: $space-3;
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: $radius-md;
+
+  div {
+    display: flex;
+    flex-direction: column;
+  }
+
+  dt {
+    font-size: $font-size-xs;
+    color: var(--text-color-secondary);
+  }
+
+  dd {
+    margin: 0;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    color: var(--text-color);
+  }
+}
+
+.undoButton {
+  padding: $space-1 $space-2;
+  font: inherit;
+  font-size: $font-size-xs;
+  color: var(--text-color-secondary);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: $radius-sm;
+  cursor: pointer;
+
+  &:hover {
+    color: var(--red);
+    border-color: var(--red);
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
+
+.fieldset {
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+  margin: 0;
+  padding: $space-3;
+  border: 1px solid var(--border);
+  border-radius: $radius-md;
+}
+
+.fieldsetLegend {
+  padding: 0 $space-1;
+  font-size: $font-size-sm;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.categoryGroup {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: $space-2 $space-4;
+}
+
+.categoryGroupLabel {
+  font-size: $font-size-xs;
+  font-weight: 600;
+  color: var(--text-color-secondary);
+}
+
+.checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-2;
+  font-size: $font-size-sm;
+  color: var(--text-color);
+  cursor: pointer;
+}

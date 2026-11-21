@@ -14,6 +14,7 @@ import { hashPassword } from "better-auth/crypto";
 import { config } from "dotenv";
 
 import { PrismaClient } from "../src/generated/prisma/client";
+import { defaultDashboardModules } from "../src/modules/dashboard/defaults";
 
 config({ path: ".env.local", quiet: true });
 
@@ -50,7 +51,7 @@ async function main() {
 
         const userId = randomUUID();
 
-        // Transação: cria usuário e credencial juntos, ou nenhum dos dois.
+        // Transação: cria usuário, credencial e os cards iniciais do Dashboard juntos, ou nada.
         await prisma.$transaction([
             prisma.user.create({
                 data: {
@@ -69,6 +70,14 @@ async function main() {
                     providerId: "credential", // login por e-mail e senha
                     password: await hashPassword(password),
                 },
+            }),
+            // createdAt com 1 ms de diferença mantém a ordem dos cards (mais antigo primeiro).
+            prisma.dashboardModule.createMany({
+                data: defaultDashboardModules.map((card, index) => ({
+                    ...card,
+                    ownerId: userId,
+                    createdAt: new Date(Date.now() + index),
+                })),
             }),
         ]);
 

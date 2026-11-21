@@ -1,0 +1,18 @@
+@use "@/styles/abstracts" as *;
+
+.empty {
+  margin-top: $space-4;
+  color: var(--text-color-secondary);
+}
+
+.done td {
+  color: var(--text-color-secondary);
+  text-decoration: line-through;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: $space-2;
+  white-space: nowrap;
+}

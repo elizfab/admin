@@ -30,9 +30,12 @@ model User {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
-  sessions Session[]
-  accounts Account[]
-  projects Project[]
+  sessions             Session[]
+  accounts             Account[]
+  projects             Project[]
+  transactions         Transaction[]
+  constructionProjects ConstructionProject[]
+  dashboardModules     DashboardModule[]
 
   @@map("user")
 }
@@ -95,6 +98,36 @@ model RateLimit {
   @@map("rateLimit")
 }
 
+// ─── Dashboard ───────────────────────────────────────────────
+// Cards (atalhos) do dashboard, cadastrados pela tela (T-0007).
+
+enum DashboardModuleStatus {
+  AVAILABLE
+  EXTERNAL
+  SOON
+}
+
+model DashboardModule {
+  id          String                @id @default(cuid())
+  slug        String                @db.VarChar(40)
+  title       String                @db.VarChar(60)
+  description String                @db.VarChar(160)
+  href        String                @db.VarChar(300)
+  // Nome do ícone (ex.: "BookOpen"); o componente vem de src/modules/dashboard/icons.ts.
+  icon        String                @db.VarChar(40)
+  status      DashboardModuleStatus @default(AVAILABLE)
+  ownerId     String
+  createdAt   DateTime              @default(now())
+  updatedAt   DateTime              @updatedAt
+
+  // Cascade: cards são só atalhos; apagar a conta apaga os cards dela.
+  owner User @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
+  // Identificador único por dona (o índice também acelera as buscas por ownerId).
+  @@unique([ownerId, slug])
+  @@map("dashboard_module")
+}
+
 // ─── Projetos ────────────────────────────────────────────────
 
 enum ProjectStatus {
@@ -121,4 +154,220 @@ model Project {
   // Este índice composto também acelera as buscas por ownerId.
   @@unique([ownerId, name])
   @@map("project")
+}
+
+// ─── Financeiro ──────────────────────────────────────────────
+
+enum TransactionType {
+  INCOME
+  EXPENSE
+}
+
+enum TransactionCategory {
+  SALARY
+  HOUSING
+  FOOD
+  TRANSPORT
+  HEALTH
+  EDUCATION
+  LEISURE
+  CONSTRUCTION
+  OTHER
+}
+
+model Transaction {
+  id          String              @id @default(cuid())
+  type        TransactionType
+  description String              @db.VarChar(120)
+  // Dinheiro em CENTAVOS (inteiro): R$ 12,34 = 1234. Sem erro de arredondamento.
+  amountCents Int
+  category    TransactionCategory @default(OTHER)
+  // Só a data (sem hora): o dia em que a receita/despesa aconteceu.
+  occurredOn  DateTime            @db.Date
+  ownerId     String
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+
+  owner User @relation(fields: [ownerId], references: [id], onDelete: Restrict)
+
+  // Preenchidos quando o lançamento foi GERADO pela obra (Fase 09/07.1.1).
+  // Um lançamento gerado só é alterado pela página da obra.
+  servicePayment      ServicePayment?
+  materialInstallment MaterialInstallment?
+
+  // As consultas sempre filtram por dona + período (resumo do mês).
+  @@index([ownerId, occurredOn])
+  @@map("transaction")
+}
+
+// ─── Obra (Financeiro → Obra, Fase 09) ───────────────────────
+
+enum ConstructionTrade {
+  MASON // Pedreiro
+  CARPENTER // Carpinteiro
+  TILER // Azulejista
+  ELECTRICIAN // Eletricista
+  PLUMBER // Encanador
+  GUTTER_INSTALLER // Calheiro
+  PAINTER // Pintor
+  GLAZIER // Vidraceiro (blindex)
+  OTHER
+}
+
+enum PaymentMethod {
+  PIX
+  CASH
+  DEBIT_CARD
+  CREDIT_CARD
+  BANK_TRANSFER
+  BOLETO
+}
+
+/// Uma obra: "Lavanderia". Só ela tem ownerId; o resto herda a dona por ela.
+model ConstructionProject {
+  id             String    @id @default(cuid())
+  name           String    @db.VarChar(80)
+  startDate      DateTime? @db.Date
+  plannedEndDate DateTime? @db.Date
+  categoryIds    String[]  @default([])
+  ownerId        String
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  owner     User                  @relation(fields: [ownerId], references: [id], onDelete: Restrict)
+  areas     ConstructionArea[]
+  phases    ConstructionPhase[]
+  services  ConstructionService[]
+  purchases MaterialPurchase[]
+  goals     ConstructionGoal[]
+
+  @@unique([ownerId, name])
+  @@map("construction_project")
+}
+
+/// Ambiente da obra: "Geral", "Banheiro", "Escritório", "Área gourmet"…
+model ConstructionArea {
+  id        String @id @default(cuid())
+  name      String @db.VarChar(60)
+  projectId String
+
+  project   ConstructionProject   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  services  ConstructionService[]
+  purchases MaterialPurchase[]
+  goals     ConstructionGoal[]
+
+  @@unique([projectId, name])
+  @@map("construction_area")
+}
+
+/// Fase da obra: número (01, 02…) e nome opcional ("Estrutura").
+model ConstructionPhase {
+  id        String  @id @default(cuid())
+  number    Int
+  name      String? @db.VarChar(60)
+  projectId String
+
+  project  ConstructionProject   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  services ConstructionService[]
+
+  @@unique([projectId, number])
+  @@map("construction_phase")
+}
+
+/// Serviço contratado (mão de obra). Pago, falta e status são CALCULADOS.
+model ConstructionService {
+  id               String            @id @default(cuid())
+  trade            ConstructionTrade
+  professionalName String?           @db.VarChar(80)
+  description      String            @db.VarChar(120)
+  contractedCents  Int
+  notes            String?           @db.VarChar(500)
+  projectId        String
+  phaseId          String
+  areaId           String?
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+
+  project  ConstructionProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  phase    ConstructionPhase   @relation(fields: [phaseId], references: [id], onDelete: Restrict)
+  area     ConstructionArea?   @relation(fields: [areaId], references: [id], onDelete: SetNull)
+  payments ServicePayment[]
+
+  @@index([projectId, phaseId])
+  @@map("construction_service")
+}
+
+/// Pagamento a um profissional. Gera 1 lançamento (Transaction) no Financeiro.
+model ServicePayment {
+  id            String        @id @default(cuid())
+  paidOn        DateTime      @db.Date
+  amountCents   Int
+  method        PaymentMethod
+  notes         String?       @db.VarChar(500)
+  serviceId     String
+  transactionId String        @unique
+
+  service     ConstructionService @relation(fields: [serviceId], references: [id], onDelete: Restrict)
+  transaction Transaction         @relation(fields: [transactionId], references: [id], onDelete: Restrict)
+
+  @@index([serviceId, paidOn])
+  @@map("service_payment")
+}
+
+/// Compra de material. As parcelas são geradas na criação.
+model MaterialPurchase {
+  id                String        @id @default(cuid())
+  item              String        @db.VarChar(120)
+  supplier          String?       @db.VarChar(80)
+  purchasedOn       DateTime      @db.Date
+  totalCents        Int
+  method            PaymentMethod
+  installmentsCount Int
+  notes             String?       @db.VarChar(500)
+  projectId         String
+  areaId            String?
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+
+  project      ConstructionProject   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  area         ConstructionArea?     @relation(fields: [areaId], references: [id], onDelete: SetNull)
+  installments MaterialInstallment[]
+
+  @@index([projectId, purchasedOn])
+  @@map("material_purchase")
+}
+
+/// Parcela de uma compra. Paga = tem paidOn e um lançamento no Financeiro.
+model MaterialInstallment {
+  id            String    @id @default(cuid())
+  number        Int
+  dueOn         DateTime  @db.Date
+  amountCents   Int
+  paidOn        DateTime? @db.Date
+  purchaseId    String
+  transactionId String?   @unique
+
+  purchase    MaterialPurchase @relation(fields: [purchaseId], references: [id], onDelete: Cascade)
+  transaction Transaction?     @relation(fields: [transactionId], references: [id], onDelete: Restrict)
+
+  @@unique([purchaseId, number])
+  @@index([dueOn])
+  @@map("material_installment")
+}
+
+/// Meta da obra (checklist), opcionalmente ligada a um ambiente.
+model ConstructionGoal {
+  id        String    @id @default(cuid())
+  title     String    @db.VarChar(160)
+  doneAt    DateTime? @db.Date
+  position  Int       @default(0)
+  projectId String
+  areaId    String?
+  createdAt DateTime  @default(now())
+
+  project ConstructionProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  area    ConstructionArea?   @relation(fields: [areaId], references: [id], onDelete: SetNull)
+
+  @@index([projectId, position])
+  @@map("construction_goal")
 }

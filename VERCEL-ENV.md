@@ -101,7 +101,7 @@ O `next.config.ts` valida no build de produção (`src/lib/env/required-env.ts`)
 |---|---|
 | `DATABASE_URL` → `localhost:5432` (Docker) | Pooler Transaction do Supabase, porta 6543 |
 | `DIRECT_URL` → `localhost:5432` | Session pooler do Supabase, porta 5432 |
-| `BETTER_AUTH_URL=http://localhost:3000` | `https://admin.vercel.app` (só Production) |
+| `BETTER_AUTH_URL=http://localhost:3000` | `https://admin-elizabetefabri.vercel.app` (só Production) |
 | `BETTER_AUTH_SECRET` local | Segredo novo por ambiente |
 | `SEED_ADMIN_*` | **Não vai** para a Vercel |
 

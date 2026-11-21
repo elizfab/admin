@@ -31,17 +31,11 @@ export function DropdownMenuContent({
     );
 }
 
-export function DropdownMenuItem({
-    className,
-    ...props
-}: ComponentProps<typeof Primitive.Item>) {
+export function DropdownMenuItem({ className, ...props }: ComponentProps<typeof Primitive.Item>) {
     return <Primitive.Item className={cn(styles.item, className)} {...props} />;
 }
 
-export function DropdownMenuLabel({
-    className,
-    ...props
-}: ComponentProps<typeof Primitive.Label>) {
+export function DropdownMenuLabel({ className, ...props }: ComponentProps<typeof Primitive.Label>) {
     return <Primitive.Label className={cn(styles.label, className)} {...props} />;
 }
 
@@ -49,7 +43,5 @@ export function DropdownMenuSeparator({
     className,
     ...props
 }: ComponentProps<typeof Primitive.Separator>) {
-    return (
-        <Primitive.Separator className={cn(styles.separator, className)} {...props} />
-    );
+    return <Primitive.Separator className={cn(styles.separator, className)} {...props} />;
 }

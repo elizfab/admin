@@ -3,11 +3,7 @@
  * SEGURA para mostrar ao cliente. Detalhes internos nunca vão aqui.
  */
 export type ErrorCode =
-    | "VALIDATION_ERROR"
-    | "UNAUTHORIZED"
-    | "FORBIDDEN"
-    | "NOT_FOUND"
-    | "CONFLICT";
+    "VALIDATION_ERROR" | "UNAUTHORIZED" | "FORBIDDEN" | "NOT_FOUND" | "CONFLICT";
 
 export type FieldErrors = Record<string, string[] | undefined>;
 

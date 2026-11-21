@@ -1,4 +1,5 @@
-# Integração contínua: roda a cada push na main e em todo pull request.
+# Integração contínua: roda a cada push na main e em todo pull request
+# (uma vez por PR/push; os workflows que abrem PR não chamam mais a CI — T-0020).
 # Se qualquer etapa falhar, o commit/PR fica marcado com ❌ no GitHub.
 name: CI
 
@@ -38,8 +39,11 @@ jobs:
           --health-retries 10
 
     steps:
+      # Histórico completo: a checagem de cobertura compara com a develop/main.
       - name: Baixar o código
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Instalar Node.js (versão do .nvmrc)
         uses: actions/setup-node@v4
@@ -52,6 +56,10 @@ jobs:
 
       - name: Verificar tipos
         run: npm run typecheck
+
+      # Prettier: recusa arquivo fora do formato (evita diff de indentação nos PRs).
+      - name: Formatação
+        run: npm run format:check
 
       - name: Lint
         run: npm run lint
@@ -66,8 +74,21 @@ jobs:
       - name: Testes E2E
         run: npm run test:e2e
 
-      - name: Testes de integração
-        run: npm run test:integration
+      # Unitários + integração juntos, com o relatório de cobertura somado (coverage/).
+      - name: Testes com cobertura (unitários + integração)
+        run: npm run test:coverage
+
+      # ≥ 95% em cada arquivo novo/alterado e total que não cai (scripts/coverage-check.ts).
+      - name: Conferir cobertura
+        run: npm run coverage:check
+
+      - name: Guardar o relatório de cobertura
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage/
+          retention-days: 14
 
       - name: Guardar o relatório do Playwright (se algo falhar)
         if: failure()

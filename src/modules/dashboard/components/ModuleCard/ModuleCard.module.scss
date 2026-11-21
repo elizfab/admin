@@ -3,8 +3,6 @@
 .card {
   display: flex;
   flex-direction: column;
-  gap: $space-2;
-  padding: $space-5;
   background: var(--card-background);
   border: 1px solid var(--border);
   border-radius: $radius-lg;
@@ -12,9 +10,25 @@
     border-color 150ms ease,
     box-shadow 150ms ease;
 
-  &:hover {
+  &:hover,
+  &:focus-within {
     border-color: var(--accent-color);
     box-shadow: 0 4px 16px color-mix(in srgb, var(--accent-color) 10%, transparent);
+  }
+}
+
+.link {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  gap: $space-2;
+  padding: $space-5;
+  color: inherit;
+  text-decoration: none;
+  border-radius: $radius-lg;
+
+  &:focus-visible {
+    @include focus-ring;
   }
 }
 
@@ -46,17 +60,28 @@
   border-radius: 999px;
 }
 
-.status_available {
+.status_AVAILABLE {
   color: var(--green);
   background: color-mix(in srgb, var(--green) 14%, transparent);
 }
 
-.status_external {
+.status_EXTERNAL {
   color: var(--accent-on-selection);
   background: var(--selection-color);
 }
 
-.status_soon {
+.status_SOON {
   color: var(--text-color-secondary);
   background: var(--background);
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: $space-2;
+  padding: 0 $space-5 $space-4;
+}
+
+.srOnly {
+  @include visually-hidden;
 }

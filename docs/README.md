@@ -53,6 +53,8 @@ Legenda: ⬜ não iniciada · 🟨 em andamento · ✅ concluída · 📋 planej
 | 04 | [`setup/04-setup-backend`](setup/04-setup-backend/README.md) | Módulo Projetos: Zod 4, erros padrão, repositório, serviço, API REST, Server Actions, telas e testes de isolamento | ✅ |
 | 05 | [`setup/05-setup-testes-e2e`](setup/05-setup-testes-e2e/README.md) | Playwright (auth, navegação, CRUD, isolamento, acessibilidade) e integração com banco | ✅ |
 | 06 | [`setup/06-setup-deploy`](setup/06-setup-deploy/README.md) | GitHub, Vercel, variáveis por ambiente e backup | ✅ |
+| 07.1 | [`setup/07-novos-modulos/7.1-financeiro`](setup/07-novos-modulos/7.1-financeiro/README.md) | Módulo Financeiro: transações, categorias, resumo mensal e telas | ✅ |
+| 07.1.1 | [`setup/07-novos-modulos/7.1-financeiro/7.1.1-financeiro-construcao`](setup/07-novos-modulos/7.1-financeiro/7.1.1-financeiro-construcao/README.md) | Financeiro → Obra: serviços, pagamentos, fases, compras/parcelas, metas, dashboard e atalho em Nova transação | ✅ |
 
 > Todas as fases (00 a 06) estão **concluídas**: a aplicação está no ar em
 > <https://admin-elizabetefabri.vercel.app/> (produção) com CI no GitHub
@@ -81,7 +83,8 @@ docs/
 ├── architecture/
 │   └── ARCHITECTURE.md            ← arquitetura e decisões (revisão 1.4)
 ├── decisions/
-│   └── ADR-006-autenticacao-better-auth.md
+│   ├── ADR-006-autenticacao-better-auth.md
+│   └── ADR-013-portal-dev-protegido.md
 └── setup/
     ├── MODELO-DE-PASSO.md         ← modelo para novos guias
     ├── 00-setup-ambiente/
@@ -131,6 +134,7 @@ guia, compare primeiro com esta tabela.
 | Decisão | Registro |
 |---|---|
 | Autenticação com Better Auth (substitui Auth.js) | [ADR-006](decisions/ADR-006-autenticacao-better-auth.md) |
+| Portal Dev protegido, servido pelo Admin | [ADR-013](decisions/ADR-013-portal-dev-protegido.md) |
 | PostgreSQL local (Docker) para desenvolvimento; Supabase para Preview/Produção | ARCHITECTURE.md, seção 12.7 |
 | Data API do Supabase desativada | ARCHITECTURE.md, seção 12.6 |
 

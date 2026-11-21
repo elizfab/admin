@@ -30,14 +30,20 @@ export function ProjectList({ projects }: ProjectListProps) {
                             </span>
                         </div>
 
-                        {project.description && <p className={styles.description}>{project.description}</p>}
+                        {project.description && (
+                            <p className={styles.description}>{project.description}</p>
+                        )}
 
                         <p className={styles.meta}>
                             Atualizado em {dateFormatter.format(project.updatedAt)}
                             {project.repositoryUrl && (
                                 <>
                                     {" · "}
-                                    <a href={project.repositoryUrl} target="_blank" rel="noopener noreferrer">
+                                    <a
+                                        href={project.repositoryUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
                                         Repositório <ExternalLink size={12} aria-hidden="true" />
                                         <span className="visually-hidden"> (abre em nova aba)</span>
                                     </a>

@@ -1,0 +1,79 @@
+@use "@/styles/abstracts" as *;
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: $space-2 $space-4;
+  padding: $space-3 $space-4;
+  background: var(--card-background);
+  border: 1px solid var(--border);
+  border-radius: $radius-md;
+
+  @include up("md") {
+    grid-template-columns: 1fr auto auto;
+  }
+}
+
+.info {
+  min-width: 0;
+}
+
+.description {
+  margin: 0;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.obraBadge {
+  display: inline-block;
+  margin-left: $space-2;
+  padding: 0 $space-2;
+  font-size: $font-size-xs;
+  font-weight: 700;
+  vertical-align: middle;
+  color: var(--accent-on-selection);
+  background: var(--selection-color);
+  border-radius: 999px;
+}
+
+.meta {
+  margin: 0;
+  font-size: $font-size-xs;
+  color: var(--text-color-secondary);
+}
+
+.amount {
+  margin: 0;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.income {
+  color: var(--green);
+}
+
+.expense {
+  color: var(--red);
+}
+
+.actions {
+  display: flex;
+  grid-column: 1 / -1;
+  justify-content: flex-end;
+  gap: $space-2;
+
+  @include up("md") {
+    grid-column: auto;
+  }
+}

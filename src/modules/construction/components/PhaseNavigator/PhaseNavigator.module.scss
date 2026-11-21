@@ -1,0 +1,16 @@
+@use "@/styles/abstracts" as *;
+
+.navigator {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-3;
+  margin-bottom: $space-4;
+}
+
+.label {
+  margin: 0;
+  font-size: $font-size-lg;
+  font-weight: 700;
+  color: var(--text-color);
+}

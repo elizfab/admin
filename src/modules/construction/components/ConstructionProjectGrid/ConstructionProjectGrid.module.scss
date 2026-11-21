@@ -1,0 +1,93 @@
+@use "@/styles/abstracts" as *;
+
+.empty {
+  margin: 0;
+  color: var(--text-color-secondary);
+}
+
+// Painel de altura fixa: até 12 cards (4 colunas × 3 linhas no desktop),
+// sem rolagem interna (OBRA-R18). Mobile-first: 1 → 2 → 3 → 4 colunas.
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-auto-rows: minmax(150px, auto);
+  gap: $space-3;
+  margin: 0;
+  padding: $space-4;
+  list-style: none;
+  background: var(--card-background);
+  border: 1px solid var(--border);
+  border-radius: $radius-lg;
+
+  @include up("md") {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @include up("lg") {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  @include up("xl") {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+  min-width: 0;
+  padding: $space-4;
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: $radius-lg;
+}
+
+.name {
+  font-size: $font-size-md;
+  font-weight: 700;
+  color: var(--text-color);
+  text-decoration: none;
+  overflow-wrap: anywhere;
+
+  &:hover {
+    color: var(--accent-color);
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
+
+.dates {
+  font-size: $font-size-sm;
+  color: var(--text-color-secondary);
+}
+
+.categories {
+  font-size: $font-size-xs;
+  color: var(--text-color-secondary);
+}
+
+.open {
+  align-self: flex-start;
+  margin-top: auto;
+}
+
+.more {
+  position: absolute;
+  right: $space-3;
+  bottom: $space-3;
+  padding: $space-1 $space-3;
+  font-size: $font-size-sm;
+  font-weight: 600;
+  color: var(--accent-color);
+  text-decoration: underline;
+  background: var(--card-background);
+  border-radius: $radius-sm;
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
