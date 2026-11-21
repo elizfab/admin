@@ -18,6 +18,7 @@ const privatePages = [
     "/projects/new",
     "/documentation",
     "/finance",
+    "/finance/transactions",
     "/finance/transactions/new",
     "/finance/construction",
     "/studies",
@@ -110,6 +111,7 @@ test.describe("telas da obra (Fase 09)", () => {
 
     const obraPages = () => [
         base,
+        `${base}/phases`,
         `${base}/phases/${phaseNumber}`,
         `${base}/services`,
         `${base}/services/new`,

@@ -5,6 +5,7 @@ import { useActionState } from "react";
 
 import { Button } from "@/components/ui/Button/Button";
 
+import { OBRA_CATEGORIAS, OBRA_GRUPOS } from "../../constants/categories";
 import type { FormState } from "../../actions/project.actions";
 import { unpayInstallmentAction } from "../../actions/purchase.actions";
 import styles from "./ConstructionForms.module.scss";
@@ -16,7 +17,12 @@ export function ProjectSettingsForm({
     project,
 }: {
     action: (state: FormState, formData: FormData) => Promise<FormState>;
-    project: { name: string; startDate: string | null; plannedEndDate: string | null };
+    project: {
+        name: string;
+        startDate: string | null;
+        plannedEndDate: string | null;
+        categoryIds?: string[];
+    };
 }) {
     const [state, formAction, pending] = useActionState(action, null);
     const errors = state?.fieldErrors;
@@ -65,6 +71,33 @@ export function ProjectSettingsForm({
                     )}
                 </div>
             </div>
+
+            <fieldset className={styles.fieldset}>
+                <legend className={styles.fieldsetLegend}>Categorias</legend>
+                {errors?.categoryIds && (
+                    <p className={styles.fieldError}>{errors.categoryIds[0]}</p>
+                )}
+                {OBRA_GRUPOS.map((grupo) => {
+                    const categorias = OBRA_CATEGORIAS.filter((c) => c.grupoId === grupo.id);
+                    if (categorias.length === 0) return null;
+                    return (
+                        <div key={grupo.id} className={styles.categoryGroup}>
+                            <span className={styles.categoryGroupLabel}>{grupo.label}</span>
+                            {categorias.map((categoria) => (
+                                <label key={categoria.id} className={styles.checkbox}>
+                                    <input
+                                        type="checkbox"
+                                        name="categoryIds"
+                                        value={categoria.id}
+                                        defaultChecked={project.categoryIds?.includes(categoria.id)}
+                                    />
+                                    {categoria.label}
+                                </label>
+                            ))}
+                        </div>
+                    );
+                })}
+            </fieldset>
 
             <div className={styles.actions}>
                 <Button type="submit" disabled={pending}>

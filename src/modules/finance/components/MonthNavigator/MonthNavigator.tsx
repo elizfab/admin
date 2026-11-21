@@ -8,6 +8,8 @@ import styles from "./MonthNavigator.module.scss";
 
 type MonthNavigatorProps = {
     month: string;
+    /** Caminho base dos links (?month=…): "/finance" no Dashboard, "/finance/transactions" nas Transações. */
+    basePath?: string;
 };
 
 /**
@@ -15,14 +17,14 @@ type MonthNavigatorProps = {
  * a página continua Server Component, o mês fica na URL (dá para favoritar
  * ou compartilhar) e o botão "voltar" do navegador funciona.
  */
-export function MonthNavigator({ month }: MonthNavigatorProps) {
+export function MonthNavigator({ month, basePath = "/finance" }: MonthNavigatorProps) {
     const previous = shiftMonth(month, -1);
     const next = shiftMonth(month, 1);
 
     return (
         <nav aria-label="Navegar entre meses" className={styles.navigator}>
             <Link
-                href={`/finance?month=${previous}`}
+                href={`${basePath}?month=${previous}`}
                 className={buttonClassName("secondary")}
                 aria-label={`Mês anterior: ${formatMonth(previous)}`}
             >
@@ -30,7 +32,7 @@ export function MonthNavigator({ month }: MonthNavigatorProps) {
             </Link>
             <h2 className={styles.label}>{formatMonth(month)}</h2>
             <Link
-                href={`/finance?month=${next}`}
+                href={`${basePath}?month=${next}`}
                 className={buttonClassName("secondary")}
                 aria-label={`Próximo mês: ${formatMonth(next)}`}
             >

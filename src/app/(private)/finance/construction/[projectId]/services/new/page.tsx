@@ -23,18 +23,12 @@ export default async function NewServicePage({
         if (error instanceof NotFoundError) notFound();
         throw error;
     });
-
-    const firstPhase = project.phases[0]?.number ?? 1;
     const action = createServiceAction.bind(null, project.id);
 
     return (
         <>
             <PageHeader title={`${project.name} — Novo serviço`} />
-            <ConstructionTabs
-                projectId={project.id}
-                firstPhaseNumber={firstPhase}
-                active="services"
-            />
+            <ConstructionTabs projectId={project.id} active="services" />
             <ServiceForm
                 action={action}
                 projectId={project.id}

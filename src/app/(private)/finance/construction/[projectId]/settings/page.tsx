@@ -7,17 +7,12 @@ import { NotFoundError } from "@/lib/errors/app-error";
 import { ConstructionTabs } from "@/modules/construction/components/ConstructionTabs/ConstructionTabs";
 import {
     AddAreaForm,
-    AddPhaseForm,
     ProjectSettingsForm,
 } from "@/modules/construction/components/ConstructionForms/SettingsForms";
 import { DeleteButton } from "@/modules/construction/components/DeleteButton/DeleteButton";
 import { DataTable } from "@/modules/construction/components/DataTable/DataTable";
 import { formatDay } from "@/lib/dates/month";
-import {
-    addAreaAction,
-    addPhaseAction,
-    updateProjectAction,
-} from "@/modules/construction/actions/project.actions";
+import { addAreaAction, updateProjectAction } from "@/modules/construction/actions/project.actions";
 import { deleteGoalAction } from "@/modules/construction/actions/goal.actions";
 import { deleteServiceAction } from "@/modules/construction/actions/service.actions";
 import { deletePurchaseAction } from "@/modules/construction/actions/purchase.actions";
@@ -28,7 +23,7 @@ import { dayToInput } from "@/lib/dates/month";
 import styles from "./page.module.scss";
 
 export const metadata: Metadata = {
-    title: "Configuração da obra",
+    title: "Dados da obra",
 };
 
 export default async function ConstructionSettingsPage({
@@ -47,20 +42,13 @@ export default async function ConstructionSettingsPage({
         listPurchases(session.user.id, project.id),
         listGoals(session.user.id, project.id),
     ]);
-    const firstPhase = project.phases[0]?.number ?? 1;
     const updateAction = updateProjectAction.bind(null, project.id);
     const addArea = addAreaAction.bind(null, project.id);
-    const addPhase = addPhaseAction.bind(null, project.id);
-    const suggestedPhase = Math.max(0, ...project.phases.map((p) => p.number)) + 1;
 
     return (
         <>
-            <PageHeader title={`${project.name} — Configuração`} />
-            <ConstructionTabs
-                projectId={project.id}
-                firstPhaseNumber={firstPhase}
-                active="settings"
-            />
+            <PageHeader title={`${project.name} — Dados da obra`} />
+            <ConstructionTabs projectId={project.id} active="settings" />
 
             <section className={styles.section} aria-labelledby="project-data">
                 <h2 id="project-data" className={styles.sectionTitle}>
@@ -74,6 +62,7 @@ export default async function ConstructionSettingsPage({
                         plannedEndDate: project.plannedEndDate
                             ? dayToInput(project.plannedEndDate)
                             : null,
+                        categoryIds: project.categoryIds,
                     }}
                 />
             </section>
@@ -90,21 +79,6 @@ export default async function ConstructionSettingsPage({
                     ))}
                 </ul>
                 <AddAreaForm action={addArea} />
-            </section>
-
-            <section className={styles.section} aria-labelledby="phases">
-                <h2 id="phases" className={styles.sectionTitle}>
-                    Fases
-                </h2>
-                <ul className={styles.chips}>
-                    {project.phases.map((phase) => (
-                        <li key={phase.id} className={styles.chip}>
-                            Fase {String(phase.number).padStart(2, "0")}
-                            {phase.name ? ` — ${phase.name}` : ""}
-                        </li>
-                    ))}
-                </ul>
-                <AddPhaseForm action={addPhase} suggestedNumber={suggestedPhase} />
             </section>
 
             <section className={styles.section} aria-labelledby="danger">

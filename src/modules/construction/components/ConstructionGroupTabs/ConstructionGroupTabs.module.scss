@@ -1,0 +1,30 @@
+@use "@/styles/abstracts" as *;
+
+.tabs {
+  display: flex;
+  gap: $space-1;
+  border-bottom: 1px solid var(--border);
+}
+
+.tab {
+  padding: $space-2 $space-4;
+  font-size: $font-size-sm;
+  font-weight: 600;
+  color: var(--text-color-secondary);
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+
+  &:hover {
+    color: var(--text-color);
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
+
+.active {
+  color: var(--accent-color);
+  border-bottom-color: var(--accent-color);
+}

@@ -52,7 +52,7 @@ function toFormState(error: unknown, values?: TransactionFormValues): Transactio
 
 /** Depois de salvar, volta para o painel NO MÊS da transação. */
 function financeUrlFor(occurredOn: Date) {
-    return `/finance?month=${occurredOn.toISOString().slice(0, 7)}`;
+    return `/finance/transactions?month=${occurredOn.toISOString().slice(0, 7)}`;
 }
 
 export async function createTransactionAction(

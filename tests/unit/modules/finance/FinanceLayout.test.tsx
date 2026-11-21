@@ -20,12 +20,12 @@ describe("FinanceLayout (topo igual nas duas abas — FIN-R12)", () => {
         expect(screen.getByText("conteúdo da aba")).toBeInTheDocument();
     });
 
-    it("em Transações, Voltar leva ao início (Dashboard)", () => {
+    it("em Transações, Voltar leva ao Financeiro (um nível acima)", () => {
         render(<FinanceLayout current="transactions">x</FinanceLayout>);
 
-        expect(screen.getByRole("link", { name: "Voltar ao início" })).toHaveAttribute(
+        expect(screen.getByRole("link", { name: "Voltar ao Financeiro" })).toHaveAttribute(
             "href",
-            "/dashboard",
+            "/finance",
         );
     });
 

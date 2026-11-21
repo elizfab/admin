@@ -42,7 +42,6 @@ export default async function ConstructionPurchasesPage({
     });
 
     const purchases = await listPurchases(session.user.id, project.id);
-    const firstPhase = project.phases[0]?.number ?? 1;
     const defaultDate = today();
 
     return (
@@ -58,11 +57,7 @@ export default async function ConstructionPurchasesPage({
                     </Link>
                 }
             />
-            <ConstructionTabs
-                projectId={project.id}
-                firstPhaseNumber={firstPhase}
-                active="purchases"
-            />
+            <ConstructionTabs projectId={project.id} active="purchases" />
 
             {purchases.length === 0 ? (
                 <p className={styles.empty}>Nenhuma compra registrada ainda.</p>

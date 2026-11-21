@@ -24,18 +24,12 @@ export default async function NewPurchasePage({
         if (error instanceof NotFoundError) notFound();
         throw error;
     });
-
-    const firstPhase = project.phases[0]?.number ?? 1;
     const action = createPurchaseAction.bind(null, project.id);
 
     return (
         <>
             <PageHeader title={`${project.name} — Nova compra`} />
-            <ConstructionTabs
-                projectId={project.id}
-                firstPhaseNumber={firstPhase}
-                active="purchases"
-            />
+            <ConstructionTabs projectId={project.id} active="purchases" />
             <PurchaseForm
                 action={action}
                 areas={project.areas}

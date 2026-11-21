@@ -32,3 +32,58 @@
   border: 1px dashed var(--border);
   border-radius: $radius-lg;
 }
+
+// Dashboard de Construção: seção com divisor e grid de categorias
+// (Especificação §2 — somente textos, sem métricas nem links).
+.construction {
+  display: flex;
+  flex-direction: column;
+  gap: $space-4;
+}
+
+.constructionTitle {
+  margin: 0;
+  font-size: $font-size-lg;
+  color: var(--text-color);
+}
+
+.constructionDivider {
+  height: 1px;
+  background: var(--border);
+}
+
+.constructionGroup {
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+}
+
+.constructionGroupTitle {
+  margin: 0;
+  font-size: $font-size-md;
+  color: var(--text-color);
+}
+
+.constructionCards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $space-3;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  @include up("md") {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.constructionCard {
+  padding: $space-4;
+  font-size: $font-size-md;
+  font-weight: 600;
+  color: var(--text-color);
+  text-align: center;
+  background: var(--card-background);
+  border: 1px solid var(--border);
+  border-radius: $radius-lg;
+}

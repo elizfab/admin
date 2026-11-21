@@ -5,10 +5,11 @@ import { cn } from "@/lib/utils/cn";
 
 import styles from "./FinanceTabs.module.scss";
 
-export type FinanceSection = "transactions" | "construction";
+export type FinanceSection = "dashboard" | "transactions" | "construction";
 
 const tabs: { id: FinanceSection; label: string; href: string }[] = [
-    { id: "transactions", label: "Transações", href: "/finance" },
+    { id: "dashboard", label: "Dashboard", href: "/finance" },
+    { id: "transactions", label: "Transações", href: "/finance/transactions" },
     { id: "construction", label: "Construção", href: "/finance/construction" },
 ];
 
@@ -19,23 +20,26 @@ type FinanceTabsProps = {
 };
 
 /**
- * Abas do Financeiro (FIN-R11). Cada aba é uma ROTA, então são links de navegação
- * com aria-current (e não role="tablist", que é para painéis na mesma página).
+ * Abas do Financeiro (FIN-R11). Como navegam entre ROTAS, usam links com
+ * role="tab" + aria-selected (ETAPA 04: abas não usam aria-current).
  */
 export function FinanceTabs({ current, children }: FinanceTabsProps) {
     return (
         <div className={styles.container}>
-            <nav aria-label="Seções do Financeiro" className={styles.tabs}>
-                {tabs.map((tab) => (
-                    <Link
-                        key={tab.id}
-                        href={tab.href}
-                        className={cn(styles.tab, tab.id === current && styles.active)}
-                        aria-current={tab.id === current ? "page" : undefined}
-                    >
-                        {tab.label}
-                    </Link>
-                ))}
+            <nav aria-label="Seções do Financeiro">
+                <div role="tablist" className={styles.tabs}>
+                    {tabs.map((tab) => (
+                        <Link
+                            key={tab.id}
+                            href={tab.href}
+                            role="tab"
+                            aria-selected={tab.id === current}
+                            className={cn(styles.tab, tab.id === current && styles.active)}
+                        >
+                            {tab.label}
+                        </Link>
+                    ))}
+                </div>
             </nav>
             <div className={styles.panel}>{children}</div>
         </div>

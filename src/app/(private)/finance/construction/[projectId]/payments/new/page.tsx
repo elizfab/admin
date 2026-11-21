@@ -41,18 +41,12 @@ export default async function NewPaymentPage({
             paidCents: service.paidCents,
             remainingCents: service.remainingCents,
         }));
-
-    const firstPhase = project.phases[0]?.number ?? 1;
     const selected = typeof serviceId === "string" ? serviceId : undefined;
 
     return (
         <>
             <PageHeader title={`${project.name} — Registrar pagamento`} />
-            <ConstructionTabs
-                projectId={project.id}
-                firstPhaseNumber={firstPhase}
-                active="payments"
-            />
+            <ConstructionTabs projectId={project.id} active="payments" />
 
             {options.length === 0 ? (
                 <p>

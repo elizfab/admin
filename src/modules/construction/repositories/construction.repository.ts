@@ -16,7 +16,47 @@ export const constructionRepository = {
     listProjects(ownerId: string) {
         return prisma.constructionProject.findMany({
             where: { ownerId },
-            orderBy: { createdAt: "asc" },
+            // Mais recente primeiro (data de início); empate estável pelo id.
+            orderBy: [{ startDate: { sort: "desc", nulls: "last" } }, { id: "asc" }],
+        });
+    },
+
+    /**
+     * Cards da grade da aba Construção: filtrados por categoria (ou "sem
+     * categoria") e paginados com limite + 1 para o "Ver mais" (OBRA-R18).
+     */
+    listProjectCards(
+        ownerId: string,
+        filter: { categoryId?: string; uncategorized?: boolean },
+        page: { offset: number; limit: number },
+    ) {
+        return prisma.constructionProject.findMany({
+            where: {
+                ownerId,
+                ...(filter.categoryId
+                    ? { categoryIds: { has: filter.categoryId } }
+                    : filter.uncategorized
+                      ? { categoryIds: { isEmpty: true } }
+                      : {}),
+            },
+            select: {
+                id: true,
+                name: true,
+                startDate: true,
+                plannedEndDate: true,
+                categoryIds: true,
+            },
+            orderBy: [{ startDate: { sort: "desc", nulls: "last" } }, { id: "asc" }],
+            skip: page.offset,
+            take: page.limit + 1,
+        });
+    },
+
+    /** categoryIds de todas as obras da dona (base pequena: conta no serviço). */
+    listProjectCategoryIds(ownerId: string) {
+        return prisma.constructionProject.findMany({
+            where: { ownerId },
+            select: { categoryIds: true },
         });
     },
 

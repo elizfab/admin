@@ -147,3 +147,42 @@
     @include focus-ring;
   }
 }
+
+.fieldset {
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+  margin: 0;
+  padding: $space-3;
+  border: 1px solid var(--border);
+  border-radius: $radius-md;
+}
+
+.fieldsetLegend {
+  padding: 0 $space-1;
+  font-size: $font-size-sm;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.categoryGroup {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: $space-2 $space-4;
+}
+
+.categoryGroupLabel {
+  font-size: $font-size-xs;
+  font-weight: 600;
+  color: var(--text-color-secondary);
+}
+
+.checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-2;
+  font-size: $font-size-sm;
+  color: var(--text-color);
+  cursor: pointer;
+}

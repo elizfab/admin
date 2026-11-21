@@ -37,6 +37,11 @@ function text(formData: FormData, key: string) {
     return String(formData.get(key) ?? "");
 }
 
+/** Checkboxes "categoryIds" podem vir várias vezes no FormData. */
+function categoryIds(formData: FormData) {
+    return formData.getAll("categoryIds").map(String);
+}
+
 // ─── Obra ─────────────────────────────────────────────────────
 
 export async function createProjectAction(
@@ -51,6 +56,7 @@ export async function createProjectAction(
             name: text(formData, "name"),
             startDate: text(formData, "startDate") || undefined,
             plannedEndDate: text(formData, "plannedEndDate") || undefined,
+            categoryIds: categoryIds(formData),
         });
 
         if (!parsed.success) throw new ValidationError(toFieldErrors(parsed.error));
@@ -77,6 +83,7 @@ export async function updateProjectAction(
             name: text(formData, "name"),
             startDate: text(formData, "startDate") || null,
             plannedEndDate: text(formData, "plannedEndDate") || null,
+            categoryIds: categoryIds(formData),
         });
 
         if (!parsed.success) throw new ValidationError(toFieldErrors(parsed.error));

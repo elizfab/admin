@@ -32,7 +32,6 @@ export default async function ConstructionPaymentsPage({
     });
 
     const payments = await listPayments(session.user.id, project.id);
-    const firstPhase = project.phases[0]?.number ?? 1;
 
     return (
         <>
@@ -47,11 +46,7 @@ export default async function ConstructionPaymentsPage({
                     </Link>
                 }
             />
-            <ConstructionTabs
-                projectId={project.id}
-                firstPhaseNumber={firstPhase}
-                active="payments"
-            />
+            <ConstructionTabs projectId={project.id} active="payments" />
 
             {payments.length === 0 ? (
                 <p className={styles.empty}>Nenhum pagamento registrado ainda.</p>

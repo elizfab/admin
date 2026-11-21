@@ -2,6 +2,8 @@ import { z } from "zod";
 
 import { parseMoneyToCents } from "@/lib/money/money";
 
+import { OBRA_CATEGORIAS, obraCategoriaIds } from "../constants/categories";
+
 /*
  * Listas fechadas espelhadas do schema.prisma (este arquivo vai ao navegador
  * pelos formulários; o client do Prisma não pode ir). Mude as duas juntas.
@@ -69,6 +71,7 @@ export const createProjectSchema = z.object({
     name: z.string().trim().min(2, { error: "Informe o nome da obra." }).max(80),
     startDate: isoDay.optional(),
     plannedEndDate: isoDay.optional(),
+    categoryIds: z.array(z.enum(obraCategoriaIds)).max(OBRA_CATEGORIAS.length).optional(),
 });
 
 export const updateProjectSchema = z
@@ -76,6 +79,7 @@ export const updateProjectSchema = z
         name: z.string().trim().min(2, { error: "Informe o nome da obra." }).max(80),
         startDate: isoDay.nullable(),
         plannedEndDate: isoDay.nullable(),
+        categoryIds: z.array(z.enum(obraCategoriaIds)).max(OBRA_CATEGORIAS.length),
     })
     .partial()
     .refine((data) => Object.keys(data).length > 0, {
